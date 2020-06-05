@@ -1,3 +1,15 @@
 {
-  "extends": ["opencollective"]
+  "extends": ["opencollective"],
+  "rules": {
+    "import/order": [
+      "warn",
+      {
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        },
+        "newlines-between": "always"
+      }
+    ]
+  }
 }

@@ -3,6 +3,9 @@
   "modules": {
     "addresses": {
       "active": true
+    },
+    "identities": {
+      "active": true
     }
   }
 }

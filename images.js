@@ -1,13 +1,22 @@
+const hyperwatch = require('@hyperwatch/hyperwatch');
+const chalk = require('chalk');
 const dotenv = require('dotenv');
+const { pathToRegexp } = require('path-to-regexp');
+
+const { pipeline, input, lib, plugins, modules, start } = hyperwatch;
+
+const { identity, cloudflare, hostname, dnsbl, geoip, useragent } = plugins;
+
+// Load config
 
 dotenv.config();
 
-const chalk = require('chalk');
-const hyperwatch = require('@hyperwatch/hyperwatch');
+// Add Open Collective specific regexes
 
-const { pipeline, input, plugins, modules, start, util } = hyperwatch;
-
-const { cloudflare, hostname, dnsbl, geoip, useragent } = plugins;
+lib.useragent.addRegex('robot', {
+  regex: '(opencollective-images)/(\\d+)\\.(\\d+)',
+  family_replacement: 'Images', // eslint-disable-line camelcase
+});
 
 const websocketClientInput = input.websocket.create({
   name: 'WebSocket client (JSON standard format)',
@@ -25,54 +34,88 @@ const websocketClientInput = input.websocket.create({
 
 pipeline.registerInput(websocketClientInput);
 
+// Setup Pipeline and data augmentation
+
 pipeline
   .map((log) => cloudflare.augment(log))
   .map((log) => hostname.augment(log))
   .map((log) => dnsbl.augment(log))
   .map((log) => geoip.augment(log))
   .map((log) => useragent.augment(log))
+  .map((log) => identity.augment(log))
+  .map((log) => {
+    if (log.getIn(['useragent', 'family']) === 'Open Collective Images') {
+      // check secret
+      log = log.set('identity', 'Images');
+    }
+
+    return log;
+  })
   .registerNode('main');
 
+// Create node based on Express Routes
+
+const routes = {
+  'github-avatar': pathToRegexp(
+    '/github/:githubUsername/:image(avatar)/:style(rounded|square)?/:height?.:format(png)',
+  ),
+  avatar: pathToRegexp(
+    '/:collectiveSlug/:hash?/:image(avatar|logo)/:style(rounded|square)?/:height?/:width?.:format(txt|png|jpg|svg)',
+  ),
+  background: pathToRegexp(
+    '/:collectiveSlug/:hash?/background/:height?/:width?.:format(png|jpg)',
+  ),
+  'banner-contributors': pathToRegexp('/:collectiveSlug/contributors.svg'),
+  banner: pathToRegexp('/:collectiveSlug/:backerType.svg'),
+  'banner-tiers': pathToRegexp('/:collectiveSlug/tiers/:tierSlug.svg'),
+  badge: pathToRegexp('/:collectiveSlug/:backerType/badge.svg'),
+  'badge-tiers': pathToRegexp('/:collectiveSlug/tiers/:tierSlug/badge.svg'),
+  'github-readme-avatar': pathToRegexp(
+    '/:collectiveSlug/:backerType/:position/avatar.:format(png|jpg|svg)?',
+  ),
+  'github-readme-website': pathToRegexp(
+    '/:collectiveSlug/:backerType/:position/website',
+  ),
+  'github-readme-avatar-tiers': pathToRegexp(
+    '/:collectiveSlug/tiers/:tierSlug/:position/avatar.:format(png|jpg|svg)?',
+  ),
+  'github-readme-website-tiers': pathToRegexp(
+    '/:collectiveSlug/tiers/:tierSlug/:position/website',
+  ),
+  proxy: pathToRegexp('/proxy/images'),
+};
+
+let node, other;
+for (const [name, regex] of Object.entries(routes)) {
+  [node, other] = (other || pipeline.getNode('main')).split((log) =>
+    regex.test(log.getIn(['request', 'url']).split('?')[0]),
+  );
+  node.registerNode(name);
+}
+other.registerNode('other');
+
 function getAgent(entry) {
-  const agent = entry.get('agent');
+  const agent = entry.get('useragent');
   if (!agent) {
     return;
   }
   if (agent.get('family') === 'Other' || !agent.get('family')) {
     return;
   }
-  if (!agent.get('major')) {
+  if (!agent.get('major') || agent.get('type') === 'robot') {
     return agent.get('family');
   }
   return `${agent.get('family')} ${agent.get('major')}`;
 }
 
-function getOs(entry) {
-  const os = entry.getIn(['agent', 'os']);
-  if (!os) {
-    return;
-  }
-  if (os.get('family') === 'Other' || !os.get('family')) {
-    return;
-  }
-  if (os.get('family') === 'Mac OS X') {
-    return 'macOS';
-  }
-  return os.get('family');
-}
-
-pipeline.getNode('main').map((log) => {
-  const application = log.getIn(['request', 'headers', 'oc-application']);
-
+other.map((log) => {
   console.log(
     chalk.red(log.getIn(['request', 'time']).slice(11)),
 
     chalk.blue(`${getAgent(log)}`),
 
     chalk.white(
-      application ||
-        log.getIn(['hostname', 'value']) ||
-        log.getIn(['address', 'value']),
+      log.getIn(['hostname', 'value']) || log.getIn(['address', 'value']),
     ),
 
     chalk.blue(log.getIn(['request', 'method'])),
@@ -89,61 +132,6 @@ pipeline.getNode('main').map((log) => {
   );
 
   return log;
-});
-
-modules.addresses.setMapper((entry, format) => {
-  return {
-    hostname: entry.getIn(['address', 'hostname'])
-      ? `${entry.getIn(['address', 'hostname'])}${
-          entry.getIn(['hostname', 'verified']) ? '+' : ''
-        }`
-      : entry.getIn(['address', 'value']),
-
-    agent: getAgent(entry),
-    os: getOs(entry),
-
-    cc: entry.getIn(['geoip', 'country']),
-    reg: entry.getIn(['geoip', 'region']),
-    city: entry.getIn(['geoip', 'city']),
-    dc: entry.getIn(['cloudflare', 'data-center']),
-    '15m': util.aggregateSpeed(entry, 'per_minute'),
-    '24h': util.aggregateSpeed(entry, 'per_hour'),
-    xbl: entry.getIn(['dnsbl', 'xbl'])
-      ? format === 'txt'
-        ? ' x '
-        : true
-      : format === 'txt'
-      ? ''
-      : false,
-  };
-});
-
-modules.addresses.setEnricher((entry, log) => {
-  for (const field of [
-    'address',
-    'hostname',
-    'cloudflare',
-    'geoip',
-    'dnsbl',
-    'opencollective',
-    'agent',
-  ]) {
-    if (!entry.has(field) && log.has(field)) {
-      entry = entry.set(field, log.get(field));
-    }
-  }
-
-  if (
-    !entry.has('identity') &&
-    log.hasIn(['request', 'headers', 'oc-application'])
-  ) {
-    entry = entry.set(
-      'identity',
-      log.getIn(['request', 'headers', 'oc-application']),
-    );
-  }
-
-  return entry;
 });
 
 modules.load();
