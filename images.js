@@ -15,7 +15,7 @@ dotenv.config();
 
 lib.useragent.addRegex('robot', {
   regex: '(opencollective-images)/(\\d+)\\.(\\d+)',
-  family_replacement: 'Images', // eslint-disable-line camelcase
+  family_replacement: 'Open Collective Images', // eslint-disable-line camelcase
 });
 
 const websocketClientInput = input.websocket.create({
