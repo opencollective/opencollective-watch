@@ -1,5 +1,4 @@
 const hyperwatch = require('@hyperwatch/hyperwatch');
-const chalk = require('chalk');
 const dotenv = require('dotenv');
 const { pathToRegexp } = require('path-to-regexp');
 
@@ -17,6 +16,8 @@ lib.useragent.addRegex('robot', {
   regex: '(opencollective-images)/(\\d+)\\.(\\d+)',
   family_replacement: 'Open Collective Images', // eslint-disable-line camelcase
 });
+
+// Connect Input
 
 const websocketClientInput = input.websocket.create({
   name: 'WebSocket client (JSON standard format)',
@@ -46,7 +47,7 @@ pipeline
   .map((log) => {
     if (log.getIn(['useragent', 'family']) === 'Open Collective Images') {
       // check secret
-      log = log.set('identity', 'Images');
+      log = log.set('identity', 'Open Collective Images');
     }
 
     return log;
@@ -94,45 +95,13 @@ for (const [name, regex] of Object.entries(routes)) {
 }
 other.registerNode('other');
 
-function getAgent(entry) {
-  const agent = entry.get('useragent');
-  if (!agent) {
-    return;
-  }
-  if (agent.get('family') === 'Other' || !agent.get('family')) {
-    return;
-  }
-  if (!agent.get('major') || agent.get('type') === 'robot') {
-    return agent.get('family');
-  }
-  return `${agent.get('family')} ${agent.get('major')}`;
-}
+// Console Output
 
-other.map((log) => {
-  console.log(
-    chalk.red(log.getIn(['request', 'time']).slice(11)),
+const consoleFormatter = new lib.formatter.Formatter('console');
 
-    chalk.blue(`${getAgent(log)}`),
+other.map((log) => console.log(consoleFormatter.format(log)));
 
-    chalk.white(
-      log.getIn(['hostname', 'value']) || log.getIn(['address', 'value']),
-    ),
-
-    chalk.blue(log.getIn(['request', 'method'])),
-    chalk.grey(log.getIn(['request', 'url'])),
-    chalk.green(log.getIn(['response', 'status'])),
-
-    chalk.blue(log.getIn(['request', 'headers', 'user-agent'])),
-
-    log.get('executionTime') <= 100
-      ? chalk.green(`${log.get('executionTime')}ms`)
-      : log.get('executionTime') >= 1000
-      ? chalk.red(`${log.get('executionTime')}ms`)
-      : chalk.yellow(`${log.get('executionTime')}ms`),
-  );
-
-  return log;
-});
+// Start
 
 modules.load();
 

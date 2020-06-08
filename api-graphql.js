@@ -1,5 +1,4 @@
 const hyperwatch = require('@hyperwatch/hyperwatch');
-const chalk = require('chalk');
 const dotenv = require('dotenv');
 const { pick } = require('lodash');
 
@@ -15,12 +14,17 @@ dotenv.config();
 
 lib.useragent.addRegex('robot', {
   regex: '(opencollective-images)/(\\d+)\\.(\\d+)',
-  family_replacement: 'Images', // eslint-disable-line camelcase
+  family_replacement: 'Open Collective Images', // eslint-disable-line camelcase
 });
 
 lib.useragent.addRegex('robot', {
   regex: '(opencollective-frontend)/(\\d+)\\.(\\d+)',
-  family_replacement: 'Frontend', // eslint-disable-line camelcase
+  family_replacement: 'Open Collective Frontend', // eslint-disable-line camelcase
+});
+
+lib.useragent.addRegex('robot', {
+  regex: '(opencollective-rest)/(\\d+)\\.(\\d+)',
+  family_replacement: 'Open Collective Rest', // eslint-disable-line camelcase
 });
 
 // Connect Input
@@ -99,38 +103,50 @@ pipeline
   .filter((log) => log.get('executionTime') > 1000)
   .registerNode('extra-slow');
 
+// GraphQL formatter
+
+const graphqlFormatter = (log, output) => ({
+  time: lib.formatter.time(log),
+  identity: lib.formatter.identity(log),
+  address: lib.formatter.address(log),
+  country: lib.formatter.country(log),
+  operationName: log.getIn(['graphql', 'operationName']),
+  variables: JSON.stringify(
+    pick(
+      log.hasIn(['graphql', 'variables'])
+        ? log.getIn(['graphql', 'variables']).toJS()
+        : {},
+      [
+        'id',
+        'slug',
+        'collectiveSlug',
+        'CollectiveSlug',
+        'CollectiveId',
+        'legacyExpenseId',
+        'tierId',
+      ],
+    ),
+  ),
+  executionTime: lib.formatter.executionTime(log, output),
+  agent: lib.formatter.agent(log),
+});
+
 // Log to the console
 
-pipeline.getNode('slow').map((log) => {
-  const identity = log.getIn(['identity']);
+const graphqlConsoleFormatter = new lib.formatter.Formatter(
+  'console',
+  graphqlFormatter,
+);
 
-  console.log(
-    chalk.red(log.getIn(['request', 'time']).slice(11)),
-
-    chalk.white(
-      identity ||
-        log.getIn(['hostname', 'value']) ||
-        log.getIn(['address', 'value']),
-    ),
-
-    chalk.blue(log.getIn(['graphql', 'operationName'])),
-    chalk.grey(JSON.stringify(log.getIn(['graphql', 'variables']).toJS())),
-
-    chalk.blue(log.getIn(['request', 'headers', 'user-agent'])),
-
-    log.get('executionTime') <= 100
-      ? chalk.green(`${log.get('executionTime')}ms`)
-      : log.get('executionTime') >= 1000
-      ? chalk.red(`${log.get('executionTime')}ms`)
-      : chalk.yellow(`${log.get('executionTime')}ms`),
-  );
-
-  return log;
-});
+pipeline
+  .getNode('extra-slow')
+  .map((log) => console.log(graphqlConsoleFormatter.format(log)));
 
 // Add GraphQL aggregator
 
-const aggregator = new lib.aggregator.Aggregator();
+const { Aggregator } = lib.aggregator;
+
+const aggregator = new Aggregator();
 
 aggregator.setIdentifier(
   (log) => `${log.getIn(['graphql', 'operationName']) || 'unknown'}`,
@@ -157,28 +173,16 @@ aggregator.setMapper((entry) => {
 
 pipeline.getNode('graphql').map((log) => aggregator.processLog(log));
 
-app.api.registerAggregator('graphql', aggregator);
+app.api.registerAggregator('graphql-operations', aggregator);
 
-// Tweak Logs module
+// Tweak Logs module for GraphQL usage
 
-modules.logs.setFormatter((log) => {
-  return `${log.getIn(['request', 'time']).slice(11)} ${
-    log.getIn(['identity']) ||
-    log.getIn(['hostname', 'value']) ||
-    log.getIn(['address', 'value']) ||
-    log.getIn(['request', 'address'])
-  } ${log.getIn(['graphql', 'operationName'])} ${JSON.stringify(
-    pick(log.getIn(['graphql', 'variables']).toJS(), [
-      'id',
-      'slug',
-      'collectiveSlug',
-      'CollectiveSlug',
-      'CollectiveId',
-      'legacyExpenseId',
-      'tierId',
-    ]),
-  )} ${log.get('executionTime')}ms`;
-});
+const graphqlHtmlFormatter = new lib.formatter.Formatter(
+  'html',
+  graphqlFormatter,
+);
+
+modules.logs.setFormatter(graphqlHtmlFormatter);
 
 // Start
 

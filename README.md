@@ -22,9 +22,44 @@ Then, start with:
 node api-graphql.js
 ```
 
-You can browse the addresses metrics at:
+You can use the following the URL:
 
-http://localhost:3009/addresses.txt
+- see pipeline status: http://localhost:3009/status
+- browse identities: http://localhost:3009/identities
+- browse identities: http://localhost:3009/addresses
+- watch real time logs: http://localhost:3009/logs/main
+
+### Watching Open Collective Images
+
+Set the following environment variables in `.env`.
+
+```
+IMAGES_HYPERWATCH_URL={API_URL}/{HYPERWATCH_PATH}/logs/raw
+IMAGES_HYPERWATCH_USERNAME={USERNAME}
+IMAGES_HYPERWATCH_SECRET={SECRET}
+```
+
+Then, start with:
+
+```
+node images.js
+```
+
+### Watching Open Collective Rest
+
+Set the following environment variables in `.env`.
+
+```
+REST_HYPERWATCH_URL={API_URL}/{HYPERWATCH_PATH}/logs/raw
+REST_HYPERWATCH_USERNAME={USERNAME}
+REST_HYPERWATCH_SECRET={SECRET}
+```
+
+Then, start with:
+
+```
+node rest.js
+```
 
 ### Using a development version of Hyperwatch
 
