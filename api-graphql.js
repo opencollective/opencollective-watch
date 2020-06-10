@@ -4,7 +4,7 @@ const { pick } = require('lodash');
 
 const { app, pipeline, input, plugins, modules, start, lib, util } = hyperwatch;
 
-const { cloudflare, hostname, dnsbl, geoip, useragent, identity } = plugins;
+const { cloudflare, geoip, hostname, identity, useragent } = plugins;
 
 // Load config
 
@@ -50,7 +50,6 @@ pipeline.registerInput(websocketClientInput);
 pipeline
   .map((log) => cloudflare.augment(log))
   .map((log) => hostname.augment(log))
-  .map((log) => dnsbl.augment(log))
   .map((log) => geoip.augment(log))
   .map((log) => useragent.augment(log))
   .map((log) => identity.augment(log))
@@ -109,7 +108,7 @@ const graphqlFormatter = (log, output) => ({
   time: lib.formatter.time(log),
   identity: lib.formatter.identity(log),
   address: lib.formatter.address(log),
-  country: lib.formatter.country(log),
+  country: lib.formatter.country(log, output),
   operationName: log.getIn(['graphql', 'operationName']),
   variables: JSON.stringify(
     pick(
@@ -124,6 +123,7 @@ const graphqlFormatter = (log, output) => ({
         'CollectiveId',
         'legacyExpenseId',
         'tierId',
+        'term',
       ],
     ),
   ),
