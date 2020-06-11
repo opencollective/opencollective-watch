@@ -104,42 +104,35 @@ pipeline
 
 // GraphQL formatter
 
-const graphqlFormatter = (log, output) => ({
-  time: lib.formatter.time(log),
-  identity: lib.formatter.identity(log),
-  address: lib.formatter.address(log),
-  country: lib.formatter.country(log, output),
-  operationName: log.getIn(['graphql', 'operationName']),
-  variables: JSON.stringify(
-    pick(
-      log.hasIn(['graphql', 'variables'])
-        ? log.getIn(['graphql', 'variables']).toJS()
-        : {},
-      [
-        'id',
-        'slug',
-        'collectiveSlug',
-        'CollectiveSlug',
-        'CollectiveId',
-        'legacyExpenseId',
-        'tierId',
-        'term',
-      ],
-    ),
-  ),
-  executionTime: lib.formatter.executionTime(log, output),
-  agent: lib.formatter.agent(log),
-});
+const formatRequest = (log) => {
+  if (!log.has('graphql')) {
+    return lib.formatter.request(log);
+  }
+
+  const pickList = [
+    'id',
+    'slug',
+    'collectiveSlug',
+    'CollectiveSlug',
+    'CollectiveId',
+    'legacyExpenseId',
+    'tierId',
+    'term',
+  ];
+  const operationName = log.getIn(['graphql', 'operationName'], 'unknown');
+  const variables = log.hasIn(['graphql', 'variables'])
+    ? log.getIn(['graphql', 'variables']).toJS()
+    : {};
+  return `${operationName} ${JSON.stringify(pick(variables, pickList))}`;
+};
 
 // Log to the console
 
-const graphqlConsoleFormatter = new lib.formatter.Formatter(
-  'console',
-  graphqlFormatter,
-);
+const graphqlConsoleFormatter = new lib.formatter.Formatter('console');
+graphqlConsoleFormatter.setFormat('request', formatRequest);
 
 pipeline
-  .getNode('extra-slow')
+  .getNode('slow')
   .map((log) => console.log(graphqlConsoleFormatter.format(log)));
 
 // Add GraphQL aggregator
@@ -162,14 +155,13 @@ aggregator.setEnricher((entry, log) => {
   return entry;
 });
 
-aggregator.setMapper((entry) => {
-  return {
-    operation: entry.getIn(['graphql', 'operationName']) || 'unknown',
-    application: entry.getIn(['application']),
-    '15m': util.aggregateSpeed(entry, 'per_minute'),
-    '24h': util.aggregateSpeed(entry, 'per_hour'),
-  };
+const graphqlOperationFormatter = new lib.formatter.Formatter('html', {
+  operation: (entry) => entry.getIn(['graphql', 'operationName']) || 'unknown',
+  application: (entry) => entry.getIn(['application']),
+  '15m': (entry) => util.aggregateSpeed(entry, 'per_minute'),
+  '24h': (entry) => util.aggregateSpeed(entry, 'per_hour'),
 });
+aggregator.setFormatter(graphqlOperationFormatter);
 
 pipeline.getNode('graphql').map((log) => aggregator.processLog(log));
 
@@ -177,10 +169,8 @@ app.api.registerAggregator('graphql-operations', aggregator);
 
 // Tweak Logs module for GraphQL usage
 
-const graphqlHtmlFormatter = new lib.formatter.Formatter(
-  'html',
-  graphqlFormatter,
-);
+const graphqlHtmlFormatter = new lib.formatter.Formatter('html');
+graphqlHtmlFormatter.setFormat('request', formatRequest);
 
 modules.logs.setFormatter(graphqlHtmlFormatter);
 
