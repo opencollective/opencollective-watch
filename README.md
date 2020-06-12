@@ -29,6 +29,22 @@ You can use the following the URL:
 - browse identities: http://localhost:3009/addresses
 - watch real time logs: http://localhost:3009/logs/main
 
+### Watching Open Collective Frontend
+
+Set the following environment variables in `.env`.
+
+```
+FRONTEND_HYPERWATCH_URL={API_URL}/{HYPERWATCH_PATH}/logs/raw
+FRONTEND_HYPERWATCH_USERNAME={USERNAME}
+FRONTEND_HYPERWATCH_SECRET={SECRET}
+```
+
+Then, start with:
+
+```
+node frontend.js
+```
+
 ### Watching Open Collective Images
 
 Set the following environment variables in `.env`.

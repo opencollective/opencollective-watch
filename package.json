@@ -16,7 +16,7 @@
     "prettier:write": "npm run prettier -- --write"
   },
   "dependencies": {
-    "@hyperwatch/hyperwatch": "^3.5.0",
+    "@hyperwatch/hyperwatch": "^3.5.1",
     "dotenv": "^8.2.0",
     "lodash": "^4.17.15",
     "path-to-regexp": "^6.1.0"
