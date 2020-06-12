@@ -1,10 +1,31 @@
 {
   "port": 3009,
   "modules": {
-    "addresses": {
+    "geoip": {
       "active": true
     },
-    "identities": {
+    "agent": {
+      "active": true
+    },
+    "cloudflare": {
+      "active": true
+    },
+    "hostname": {
+      "active": true
+    },
+    "dnsbl": {
+      "active": false
+    },
+    "address": {
+      "active": true
+    },
+    "language": {
+      "active": true
+    },
+    "identity": {
+      "active": true
+    },
+    "sparkline": {
       "active": true
     }
   }

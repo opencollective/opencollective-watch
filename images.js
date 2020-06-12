@@ -1,14 +1,10 @@
 const hyperwatch = require('@hyperwatch/hyperwatch');
-const dotenv = require('dotenv');
 const { pathToRegexp } = require('path-to-regexp');
+const uuid = require('uuid');
 
-const { pipeline, input, lib, plugins, modules, start } = hyperwatch;
+const serverCount = 2;
 
-const { identity, cloudflare, hostname, dnsbl, geoip, useragent } = plugins;
-
-// Load config
-
-dotenv.config();
+const { pipeline, input, lib } = hyperwatch;
 
 // Add Open Collective specific regexes
 
@@ -17,35 +13,28 @@ lib.useragent.addRegex('robot', {
   family_replacement: 'Open Collective Images', // eslint-disable-line camelcase
 });
 
-// Connect Input
+// Connect Inputs (1 per live server)
 
-const websocketClientInput = input.websocket.create({
-  name: 'WebSocket client (JSON standard format)',
-  type: 'client',
-  address: process.env.IMAGES_HYPERWATCH_URL,
-  reconnectOnClose: true,
-  options: {
-    headers: {
-      Authorization: `Basic ${Buffer.from(
-        `${process.env.IMAGES_HYPERWATCH_USERNAME}:${process.env.IMAGES_HYPERWATCH_SECRET}`,
-      ).toString('base64')}`,
-    },
-  },
-});
+for (let i = 0; i < serverCount; i++) {
+  const websocketClientInput = input.websocket.create({
+    name: 'WebSocket client (JSON standard format)',
+    type: 'client',
+    address: process.env.IMAGES_HYPERWATCH_URL,
+    reconnectOnClose: true,
+    username: process.env.IMAGES_HYPERWATCH_USERNAME,
+    password: process.env.IMAGES_HYPERWATCH_SECRET,
+    clientId: uuid.v4(),
+  });
 
-pipeline.registerInput(websocketClientInput);
+  pipeline.registerInput(websocketClientInput);
+}
 
 // Setup Pipeline and data augmentation
 
 pipeline
-  .map((log) => cloudflare.augment(log))
-  .map((log) => hostname.augment(log))
-  .map((log) => dnsbl.augment(log))
-  .map((log) => geoip.augment(log))
-  .map((log) => useragent.augment(log))
-  .map((log) => identity.augment(log))
+  .getNode('main')
   .map((log) => {
-    if (log.getIn(['useragent', 'family']) === 'Open Collective Images') {
+    if (log.getIn(['agent', 'family']) === 'Open Collective Images') {
       // check secret
       log = log.set('identity', 'Open Collective Images');
     }
@@ -97,12 +86,6 @@ other.registerNode('other');
 
 // Console Output
 
-const consoleFormatter = new lib.formatter.Formatter('console');
-
-other.map((log) => console.log(consoleFormatter.format(log)));
-
-// Start
-
-modules.load();
-
-start();
+other.map((log) =>
+  console.log(lib.logger.defaultFormatter.format(log, 'console')),
+);

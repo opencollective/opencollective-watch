@@ -13,13 +13,18 @@
     "lint:quiet": "npm run lint -- --quiet",
     "prettier": "prettier \"**/*.@(js|json|md)\"",
     "prettier:check": "npm run prettier -- --check",
-    "prettier:write": "npm run prettier -- --write"
+    "prettier:write": "npm run prettier -- --write",
+    "start:api": "PORT=3009 dotenv hyperwatch api",
+    "start:images": "PORT=3010 dotenv hyperwatch images",
+    "start:rest": "PORT=3011 dotenv hyperwatch rest",
+    "start:frontend": "PORT=3012 dotenv hyperwatch frontend"
   },
   "dependencies": {
     "@hyperwatch/hyperwatch": "^3.5.1",
-    "dotenv": "^8.2.0",
+    "dotenv-cli": "^3.1.0",
     "lodash": "^4.17.15",
-    "path-to-regexp": "^6.1.0"
+    "path-to-regexp": "^6.1.0",
+    "uuid": "^8.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",

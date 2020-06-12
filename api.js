@@ -1,14 +1,7 @@
 const hyperwatch = require('@hyperwatch/hyperwatch');
-const dotenv = require('dotenv');
 const { pick } = require('lodash');
 
-const { app, pipeline, input, plugins, modules, start, lib, util } = hyperwatch;
-
-const { cloudflare, geoip, hostname, identity, useragent } = plugins;
-
-// Load config
-
-dotenv.config();
+const { app, pipeline, input, lib, util } = hyperwatch;
 
 // Add Open Collective specific regexes
 
@@ -34,13 +27,8 @@ const websocketClientInput = input.websocket.create({
   type: 'client',
   address: process.env.API_HYPERWATCH_URL,
   reconnectOnClose: true,
-  options: {
-    headers: {
-      Authorization: `Basic ${Buffer.from(
-        `${process.env.API_HYPERWATCH_USERNAME}:${process.env.API_HYPERWATCH_SECRET}`,
-      ).toString('base64')}`,
-    },
-  },
+  username: process.env.API_HYPERWATCH_USERNAME,
+  password: process.env.API_HYPERWATCH_SECRET,
 });
 
 pipeline.registerInput(websocketClientInput);
@@ -48,11 +36,7 @@ pipeline.registerInput(websocketClientInput);
 // Setup Pipeline and data augmentation
 
 pipeline
-  .map((log) => cloudflare.augment(log))
-  .map((log) => hostname.augment(log))
-  .map((log) => geoip.augment(log))
-  .map((log) => useragent.augment(log))
-  .map((log) => identity.augment(log))
+  .getNode('main')
   .map((log) => {
     if (log.getIn(['request', 'headers', 'oc-application']) === 'frontend') {
       // check secret
@@ -129,14 +113,15 @@ const formatRequest = (log) => {
   return `${operationName} ${JSON.stringify(pick(variables, pickList))}`;
 };
 
-// Log to the console
+lib.logger.defaultFormatter.replaceFormat('request', formatRequest);
 
-const graphqlConsoleFormatter = new lib.formatter.Formatter('console');
-graphqlConsoleFormatter.setFormat('request', formatRequest);
+// Log to the console
 
 pipeline
   .getNode('slow')
-  .map((log) => console.log(graphqlConsoleFormatter.format(log)));
+  .map((log) =>
+    console.log(lib.logger.defaultFormatter.format(log, 'console')),
+  );
 
 // Add GraphQL aggregator
 
@@ -158,27 +143,20 @@ aggregator.setEnricher((entry, log) => {
   return entry;
 });
 
-const graphqlOperationFormatter = new lib.formatter.Formatter('html', {
-  operation: (entry) => entry.getIn(['graphql', 'operationName']) || 'unknown',
-  application: (entry) => entry.getIn(['application']),
-  '15m': (entry) => util.aggregateSpeed(entry, 'per_minute'),
-  '24h': (entry) => util.aggregateSpeed(entry, 'per_hour'),
-});
+const graphqlOperationFormatter = new lib.formatter.Formatter();
+
+graphqlOperationFormatter.setFormats([
+  [
+    'operation',
+    (entry) => entry.getIn(['graphql', 'operationName']) || 'unknown',
+  ],
+  ['application', (entry) => entry.getIn(['application'])],
+  ['15m', (entry) => util.aggregateSpeed(entry, 'per_minute')],
+  ['24h', (entry) => util.aggregateSpeed(entry, 'per_hour')],
+]);
+
 aggregator.setFormatter(graphqlOperationFormatter);
 
 pipeline.getNode('graphql').map((log) => aggregator.processLog(log));
 
-app.api.registerAggregator('graphql-operations', aggregator);
-
-// Tweak Logs module for GraphQL usage
-
-const graphqlHtmlFormatter = new lib.formatter.Formatter('html');
-graphqlHtmlFormatter.setFormat('request', formatRequest);
-
-modules.logs.setFormatter(graphqlHtmlFormatter);
-
-// Start
-
-modules.load();
-
-start();
+app.api.registerAggregator('graphql', aggregator);
