@@ -69,8 +69,11 @@ pipeline
       log = log.set('application', 'rest');
       log = log.set('identity', 'rest');
     }
-    if (log.hasIn(['opencollective', 'user', 'email'])) {
-      log = log.set('identity', log.getIn(['opencollective', 'user', 'email']));
+    if (log.hasIn(['opencollective', 'collective', 'slug'])) {
+      log = log.set(
+        'identity',
+        `@${log.getIn(['opencollective', 'collective', 'slug'])}`,
+      );
     }
     return log;
   })
