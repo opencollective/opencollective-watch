@@ -6,24 +6,22 @@ const serverCount = 2;
 
 const { pipeline, input, lib } = hyperwatch;
 
-// Add Open Collective specific regexes
+// Init Hyperwatch (will load modules)
 
-lib.useragent.addRegex('robot', {
-  regex: '(opencollective-images)/(\\d+)\\.(\\d+)',
-  family_replacement: 'Open Collective Images', // eslint-disable-line camelcase
-});
+hyperwatch.init({});
 
 // Connect Inputs (1 per live server)
 
+const clientId = uuid.v4();
+
 for (let i = 0; i < serverCount; i++) {
   const websocketClientInput = input.websocket.create({
-    name: 'WebSocket client (JSON standard format)',
+    name: `WebSocket client (JSON standard format) #${i}`,
     type: 'client',
-    address: process.env.IMAGES_HYPERWATCH_URL,
+    address: `${process.env.IMAGES_HYPERWATCH_URL}?clientId=${clientId}`,
     reconnectOnClose: true,
     username: process.env.IMAGES_HYPERWATCH_USERNAME,
     password: process.env.IMAGES_HYPERWATCH_SECRET,
-    clientId: uuid.v4(),
   });
 
   pipeline.registerInput(websocketClientInput);
@@ -35,7 +33,7 @@ pipeline
   .getNode('main')
   .map((log) => {
     if (log.getIn(['agent', 'family']) === 'Open Collective Images') {
-      // check secret
+      // TODO: check secret
       log = log.set('identity', 'Open Collective Images');
     }
 
@@ -86,6 +84,8 @@ other.registerNode('other');
 
 // Console Output
 
-other.map((log) =>
-  console.log(lib.logger.defaultFormatter.format(log, 'console')),
-);
+pipeline
+  .getNode('main')
+  .map((log) =>
+    console.log(lib.logger.defaultFormatter.format(log, 'console')),
+  );

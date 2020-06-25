@@ -19,10 +19,16 @@
     "address": {
       "active": true
     },
+    "logs": {
+      "active": true
+    },
     "language": {
       "active": true
     },
     "identity": {
+      "active": true
+    },
+    "signature": {
       "active": true
     },
     "sparkline": {

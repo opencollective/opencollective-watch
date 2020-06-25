@@ -2,6 +2,10 @@ const hyperwatch = require('@hyperwatch/hyperwatch');
 
 const { pipeline, input, lib } = hyperwatch;
 
+// Init Hyperwatch (will load modules)
+
+hyperwatch.init({});
+
 // Connect Input
 
 const websocketClientInput = input.websocket.create({

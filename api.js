@@ -3,22 +3,9 @@ const { pick } = require('lodash');
 
 const { app, pipeline, input, lib, util } = hyperwatch;
 
-// Add Open Collective specific regexes
+// Init Hyperwatch (will load modules)
 
-lib.useragent.addRegex('robot', {
-  regex: '(opencollective-images)/(\\d+)\\.(\\d+)',
-  family_replacement: 'Open Collective Images', // eslint-disable-line camelcase
-});
-
-lib.useragent.addRegex('robot', {
-  regex: '(opencollective-frontend)/(\\d+)\\.(\\d+)',
-  family_replacement: 'Open Collective Frontend', // eslint-disable-line camelcase
-});
-
-lib.useragent.addRegex('robot', {
-  regex: '(opencollective-rest)/(\\d+)\\.(\\d+)',
-  family_replacement: 'Open Collective Rest', // eslint-disable-line camelcase
-});
+hyperwatch.init({});
 
 // Connect Input
 
