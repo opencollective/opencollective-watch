@@ -32,7 +32,7 @@ for (let i = 0; i < serverCount; i++) {
 pipeline
   .getNode('main')
   .map((log) => {
-    if (log.getIn(['agent', 'family']) === 'Open Collective Images') {
+    if (log.getIn(['agent', 'family']) === 'opencollective-images') {
       // TODO: check secret
       log = log.set('identity', 'Open Collective Images');
     }
