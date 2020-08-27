@@ -19,7 +19,7 @@ API_HYPERWATCH_SECRET={SECRET}
 Then, start with:
 
 ```
-node api-graphql.js
+npm run start:api
 ```
 
 You can use the following the URL:
@@ -42,7 +42,7 @@ FRONTEND_HYPERWATCH_SECRET={SECRET}
 Then, start with:
 
 ```
-node frontend.js
+npm run start:frontend
 ```
 
 ### Watching Open Collective Images
@@ -58,7 +58,7 @@ IMAGES_HYPERWATCH_SECRET={SECRET}
 Then, start with:
 
 ```
-node images.js
+npm run start:images
 ```
 
 ### Watching Open Collective Rest
@@ -74,7 +74,7 @@ REST_HYPERWATCH_SECRET={SECRET}
 Then, start with:
 
 ```
-node rest.js
+npm run start:rest
 ```
 
 ### Using a development version of Hyperwatch

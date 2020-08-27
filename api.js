@@ -105,7 +105,7 @@ lib.logger.defaultFormatter.replaceFormat('request', formatRequest);
 // Log to the console
 
 pipeline
-  .getNode('slow')
+  .getNode('main')
   .map((log) =>
     console.log(lib.logger.defaultFormatter.format(log, 'console')),
   );

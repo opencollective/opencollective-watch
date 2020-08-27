@@ -50,7 +50,7 @@ pipeline
   .registerNode('extra-slow');
 
 pipeline
-  .getNode('extra-slow')
+  .getNode('main')
   .map((log) =>
     console.log(lib.logger.defaultFormatter.format(log, 'console')),
   );
