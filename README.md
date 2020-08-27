@@ -24,10 +24,10 @@ npm run start:api
 
 You can use the following the URL:
 
-- see pipeline status: http://localhost:3009/status
-- browse identities: http://localhost:3009/identities
-- browse identities: http://localhost:3009/addresses
-- watch real time logs: http://localhost:3009/logs/main
+- see pipeline status: http://localhost:3360/status
+- browse identities: http://localhost:3360/identities
+- browse identities: http://localhost:3360/addresses
+- watch real time logs: http://localhost:3360/logs/main
 
 ### Watching Open Collective Frontend
 
