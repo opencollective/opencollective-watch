@@ -22,7 +22,7 @@
   "dependencies": {
     "@hyperwatch/hyperwatch": "^3.7.0",
     "dotenv-cli": "^3.2.0",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "path-to-regexp": "^6.1.0",
     "uuid": "^8.2.0"
   },
