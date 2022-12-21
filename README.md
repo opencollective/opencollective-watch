@@ -11,7 +11,7 @@ If you see a step below that could be improved (or is outdated), please update t
 Set the following environment variables in `.env`.
 
 ```
-API_HYPERWATCH_URL={API_URL}/{HYPERWATCH_PATH}/logs/raw
+API_HYPERWATCH_URL=wss://{API_DOMAIN}/{HYPERWATCH_PATH}/logs/raw
 API_HYPERWATCH_USERNAME={USERNAME}
 API_HYPERWATCH_SECRET={SECRET}
 ```
@@ -34,7 +34,7 @@ You can use the following the URL:
 Set the following environment variables in `.env`.
 
 ```
-FRONTEND_HYPERWATCH_URL={API_URL}/{HYPERWATCH_PATH}/logs/raw
+FRONTEND_HYPERWATCH_URL=wss://{FRONTEND_DOMAIN}/{HYPERWATCH_PATH}/logs/raw
 FRONTEND_HYPERWATCH_USERNAME={USERNAME}
 FRONTEND_HYPERWATCH_SECRET={SECRET}
 ```
@@ -50,7 +50,7 @@ npm run start:frontend
 Set the following environment variables in `.env`.
 
 ```
-IMAGES_HYPERWATCH_URL={API_URL}/{HYPERWATCH_PATH}/logs/raw
+IMAGES_HYPERWATCH_URL=wss://{IMAGES_DOMAIN}/{HYPERWATCH_PATH}/logs/raw
 IMAGES_HYPERWATCH_USERNAME={USERNAME}
 IMAGES_HYPERWATCH_SECRET={SECRET}
 ```
@@ -66,7 +66,7 @@ npm run start:images
 Set the following environment variables in `.env`.
 
 ```
-REST_HYPERWATCH_URL={API_URL}/{HYPERWATCH_PATH}/logs/raw
+REST_HYPERWATCH_URL=wss://{REST_DOMAIN}/{HYPERWATCH_PATH}/logs/raw
 REST_HYPERWATCH_USERNAME={USERNAME}
 REST_HYPERWATCH_SECRET={SECRET}
 ```
@@ -82,7 +82,7 @@ npm run start:rest
 Clone and link Hyperwatch:
 
 ```
-git clone git@github.com:znarf/hyperwatch.git
+git clone git@github.com:hyperwatch/hyperwatch.git
 cd hyperwatch
 npm install
 npm link
