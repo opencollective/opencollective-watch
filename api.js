@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+
 const hyperwatch = require('@hyperwatch/hyperwatch');
 const { pick } = require('lodash');
 
@@ -50,6 +53,13 @@ pipeline
   })
   .registerNode('main')
   .filter((log) => log.has('graphql'))
+  .map((log) => {
+    log = log.setIn(
+      ['graphql', 'hash'],
+      util.md5(log.getIn(['graphql', 'query'])).slice(0, 8),
+    );
+    return log;
+  })
   .registerNode('graphql');
 
 // Register application nodes
@@ -64,18 +74,6 @@ for (const application of ['frontend', 'images', 'rest']) {
 }
 other.registerNode('other');
 
-// Register slow nodes
-
-pipeline
-  .getNode('graphql')
-  .filter((log) => log.get('executionTime') > 100)
-  .registerNode('slow');
-
-pipeline
-  .getNode('graphql')
-  .filter((log) => log.get('executionTime') > 1000)
-  .registerNode('extra-slow');
-
 // GraphQL formatter
 
 const formatRequest = (log) => {
@@ -86,29 +84,33 @@ const formatRequest = (log) => {
   const pickList = [
     'id',
     'slug',
+    'accountSlug',
     'collectiveSlug',
     'CollectiveSlug',
     'CollectiveId',
     'legacyExpenseId',
     'tierId',
     'term',
+    'type',
+    'role',
+    'tierSlug',
+    'TierId',
+    'limit',
+    'offset',
+    'action',
+    'reference',
   ];
+
+  const hash = log.getIn(['graphql', 'hash']);
   const operationName = log.getIn(['graphql', 'operationName'], 'unknown');
-  const variables = log.hasIn(['graphql', 'variables'])
-    ? log.getIn(['graphql', 'variables']).toJS()
-    : {};
-  return `${operationName} ${JSON.stringify(pick(variables, pickList))}`;
+  const variables = log.getIn(['graphql', 'variables'], {});
+
+  return `${hash} ${operationName} ${JSON.stringify(
+    pick(variables.toJS ? variables.toJS() : variables, pickList),
+  )} ${log.hasIn(['graphql', 'servedFromCache']) ? 'HIT' : 'MISS'}`;
 };
 
 lib.logger.defaultFormatter.replaceFormat('request', formatRequest);
-
-// Log to the console
-
-pipeline
-  .getNode('main')
-  .map((log) =>
-    console.log(lib.logger.defaultFormatter.format(log, 'console')),
-  );
 
 // Add GraphQL aggregator
 
@@ -147,3 +149,40 @@ aggregator.setFormatter(graphqlOperationFormatter);
 pipeline.getNode('graphql').map((log) => aggregator.processLog(log));
 
 app.api.registerAggregator('graphql', aggregator);
+
+// Write GraphQL queries to disk
+
+const graphqlQueriesDir = path.join(__dirname, 'graphql-queries');
+if (!fs.existsSync(graphqlQueriesDir)) {
+  fs.mkdirSync(graphqlQueriesDir, { recursive: true });
+}
+
+pipeline.getNode('graphql').map((log) => {
+  const hash = log.getIn(['graphql', 'hash']);
+  const operationName = log.getIn(['graphql', 'operationName']);
+
+  const filename = [operationName, hash].filter((el) => !!el).join('-');
+  const filepath = path.join(graphqlQueriesDir, `${filename}.graphql`);
+
+  fs.writeFileSync(filepath, log.getIn(['graphql', 'query']));
+});
+
+// Register slow nodes
+
+pipeline
+  .getNode('graphql')
+  .filter((log) => log.get('executionTime') > 100)
+  .registerNode('graphql-slow');
+
+pipeline
+  .getNode('graphql')
+  .filter((log) => log.get('executionTime') > 1000)
+  .registerNode('graphql-extra-slow');
+
+// Log GraphQL queries to the console
+
+pipeline
+  .getNode('graphql')
+  .map((log) =>
+    console.log(lib.logger.defaultFormatter.format(log, 'console')),
+  );
