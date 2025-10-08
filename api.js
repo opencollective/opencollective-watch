@@ -1,7 +1,24 @@
 const hyperwatch = require('@hyperwatch/hyperwatch');
+// const graphite = require('graphite');
 const { pick } = require('lodash');
 
 const { app, pipeline, input, lib, util } = hyperwatch;
+
+// Init Graphite
+
+// const graphiteClient = graphite.createClient(
+//   'plaintext://carbon.hostedgraphite.com:2003/',
+// );
+
+// const statsdClient = new StatsD(
+//   'statsd.hostedgraphite.com',
+//   8125,
+//   'c8609937-bef2-4f55-a36e-d8374a0748c3.',
+// );
+
+// statsdClient.socket.on('error', function (error) {
+//   return console.error('Error in socket: ', error);
+// });
 
 // Init Hyperwatch (will load modules)
 
@@ -145,5 +162,49 @@ graphqlOperationFormatter.setFormats([
 aggregator.setFormatter(graphqlOperationFormatter);
 
 pipeline.getNode('graphql').map((log) => aggregator.processLog(log));
+
+// pipeline.getNode('graphql').map((log) => {
+//   const application = log.getIn(['application']) || 'unknown';
+//   const operation = log.getIn(['graphql', 'operationName']) || 'unknown';
+//   // const metricName = `c8609937-bef2-4f55-a36e-d8374a0748c3.graphql.${application}.${operation}.executionTime`;
+//   // graphiteClient.write({ [metricName]: log.get('executionTime') }, () => {
+//   //   // if err is null, your data was sent to graphite!
+//   // });
+//   statsdClient.timing(
+//     `graphql.${application}.${operation}.responseTime`,
+//     log.get('executionTime'),
+//     // function (error, bytes) {
+//     //   //this only gets called once after all messages have been sent
+//     //   if (error) {
+//     //     console.error('Oh noes! There was an error:', error);
+//     //   } else {
+//     //     console.log('Successfully sent', bytes, 'bytes');
+//     //   }
+//     // },
+//   );
+
+//   // statsdClient.increment(
+//   //   `graphql.${application}.${operation}`,
+//   //   1,
+//   //   function (error, bytes) {
+//   //     //this only gets called once after all messages have been sent
+//   //     if (error) {
+//   //       console.error('Oh noes! There was an error:', error);
+//   //     } else {
+//   //       console.log('Successfully sent', bytes, 'bytes');
+//   //     }
+//   //   },
+//   // );
+
+//   // return log;
+
+//   // do something
+
+//   // statsd.hostedgraphite.com:8125
+
+//   // Prefix any data with your Hosted Graphite API Key (c8609937-bef2-4f55-a36e-d8374a0748c3).
+
+//   //  200
+// });
 
 app.api.registerAggregator('graphql', aggregator);
