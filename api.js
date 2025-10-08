@@ -1,24 +1,31 @@
 const hyperwatch = require('@hyperwatch/hyperwatch');
 const { pick } = require('lodash');
+const uuid = require('uuid');
 
 const { app, pipeline, input, lib, util } = hyperwatch;
+
+const serverCount = 2;
 
 // Init Hyperwatch (will load modules)
 
 hyperwatch.init({});
 
-// Connect Input
+// Connect Inputs (1 per live server)
 
-const websocketClientInput = input.websocket.create({
-  name: 'WebSocket client (JSON standard format)',
-  type: 'client',
-  address: process.env.API_HYPERWATCH_URL,
-  reconnectOnClose: true,
-  username: process.env.API_HYPERWATCH_USERNAME,
-  password: process.env.API_HYPERWATCH_SECRET,
-});
+const clientId = uuid.v4();
 
-pipeline.registerInput(websocketClientInput);
+for (let i = 1; i <= serverCount; i++) {
+  const websocketClientInput = input.websocket.create({
+    name: `WebSocket client #${i} (JSON standard format)`,
+    type: 'client',
+    address: `${process.env.API_HYPERWATCH_URL}?clientId=${clientId}`,
+    reconnectOnClose: true,
+    username: process.env.API_HYPERWATCH_USERNAME,
+    password: process.env.API_HYPERWATCH_SECRET,
+  });
+
+  pipeline.registerInput(websocketClientInput);
+}
 
 // Setup Pipeline and data augmentation
 
