@@ -14,30 +14,40 @@
     "prettier": "prettier \"**/*.@(js|json|md)\"",
     "prettier:check": "npm run prettier -- --check",
     "prettier:write": "npm run prettier -- --write",
+    "start": "dotenv node start.js",
     "start:api": "PORT=3360 dotenv hyperwatch api",
+    "start:server": "dotenv node index.js",
     "start:images": "PORT=3301 dotenv hyperwatch images",
     "start:rest": "PORT=3303 dotenv hyperwatch rest",
-    "start:frontend": "PORT=3300 dotenv hyperwatch frontend"
+    "start:frontend": "PORT=3300 dotenv hyperwatch frontend",
+    "build:dashboard": "cd dashboard && npm run build"
   },
   "dependencies": {
-    "@hyperwatch/hyperwatch": "^3.9.3",
-    "dotenv-cli": "^6.0.0",
-    "lodash": "^4.17.21",
-    "path-to-regexp": "^6.2.1",
-    "uuid": "^9.0.0"
+    "@hyperwatch/hyperwatch": "^5.0.0",
+    "cors": "^2.8.6",
+    "dotenv-cli": "^11.0.0",
+    "express": "^5.2.1",
+    "express-ws": "^5.0.2",
+    "lodash": "^4.18.1",
+    "path-to-regexp": "^6.3.0",
+    "uuid": "^14.0.2"
   },
   "devDependencies": {
-    "babel-eslint": "^10.1.0",
-    "eslint": "^8.30.0",
-    "eslint-config-opencollective": "^3.0.3",
-    "eslint-plugin-babel": "^5.3.1",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-react": "^7.31.11",
-    "prettier": "^2.8.1"
+    "@eslint/js": "^10.0.1",
+    "@typescript-eslint/parser": "^8.70.1",
+    "eslint": "^10.11.0",
+    "eslint-config-opencollective": "^7.1.1",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-n": "^18.3.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-simple-import-sort": "^14.0.0",
+    "globals": "^17.12.0",
+    "prettier": "^3.9.9",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.70.1"
   },
   "engines": {
-    "node": "18.x",
-    "npm": "8.x"
+    "node": "24.x",
+    "npm": "11.x"
   }
 }
