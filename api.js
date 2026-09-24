@@ -64,15 +64,19 @@ pipeline
     return log;
   }, 'set application & identity')
   .map(setClientWorkerIdentity, 'set client worker identity')
+  // Before registering main, so every node derived from it has the hash
+  .map(
+    (log) =>
+      log.hasIn(['graphql', 'query'])
+        ? log.setIn(
+            ['graphql', 'hash'],
+            util.md5(log.getIn(['graphql', 'query'])).slice(0, 8),
+          )
+        : log,
+    'compute graphql hash',
+  )
   .registerNode('main')
   .filter((log) => log.has('graphql'), 'has graphql')
-  .map((log) => {
-    log = log.setIn(
-      ['graphql', 'hash'],
-      util.md5(log.getIn(['graphql', 'query'])).slice(0, 8),
-    );
-    return log;
-  }, 'compute graphql hash')
   .registerNode('graphql');
 
 // Register application nodes
