@@ -23,7 +23,7 @@
     "heroku-postbuild": "bin/install-cloudflared"
   },
   "dependencies": {
-    "@hyperwatch/dashboard": "^0.1.0",
+    "@hyperwatch/dashboard": "^0.1.1",
     "@hyperwatch/hyperwatch": "^5.0.0",
     "cors": "^2.8.6",
     "dotenv-cli": "^11.0.0",
