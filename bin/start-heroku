@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Heroku worker: runs the Hyperwatch instances and a Cloudflare Tunnel side by
+# side. There is no web process, so Watch is only reachable through the tunnel
+# and its Cloudflare Access policy. If either process exits, the other is
+# stopped and this exits non-zero so Heroku restarts the dyno.
+set -uo pipefail
+cd "$(dirname "$0")/.."
+
+if [ -z "${CLOUDFLARE_TUNNEL_TOKEN:-}" ]; then
+  echo "CLOUDFLARE_TUNNEL_TOKEN is not set: Watch would be unreachable" >&2
+  exit 1
+fi
+
+node start.js --stderr &
+watch_pid=$!
+
+vendor/cloudflared tunnel --no-autoupdate run --token "$CLOUDFLARE_TUNNEL_TOKEN" &
+tunnel_pid=$!
+
+stop() {
+  kill -TERM "$watch_pid" "$tunnel_pid" 2>/dev/null
+  wait
+}
+trap 'stop; exit 0' TERM INT
+
+wait -n
+status=$?
+echo "A process exited ($status), stopping" >&2
+stop
+exit 1

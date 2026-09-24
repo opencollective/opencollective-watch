@@ -8,7 +8,7 @@ const { pipeline, input, lib } = hyperwatch;
 
 hyperwatch.init({
   persistence: {
-    enabled: true,
+    enabled: process.env.HYPERWATCH_PERSISTENCE === 'true',
     namespace: 'rest',
   },
 });

@@ -39,7 +39,7 @@
     },
     "history": {
       "active": true,
-      "capacity": 10000
+      "capacity": 1000
     },
     "sparkline": {
       "active": true

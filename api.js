@@ -9,13 +9,16 @@ const { setClientWorkerIdentity } = require('./cloudflare-worker');
 
 const { app, pipeline, input, lib, util } = hyperwatch;
 
-const serverCount = 2;
+// Each websocket gets the logs of the one server dyno the router picked, and
+// servers don't dedupe by clientId: use 1 for single-dyno services (staging),
+// or every request is counted several times
+const serverCount = Number(process.env.API_HYPERWATCH_CONNECTIONS) || 2;
 
 // Init Hyperwatch (will load modules)
 
 hyperwatch.init({
   persistence: {
-    enabled: true,
+    enabled: process.env.HYPERWATCH_PERSISTENCE === 'true',
     namespace: 'api',
   },
 });
