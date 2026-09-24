@@ -3,6 +3,7 @@ const uuid = require('uuid');
 
 const { setClientWorkerIdentity } = require('./cloudflare-worker');
 const { mountDashboard } = require('./dashboard');
+const { hyperwatchOptions } = require('./options');
 
 // Each websocket gets the logs of the one server dyno the router picked, and
 // servers don't dedupe by clientId: use 1 for single-dyno services (staging),
@@ -13,15 +14,9 @@ const { pipeline, input, lib } = hyperwatch;
 
 // Init Hyperwatch (will load modules)
 
-hyperwatch.init({
-  modules: {
-    cloudflare: { active: false },
-  },
-  persistence: {
-    enabled: process.env.HYPERWATCH_PERSISTENCE === 'true',
-    namespace: 'frontend',
-  },
-});
+hyperwatch.init(
+  hyperwatchOptions('frontend', { modules: { cloudflare: { active: false } } }),
+);
 
 mountDashboard('frontend');
 

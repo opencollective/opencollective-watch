@@ -2,17 +2,13 @@ const hyperwatch = require('@hyperwatch/hyperwatch');
 
 const { setClientWorkerIdentity } = require('./cloudflare-worker');
 const { mountDashboard } = require('./dashboard');
+const { hyperwatchOptions } = require('./options');
 
 const { pipeline, input, lib } = hyperwatch;
 
 // Init Hyperwatch (will load modules)
 
-hyperwatch.init({
-  persistence: {
-    enabled: process.env.HYPERWATCH_PERSISTENCE === 'true',
-    namespace: 'rest',
-  },
-});
+hyperwatch.init(hyperwatchOptions('rest'));
 
 mountDashboard('rest');
 

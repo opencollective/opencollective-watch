@@ -7,6 +7,7 @@ const uuid = require('uuid');
 
 const { setClientWorkerIdentity } = require('./cloudflare-worker');
 const { mountDashboard } = require('./dashboard');
+const { hyperwatchOptions } = require('./options');
 
 const { app, pipeline, input, lib, util } = hyperwatch;
 
@@ -17,12 +18,7 @@ const serverCount = Number(process.env.API_HYPERWATCH_CONNECTIONS) || 2;
 
 // Init Hyperwatch (will load modules)
 
-hyperwatch.init({
-  persistence: {
-    enabled: process.env.HYPERWATCH_PERSISTENCE === 'true',
-    namespace: 'api',
-  },
-});
+hyperwatch.init(hyperwatchOptions('api'));
 
 mountDashboard('api');
 

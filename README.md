@@ -92,6 +92,9 @@ Optional environment variables:
 
 - `HYPERWATCH_PERSISTENCE=true`: save counters and history to `.hyperwatch-data/` on shutdown and
   reload them at start.
+- `HYPERWATCH_HISTORY_CAPACITY`: requests kept per pipeline node for `/history` and the live logs
+  (default 1000 in `.hyperwatchrc`, sized for Heroku). Raise it locally, e.g. `10000`, at the cost
+  of memory.
 - `API_HYPERWATCH_CONNECTIONS`, `FRONTEND_HYPERWATCH_CONNECTIONS`, `IMAGES_HYPERWATCH_CONNECTIONS`:
   websockets opened per service (defaults 2, 4, 2). Use `1` against single-dyno servers such as
   staging, otherwise requests are counted several times.
