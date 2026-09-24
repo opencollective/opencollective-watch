@@ -1,6 +1,7 @@
 const hyperwatch = require('@hyperwatch/hyperwatch');
 
 const { setClientWorkerIdentity } = require('./cloudflare-worker');
+const { mountDashboard } = require('./dashboard');
 
 const { pipeline, input, lib } = hyperwatch;
 
@@ -12,6 +13,8 @@ hyperwatch.init({
     namespace: 'rest',
   },
 });
+
+mountDashboard('rest');
 
 // Connect Input
 

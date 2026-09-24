@@ -15,14 +15,9 @@ const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const SERVICES = {
-  api: { port: 3360 },
-  frontend: { port: 3300 },
-  images: { port: 3301 },
-  rest: { port: 3303 },
-};
+const SERVICES = require('./services');
 
-const DEFAULT_SERVICES = ['api', 'frontend', 'images', 'rest'];
+const DEFAULT_SERVICES = Object.keys(SERVICES);
 
 const args = process.argv.slice(2);
 const verbose = args.includes('-v') || args.includes('--verbose');

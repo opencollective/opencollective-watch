@@ -6,6 +6,7 @@ const { pick } = require('lodash');
 const uuid = require('uuid');
 
 const { setClientWorkerIdentity } = require('./cloudflare-worker');
+const { mountDashboard } = require('./dashboard');
 
 const { app, pipeline, input, lib, util } = hyperwatch;
 
@@ -22,6 +23,8 @@ hyperwatch.init({
     namespace: 'api',
   },
 });
+
+mountDashboard('api');
 
 // Connect Inputs (1 per live server)
 
