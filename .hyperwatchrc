@@ -14,7 +14,7 @@
       "active": true
     },
     "dnsbl": {
-      "active": false
+      "active": true
     },
     "address": {
       "active": true
@@ -30,6 +30,16 @@
     },
     "signature": {
       "active": true
+    },
+    "fingerprint": {
+      "active": true
+    },
+    "firewall": {
+      "active": true
+    },
+    "history": {
+      "active": true,
+      "capacity": 10000
     },
     "sparkline": {
       "active": true

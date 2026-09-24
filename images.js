@@ -2,13 +2,20 @@ const hyperwatch = require('@hyperwatch/hyperwatch');
 const { pathToRegexp } = require('path-to-regexp');
 const uuid = require('uuid');
 
+const { setClientWorkerIdentity } = require('./cloudflare-worker');
+
 const serverCount = 2;
 
 const { pipeline, input, lib } = hyperwatch;
 
 // Init Hyperwatch (will load modules)
 
-hyperwatch.init({});
+hyperwatch.init({
+  persistence: {
+    enabled: true,
+    namespace: 'images',
+  },
+});
 
 // Connect Inputs (1 per live server)
 
@@ -38,7 +45,8 @@ pipeline
     }
 
     return log;
-  })
+  }, 'set images identity')
+  .map(setClientWorkerIdentity, 'set client worker identity')
   .registerNode('main');
 
 // Create node based on Express Routes
@@ -86,6 +94,7 @@ other.registerNode('other');
 
 pipeline
   .getNode('main')
-  .map((log) =>
-    console.log(lib.logger.defaultFormatter.format(log, 'console')),
+  .map(
+    (log) => console.log(lib.logger.defaultFormatter.format(log, 'console')),
+    'console output',
   );
