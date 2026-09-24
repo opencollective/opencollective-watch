@@ -20,10 +20,11 @@
     "start:images": "PORT=3301 dotenv hyperwatch images",
     "start:rest": "PORT=3303 dotenv hyperwatch rest",
     "start:frontend": "PORT=3300 dotenv hyperwatch frontend",
-    "build:dashboard": "cd dashboard && npm run build"
+    "heroku-postbuild": "bin/install-cloudflared"
   },
   "dependencies": {
-    "@hyperwatch/hyperwatch": "^5.0.0",
+    "@hyperwatch/dashboard": "^0.1.1",
+    "@hyperwatch/hyperwatch": "^5.0.1",
     "cors": "^2.8.6",
     "dotenv-cli": "^11.0.0",
     "express": "^5.2.1",

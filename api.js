@@ -6,19 +6,21 @@ const { pick } = require('lodash');
 const uuid = require('uuid');
 
 const { setClientWorkerIdentity } = require('./cloudflare-worker');
+const { mountDashboard } = require('./dashboard');
+const { hyperwatchOptions } = require('./options');
 
 const { app, pipeline, input, lib, util } = hyperwatch;
 
-const serverCount = 2;
+// Each websocket gets the logs of the one server dyno the router picked, and
+// servers don't dedupe by clientId: use 1 for single-dyno services (staging),
+// or every request is counted several times
+const serverCount = Number(process.env.API_HYPERWATCH_CONNECTIONS) || 2;
 
 // Init Hyperwatch (will load modules)
 
-hyperwatch.init({
-  persistence: {
-    enabled: true,
-    namespace: 'api',
-  },
-});
+hyperwatch.init(hyperwatchOptions('api'));
+
+mountDashboard('api');
 
 // Connect Inputs (1 per live server)
 
@@ -30,6 +32,7 @@ for (let i = 1; i <= serverCount; i++) {
     type: 'client',
     address: `${process.env.API_HYPERWATCH_URL}?clientId=${clientId}`,
     reconnectOnClose: true,
+    heartbeatInterval: 10000,
     username: process.env.API_HYPERWATCH_USERNAME,
     password: process.env.API_HYPERWATCH_SECRET,
   });
@@ -61,15 +64,19 @@ pipeline
     return log;
   }, 'set application & identity')
   .map(setClientWorkerIdentity, 'set client worker identity')
+  // Before registering main, so every node derived from it has the hash
+  .map(
+    (log) =>
+      log.hasIn(['graphql', 'query'])
+        ? log.setIn(
+            ['graphql', 'hash'],
+            util.md5(log.getIn(['graphql', 'query'])).slice(0, 8),
+          )
+        : log,
+    'compute graphql hash',
+  )
   .registerNode('main')
   .filter((log) => log.has('graphql'), 'has graphql')
-  .map((log) => {
-    log = log.setIn(
-      ['graphql', 'hash'],
-      util.md5(log.getIn(['graphql', 'query'])).slice(0, 8),
-    );
-    return log;
-  }, 'compute graphql hash')
   .registerNode('graphql');
 
 // Register application nodes

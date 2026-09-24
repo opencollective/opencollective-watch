@@ -1,17 +1,16 @@
 const hyperwatch = require('@hyperwatch/hyperwatch');
 
 const { setClientWorkerIdentity } = require('./cloudflare-worker');
+const { mountDashboard } = require('./dashboard');
+const { hyperwatchOptions } = require('./options');
 
 const { pipeline, input, lib } = hyperwatch;
 
 // Init Hyperwatch (will load modules)
 
-hyperwatch.init({
-  persistence: {
-    enabled: true,
-    namespace: 'rest',
-  },
-});
+hyperwatch.init(hyperwatchOptions('rest'));
+
+mountDashboard('rest');
 
 // Connect Input
 
@@ -20,6 +19,7 @@ const websocketClientInput = input.websocket.create({
   type: 'client',
   address: process.env.REST_HYPERWATCH_URL,
   reconnectOnClose: true,
+  heartbeatInterval: 10000,
   username: process.env.REST_HYPERWATCH_USERNAME,
   password: process.env.REST_HYPERWATCH_SECRET,
 });

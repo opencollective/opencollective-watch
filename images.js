@@ -3,19 +3,21 @@ const { pathToRegexp } = require('path-to-regexp');
 const uuid = require('uuid');
 
 const { setClientWorkerIdentity } = require('./cloudflare-worker');
+const { mountDashboard } = require('./dashboard');
+const { hyperwatchOptions } = require('./options');
 
-const serverCount = 2;
+// Each websocket gets the logs of the one server dyno the router picked, and
+// servers don't dedupe by clientId: use 1 for single-dyno services (staging),
+// or every request is counted several times
+const serverCount = Number(process.env.IMAGES_HYPERWATCH_CONNECTIONS) || 2;
 
 const { pipeline, input, lib } = hyperwatch;
 
 // Init Hyperwatch (will load modules)
 
-hyperwatch.init({
-  persistence: {
-    enabled: true,
-    namespace: 'images',
-  },
-});
+hyperwatch.init(hyperwatchOptions('images'));
+
+mountDashboard('images');
 
 // Connect Inputs (1 per live server)
 
@@ -27,6 +29,7 @@ for (let i = 0; i < serverCount; i++) {
     type: 'client',
     address: `${process.env.IMAGES_HYPERWATCH_URL}?clientId=${clientId}`,
     reconnectOnClose: true,
+    heartbeatInterval: 10000,
     username: process.env.IMAGES_HYPERWATCH_USERNAME,
     password: process.env.IMAGES_HYPERWATCH_SECRET,
   });

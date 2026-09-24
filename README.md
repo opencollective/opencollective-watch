@@ -77,6 +77,52 @@ Then, start with:
 npm run start:rest
 ```
 
+### Watching all services at once
+
+```
+npm start                  # api, frontend, images and rest, one process each, quiet
+npm start -- -v            # stream their output, prefixed with the service name
+npm start -- --stderr      # stream only errors
+npm start -- api images    # pick services
+```
+
+Errors are kept in `logs/<service>.log`. If one service crashes, the others are stopped.
+
+Optional environment variables:
+
+- `HYPERWATCH_PERSISTENCE=true`: save counters and history to `.hyperwatch-data/` on shutdown and
+  reload them at start.
+- `HYPERWATCH_HISTORY_CAPACITY`: requests kept per pipeline node for `/history` and the live logs
+  (default 1000 in `.hyperwatchrc`, sized for Heroku). Raise it locally, e.g. `10000`, at the cost
+  of memory.
+- `API_HYPERWATCH_CONNECTIONS`, `FRONTEND_HYPERWATCH_CONNECTIONS`, `IMAGES_HYPERWATCH_CONNECTIONS`:
+  websockets opened per service (defaults 2, 4, 2). Use `1` against single-dyno servers such as
+  staging, otherwise requests are counted several times.
+
+### Dashboard
+
+Each instance serves the [Hyperwatch dashboard](https://github.com/hyperwatch/dashboard)
+(`@hyperwatch/dashboard`) at `/dashboard`, e.g. http://localhost:3360/dashboard, with links to the
+other instances. Their URLs default to `http://localhost:<port>`; set `WATCH_INSTANCE_URL` to a
+template such as `https://watch-staging-{service}.opencollective.com` when they are elsewhere.
+Without the package installed, Watch runs without a dashboard.
+
+To work on the dashboard, clone it next to Hyperwatch and link it:
+
+```
+git clone git@github.com:hyperwatch/dashboard.git
+cd dashboard && npm install && npm run build && npm link
+cd ../watch && npm link @hyperwatch/dashboard
+```
+
+Then run `npm run watch` in the dashboard repo: every change is rebuilt and served by the running
+instances, reload the page to see it (the instance links keep the current page and its settings).
+`npm install` in Watch replaces the link with the published package; link again afterwards.
+
+### Running on Heroku
+
+Watch runs on Heroku for staging, behind Cloudflare Access. See [docs/heroku.md](docs/heroku.md).
+
 ### Using a development version of Hyperwatch
 
 Clone and link Hyperwatch:
@@ -102,6 +148,4 @@ TL;DR: we use [Prettier](https://prettier.io/) and [ESLint](https://eslint.org/)
 
 ## Discussion
 
-If you have any questions, ping us on Slack
-(https://slack.opencollective.org) or on Twitter
-([@opencollect](https://twitter.com/opencollect)).
+If you have any questions, ping us on [Discord](https://discord.opencollective.com).

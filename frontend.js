@@ -2,22 +2,23 @@ const hyperwatch = require('@hyperwatch/hyperwatch');
 const uuid = require('uuid');
 
 const { setClientWorkerIdentity } = require('./cloudflare-worker');
+const { mountDashboard } = require('./dashboard');
+const { hyperwatchOptions } = require('./options');
 
-const serverCount = 4;
+// Each websocket gets the logs of the one server dyno the router picked, and
+// servers don't dedupe by clientId: use 1 for single-dyno services (staging),
+// or every request is counted several times
+const serverCount = Number(process.env.FRONTEND_HYPERWATCH_CONNECTIONS) || 4;
 
 const { pipeline, input, lib } = hyperwatch;
 
 // Init Hyperwatch (will load modules)
 
-hyperwatch.init({
-  modules: {
-    cloudflare: { active: false },
-  },
-  persistence: {
-    enabled: true,
-    namespace: 'frontend',
-  },
-});
+hyperwatch.init(
+  hyperwatchOptions('frontend', { modules: { cloudflare: { active: false } } }),
+);
+
+mountDashboard('frontend');
 
 // Connect Inputs (1 per live server)
 

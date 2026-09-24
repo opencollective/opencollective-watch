@@ -1,3 +1,8 @@
 .env
 node_modules
 graphql-queries
+graphql-queries-backup
+graphql-queries-backup-backup
+.hyperwatch-data*/
+logs/
+vendor/

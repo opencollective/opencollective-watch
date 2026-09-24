@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Downloads cloudflared (Cloudflare Tunnel) to vendor/cloudflared.
+# Run by `heroku-postbuild`. Pin a release with CLOUDFLARED_VERSION.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+if [ -n "${CLOUDFLARED_VERSION:-}" ]; then
+  url="https://github.com/cloudflare/cloudflared/releases/download/$CLOUDFLARED_VERSION/cloudflared-linux-amd64"
+else
+  url="https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64"
+fi
+
+echo "Downloading cloudflared from $url"
+mkdir -p vendor
+curl -fsSL --retry 3 -o vendor/cloudflared "$url"
+chmod +x vendor/cloudflared

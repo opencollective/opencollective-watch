@@ -4,26 +4,24 @@
 //
 // Hyperwatch is a process-wide singleton, so each config gets its own child
 // process. Output is silent by default; stderr is kept in logs/<name>.log.
+// If one child exits unexpectedly, the others are stopped and this exits 1.
 //
 //   npm start                  # api + frontend + images + rest, quiet
 //   npm start -- -v            # stream prefixed output
+//   npm start -- --stderr      # stream prefixed stderr only (Heroku logs)
 //   npm start -- api images    # pick services
 
 const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const SERVICES = {
-  api: { port: 3360 },
-  frontend: { port: 3300 },
-  images: { port: 3301 },
-  rest: { port: 3303 },
-};
+const SERVICES = require('./services');
 
-const DEFAULT_SERVICES = ['api', 'frontend', 'images', 'rest'];
+const DEFAULT_SERVICES = Object.keys(SERVICES);
 
 const args = process.argv.slice(2);
 const verbose = args.includes('-v') || args.includes('--verbose');
+const stderrOnly = !verbose && args.includes('--stderr');
 const names = args.filter((arg) => !arg.startsWith('-'));
 const selected = names.length ? names : DEFAULT_SERVICES;
 
@@ -44,6 +42,7 @@ fs.mkdirSync(logsDir, { recursive: true });
 
 const children = new Map();
 let shuttingDown = false;
+let failed = false;
 
 const prefixLines = (name, stream, target) => {
   let buffer = '';
@@ -65,13 +64,17 @@ for (const name of selected) {
   const child = spawn(bin, [name], {
     cwd: __dirname,
     env: { ...process.env, PORT: String(port) },
-    stdio: verbose
-      ? ['ignore', 'pipe', 'pipe']
-      : ['ignore', 'ignore', stderrFd],
+    stdio: [
+      'ignore',
+      verbose ? 'pipe' : 'ignore',
+      verbose || stderrOnly ? 'pipe' : stderrFd,
+    ],
   });
 
   if (verbose) {
     prefixLines(name, child.stdout, process.stdout);
+  }
+  if (verbose || stderrOnly) {
     prefixLines(name, child.stderr, process.stderr);
     child.stderr.on('data', (chunk) => fs.writeSync(stderrFd, chunk));
   }
@@ -85,9 +88,11 @@ for (const name of selected) {
           signal || `code ${code}`
         }), see logs/${name}.log`,
       );
+      failed = true;
+      shutdown('SIGTERM');
     }
     if (children.size === 0) {
-      process.exit(shuttingDown ? 0 : 1);
+      process.exit(failed ? 1 : 0);
     }
   });
 
