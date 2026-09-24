@@ -30,6 +30,7 @@ for (let i = 0; i < serverCount; i++) {
     type: 'client',
     address: `${process.env.IMAGES_HYPERWATCH_URL}?clientId=${clientId}`,
     reconnectOnClose: true,
+    heartbeatInterval: 10000,
     username: process.env.IMAGES_HYPERWATCH_USERNAME,
     password: process.env.IMAGES_HYPERWATCH_SECRET,
   });

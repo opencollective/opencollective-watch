@@ -33,6 +33,7 @@ for (let i = 1; i <= serverCount; i++) {
     type: 'client',
     address: `${process.env.API_HYPERWATCH_URL}?clientId=${clientId}`,
     reconnectOnClose: true,
+    heartbeatInterval: 10000,
     username: process.env.API_HYPERWATCH_USERNAME,
     password: process.env.API_HYPERWATCH_SECRET,
   });

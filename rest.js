@@ -20,6 +20,7 @@ const websocketClientInput = input.websocket.create({
   type: 'client',
   address: process.env.REST_HYPERWATCH_URL,
   reconnectOnClose: true,
+  heartbeatInterval: 10000,
   username: process.env.REST_HYPERWATCH_USERNAME,
   password: process.env.REST_HYPERWATCH_SECRET,
 });
