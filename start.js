@@ -101,15 +101,22 @@ for (const name of selected) {
 }
 
 // Children persist their aggregators on SIGINT/SIGTERM, so let them finish.
-// A second signal kills them outright.
+// A second signal kills them outright. One Ctrl+C reaches this process more
+// than once (from the terminal, and forwarded by npm and dotenv), so repeats
+// within a second don't count as a second signal.
+let shuttingDownAt;
 const shutdown = (signal) => {
   if (shuttingDown) {
+    if (Date.now() - shuttingDownAt < 1000) {
+      return;
+    }
     for (const child of children.values()) {
       child.kill('SIGKILL');
     }
     return;
   }
   shuttingDown = true;
+  shuttingDownAt = Date.now();
   console.log(`Stopping (${signal}), waiting for persistence…`);
   for (const child of children.values()) {
     child.kill(signal);
