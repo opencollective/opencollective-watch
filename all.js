@@ -36,13 +36,17 @@ const cloudflare = modules.get('cloudflare');
 
 // connections: default number of websockets, one per production dyno (see
 // the service configs)
-// address: sets the client address, before modules (geoip, hostname,
-// identity…) use it
+// prepare: runs as logs arrive, before any node. It sets the client address
+// before modules (geoip, hostname, identity…) use it, and redacts sign-in
+// tokens before raw and the input nodes keep the logs in their history.
 const SOURCES = {
-  api: { connections: 2, address: cloudflare.augment },
-  frontend: { connections: 4, address: setRealIp },
-  images: { connections: 2, address: cloudflare.augment },
-  rest: { connections: 1, address: cloudflare.augment },
+  api: { connections: 2, prepare: cloudflare.augment },
+  frontend: {
+    connections: 4,
+    prepare: (log) => redactSigninToken(setRealIp(log)),
+  },
+  images: { connections: 2, prepare: cloudflare.augment },
+  rest: { connections: 1, prepare: cloudflare.augment },
 };
 
 // Connect Inputs (the live servers of every service)
@@ -59,7 +63,7 @@ function transformInput(websocketInput, transform) {
   };
 }
 
-for (const [service, { connections, address }] of Object.entries(SOURCES)) {
+for (const [service, { connections, prepare }] of Object.entries(SOURCES)) {
   const prefix = service.toUpperCase();
   const url = process.env[`${prefix}_HYPERWATCH_URL`];
   if (!url) {
@@ -83,7 +87,7 @@ for (const [service, { connections, address }] of Object.entries(SOURCES)) {
 
     pipeline.registerInput(
       transformInput(websocketClientInput, (log) =>
-        address(log.set('source', service)),
+        prepare(log.set('source', service)),
       ),
     );
   }
@@ -103,10 +107,6 @@ pipeline
   .map(
     forSource('api', setApplicationAndIdentity),
     'api: set application & identity',
-  )
-  .map(
-    forSource('frontend', redactSigninToken),
-    'frontend: redact signin tokens',
   )
   .map(forSource('images', setImagesIdentity), 'images: set images identity')
   .map(setClientWorkerIdentity, 'set client worker identity')
@@ -146,9 +146,3 @@ lib.logger.defaultFormatter.insertFormat('source', (log) => log.get('source'), {
   before: 'request',
   color: 'grey',
 });
-
-// Console output
-
-// pipeline.getNode('main').map((log) => {
-//   console.log(lib.logger.defaultFormatter.format(log, 'console'));
-// }, 'console output');
