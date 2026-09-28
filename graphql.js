@@ -59,7 +59,8 @@ const formatRequest = (log) => {
 
   const hash = log.getIn(['graphql', 'hash']);
   const operationName = log.getIn(['graphql', 'operationName']);
-  const variables = log.getIn(['graphql', 'variables'], {});
+  // Missing, or null when the client sends "variables": null
+  const variables = log.getIn(['graphql', 'variables']) || {};
 
   return [
     hash,
