@@ -4,10 +4,13 @@ const uuid = require('uuid');
 const { setClientWorkerIdentity } = require('./cloudflare-worker');
 const { mountDashboard } = require('./dashboard');
 const { hyperwatchOptions } = require('./options');
+const { registerSlowNodes } = require('./slow');
+const { isAsset, redactSigninToken, setRealIp } = require('./transforms');
 
-// Each websocket gets the logs of the one server dyno the router picked, and
-// servers don't dedupe by clientId: use 1 for single-dyno services (staging),
-// or every request is counted several times
+// Each websocket gets the logs of the one server dyno the router picked. A
+// dyno keeps one websocket per clientId and cuts the others, which reconnect
+// until they reach a dyno not yet followed: open one per dyno (1 for
+// single-dyno services such as staging)
 const serverCount = Number(process.env.FRONTEND_HYPERWATCH_CONNECTIONS) || 4;
 
 const { pipeline, input, lib } = hyperwatch;
@@ -40,42 +43,15 @@ for (let i = 1; i <= serverCount; i++) {
 
 pipeline
   .getNode('main')
-  .map((log) => {
-    const realIp = log.getIn(['request', 'headers', 'oc-real-ip']);
-    if (realIp) {
-      log = log.setIn(['address', 'value'], realIp);
-    }
-    return log;
-  }, 'extract oc-real-ip')
+  .map(setRealIp, 'extract oc-real-ip')
   .map(setClientWorkerIdentity, 'set client worker identity')
-  .filter(
-    (log) => !log.getIn(['request', 'url']).match(/^\/_/),
-    'exclude /_* urls',
-  )
-  .filter(
-    (log) => !log.getIn(['request', 'url']).match(/^\/static/),
-    'exclude /static urls',
-  )
-  .map(
-    (log) =>
-      log.updateIn(['request', 'url'], (url) =>
-        url.startsWith('/signin/') ? '/signin/_authentication_token_' : url,
-      ),
-    'redact signin tokens',
-  )
+  .filter((log) => !isAsset(log), 'exclude /_* and /static urls')
+  .map(redactSigninToken, 'redact signin tokens')
   .registerNode('main');
 
 // Register slow nodes
 
-pipeline
-  .getNode('main')
-  .filter((log) => log.get('executionTime') > 300, 'executionTime > 300ms')
-  .registerNode('slow');
-
-pipeline
-  .getNode('main')
-  .filter((log) => log.get('executionTime') > 1000, 'executionTime > 1000ms')
-  .registerNode('extra-slow');
+registerSlowNodes(pipeline.getNode('main'));
 
 lib.logger.defaultFormatter.insertFormat(
   'domain',

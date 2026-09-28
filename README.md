@@ -6,87 +6,80 @@ If you see a step below that could be improved (or is outdated), please update t
 
 ## Usage
 
-### Watching Open Collective API
+### Setup
 
-Set the following environment variables in `.env`.
+Set the servers to follow in `.env`, one block per service:
 
 ```
 API_HYPERWATCH_URL=wss://{API_DOMAIN}/{HYPERWATCH_PATH}/logs/raw
 API_HYPERWATCH_USERNAME={USERNAME}
 API_HYPERWATCH_SECRET={SECRET}
-```
 
-Then, start with:
-
-```
-npm run start:api
-```
-
-You can use the following the URL:
-
-- see pipeline status: http://localhost:3360/status
-- browse identities: http://localhost:3360/identities
-- browse identities: http://localhost:3360/addresses
-- watch real time logs: http://localhost:3360/logs/main
-
-### Watching Open Collective Frontend
-
-Set the following environment variables in `.env`.
-
-```
 FRONTEND_HYPERWATCH_URL=wss://{FRONTEND_DOMAIN}/{HYPERWATCH_PATH}/logs/raw
 FRONTEND_HYPERWATCH_USERNAME={USERNAME}
 FRONTEND_HYPERWATCH_SECRET={SECRET}
-```
 
-Then, start with:
-
-```
-npm run start:frontend
-```
-
-### Watching Open Collective Images
-
-Set the following environment variables in `.env`.
-
-```
 IMAGES_HYPERWATCH_URL=wss://{IMAGES_DOMAIN}/{HYPERWATCH_PATH}/logs/raw
 IMAGES_HYPERWATCH_USERNAME={USERNAME}
 IMAGES_HYPERWATCH_SECRET={SECRET}
-```
 
-Then, start with:
-
-```
-npm run start:images
-```
-
-### Watching Open Collective Rest
-
-Set the following environment variables in `.env`.
-
-```
 REST_HYPERWATCH_URL=wss://{REST_DOMAIN}/{HYPERWATCH_PATH}/logs/raw
 REST_HYPERWATCH_USERNAME={USERNAME}
 REST_HYPERWATCH_SECRET={SECRET}
 ```
 
-Then, start with:
+A service without `<SERVICE>_HYPERWATCH_URL` is skipped.
+
+### Watching all services
 
 ```
-npm run start:rest
-```
-
-### Watching all services at once
-
-```
-npm start                  # api, frontend, images and rest, one process each, quiet
-npm start -- -v            # stream their output, prefixed with the service name
+npm start                  # quiet, errors in logs/all.log
+npm start -- -v            # stream the output
 npm start -- --stderr      # stream only errors
-npm start -- api images    # pick services
 ```
 
-Errors are kept in `logs/<service>.log`. If one service crashes, the others are stopped.
+Watch runs one Hyperwatch pipeline, on http://localhost:3399, that merges the requests of the four
+services. `/addresses`, `/signatures` and `/identities` count a client across all of them:
+
+- see pipeline status: http://localhost:3399/status
+- browse addresses: http://localhost:3399/addresses
+- browse identities: http://localhost:3399/identities
+- watch real time logs: http://localhost:3399/logs/main
+
+Each request has a `source` field, the service that logged it (`api`, `frontend`, `images`,
+`rest`), whoever issued it: API calls made by our own frontend are in `api` too. Calls from our own
+servers have their identity: `Open Collective Frontend`, `Open Collective Images`,
+`Open Collective REST`. The nodes are:
+
+- `main`: every request
+- `api`, `frontend`, `images`, `rest`: one source each
+- below `api`: `graphql` (with `graphql-mutation`, `graphql-slow`, `graphql-extra-slow` and the
+  `/graphql` aggregator) and `other`, the API requests that aren't GraphQL
+- below `frontend`: `slow` and `extra-slow`
+
+Slow nodes (`slow`, `graphql-slow`…) hold requests over 300 ms, extra-slow ones over 1 s
+(`slow.js`).
+
+### One process per service
+
+Each service also has its own config, with its own counters, started when asked for:
+
+```
+npm start -- api images    # pick configs, one process each
+npm start -- all api       # the merged pipeline and the api one
+npm run start:api          # or start:frontend, start:images, start:rest
+```
+
+| Config     | Port | Nodes                                                                                    |
+| ---------- | ---- | ---------------------------------------------------------------------------------------- |
+| `api`      | 3360 | `graphql`… as in `all`, and `frontend` / `images` / `rest` / `other` by `oc-application` |
+| `frontend` | 3300 | `slow`, `extra-slow`, `with-identity`, `without-identity`                                |
+| `images`   | 3301 | one per image route: `avatar`, `banner`, `badge`, `proxy`…                               |
+| `rest`     | 3303 | `main` only                                                                              |
+
+Errors are kept in `logs/<config>.log`. If one process crashes, the others are stopped.
+
+### Options
 
 Optional environment variables:
 
@@ -94,15 +87,17 @@ Optional environment variables:
   reload them at start.
 - `HYPERWATCH_HISTORY_CAPACITY`: requests kept per pipeline node for `/history` and the live logs
   (default 1000 in `.hyperwatchrc`, sized for Heroku). Raise it locally, e.g. `10000`, at the cost
-  of memory.
+  of memory. The merged `main` node gets the traffic of every service, so 1000 requests only cover
+  a minute or two.
 - `API_HYPERWATCH_CONNECTIONS`, `FRONTEND_HYPERWATCH_CONNECTIONS`, `IMAGES_HYPERWATCH_CONNECTIONS`:
-  websockets opened per service (defaults 2, 4, 2). Use `1` against single-dyno servers such as
-  staging, otherwise requests are counted several times.
+  websockets opened per service, one per server dyno (defaults 2, 4, 2). A dyno keeps one websocket
+  from Watch and cuts the others, which keep reconnecting: use `1` against single-dyno servers such
+  as staging.
 
 ### Dashboard
 
 Each instance serves the [Hyperwatch dashboard](https://github.com/hyperwatch/dashboard)
-(`@hyperwatch/dashboard`) at `/dashboard`, e.g. http://localhost:3360/dashboard, with links to the
+(`@hyperwatch/dashboard`) at `/dashboard`, e.g. http://localhost:3399/dashboard, with links to the
 other instances. Their URLs default to `http://localhost:<port>`; set `WATCH_INSTANCE_URL` to a
 template such as `https://watch-staging-{service}.opencollective.com` when they are elsewhere.
 Without the package installed, Watch runs without a dashboard.

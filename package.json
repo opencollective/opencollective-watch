@@ -15,6 +15,7 @@
     "prettier:check": "npm run prettier -- --check",
     "prettier:write": "npm run prettier -- --write",
     "start": "dotenv node start.js",
+    "start:all": "PORT=3399 dotenv hyperwatch all",
     "start:api": "PORT=3360 dotenv hyperwatch api",
     "start:server": "dotenv node index.js",
     "start:images": "PORT=3301 dotenv hyperwatch images",
