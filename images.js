@@ -19,7 +19,7 @@ const { pipeline, input, lib } = hyperwatch;
 
 hyperwatch.init(hyperwatchOptions('images'));
 
-mountDashboard('images');
+mountDashboard();
 
 // Connect Inputs (1 per live server)
 

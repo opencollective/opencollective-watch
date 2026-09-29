@@ -64,7 +64,6 @@ Useful pages:
 | `<SERVICE>_HYPERWATCH_SECRET`                  | the `HYPERWATCH_SECRET` of the matching staging app                                                                                                                                                           |
 | `API_/FRONTEND_/IMAGES_HYPERWATCH_CONNECTIONS` | `1` (see below)                                                                                                                                                                                               |
 | `CLOUDFLARE_TUNNEL_TOKEN`                      | token of the `oc-staging-watch` tunnel                                                                                                                                                                        |
-| `WATCH_INSTANCE_URL`                           | `https://watch-staging.opencollective.com`, the public URL the dashboard links to                                                                                                                             |
 | `HYPERWATCH_PERSISTENCE`                       | **not set**: the dyno disk is wiped on every restart/deploy                                                                                                                                                   |
 
 `<SERVICE>` is `API`, `FRONTEND`, `IMAGES` or `REST`.
@@ -127,11 +126,9 @@ nothing for long:
 2. Tunnel `oc-staging-watch`: public hostname `watch-staging.opencollective.com` →
    `http://localhost:3399`, before the catch-all 404 (creates the proxied `CNAME`). Until the
    deploy, it answers 502.
-3. `heroku config:set -a oc-staging-watch WATCH_INSTANCE_URL=https://watch-staging.opencollective.com`
-   (restarts the dyno, still on the old code: coordinate it with the deploy).
-4. Deploy (see _Deploying_). Check the new hostname: unauthenticated `302` to Cloudflare Access,
+3. Deploy (see _Deploying_). Check the new hostname: unauthenticated `302` to Cloudflare Access,
    then the pages and `/dashboard` once signed in.
-5. Remove the four old hostnames: their tunnel public hostnames, their `CNAME` records, and their
+4. Remove the four old hostnames: their tunnel public hostnames, their `CNAME` records, and their
    entries in the Access application. They answer 502 in the meantime (nothing listens on
    3360, 3300, 3301, 3303).
 

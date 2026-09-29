@@ -21,7 +21,7 @@ hyperwatch.init(
   hyperwatchOptions('frontend', { modules: { cloudflare: { active: false } } }),
 );
 
-mountDashboard('frontend');
+mountDashboard();
 
 // Connect Inputs (1 per live server)
 

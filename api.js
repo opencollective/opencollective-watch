@@ -26,7 +26,7 @@ const serverCount = Number(process.env.API_HYPERWATCH_CONNECTIONS) || 2;
 
 hyperwatch.init(hyperwatchOptions('api'));
 
-mountDashboard('api');
+mountDashboard();
 
 // Connect Inputs (1 per live server)
 

@@ -30,7 +30,7 @@ hyperwatch.init(
   hyperwatchOptions('all', { modules: { cloudflare: { active: false } } }),
 );
 
-mountDashboard('all');
+mountDashboard();
 
 const cloudflare = modules.get('cloudflare');
 
