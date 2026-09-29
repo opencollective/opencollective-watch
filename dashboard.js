@@ -4,8 +4,8 @@ const { app } = require('@hyperwatch/hyperwatch');
 const SERVICES = require('./services');
 
 // Public URL of a service's instance, for the dashboard's instance links.
-// WATCH_INSTANCE_URL is a template, e.g.
-// https://watch-staging-{service}.opencollective.com
+// WATCH_INSTANCE_URL is the URL, or a template when several instances are
+// published, e.g. https://watch-staging-{service}.opencollective.com
 function instanceUrl(service) {
   const template = process.env.WATCH_INSTANCE_URL;
   return template
@@ -13,8 +13,17 @@ function instanceUrl(service) {
     : `http://localhost:${SERVICES[service].port}`;
 }
 
+// The instances to link: the ones start.js runs (WATCH_SERVICES), or this
+// one alone when started on its own
+function runningServices(service) {
+  const names = (process.env.WATCH_SERVICES || service)
+    .split(',')
+    .filter((name) => SERVICES[name]);
+  return names.length ? names : [service];
+}
+
 // Serve @hyperwatch/dashboard under /dashboard on this instance, plus
-// /dashboard.json describing the other instances. Skipped if the package
+// /dashboard.json describing the running instances. Skipped if the package
 // isn't installed.
 function mountDashboard(service) {
   let dashboard;
@@ -30,9 +39,9 @@ function mountDashboard(service) {
   app.api.get('/dashboard.json', (req, res) => {
     res.json({
       name: service,
-      instances: Object.entries(SERVICES).map(([name, { label }]) => ({
+      instances: runningServices(service).map((name) => ({
         name,
-        label,
+        label: SERVICES[name].label,
         url: instanceUrl(name),
       })),
     });

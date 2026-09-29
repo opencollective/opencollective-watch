@@ -19,7 +19,7 @@ oc-staging-watch — one worker dyno, no web process
 Cloudflare Tunnel "oc-staging-watch" ── Cloudflare Access (Google login, allow-list)
         │
         ▼
-https://watch-staging-all.opencollective.com
+https://watch-staging.opencollective.com
 ```
 
 - **No `web` process**, so Heroku never exposes Watch on `*.herokuapp.com`. The Node buildpack
@@ -29,13 +29,13 @@ https://watch-staging-all.opencollective.com
   Hyperwatch process dies.
 - `cloudflared` is downloaded at build time by `bin/install-cloudflared` (`heroku-postbuild`).
   Set `CLOUDFLARED_VERSION` to pin a release (latest by default).
-- One tunnel publishes `watch-staging-all` to `localhost:3399`. Anything else gets a 404. The
+- One tunnel publishes `watch-staging.opencollective.com` to `localhost:3399`. Anything else gets a 404. The
   per-service processes (`npm start -- api …`, ports 3360, 3300, 3301, 3303) aren't started on
   Heroku.
 
 ## Accessing it
 
-Open `https://watch-staging-all.opencollective.com` and sign in with Google. Sessions last 24h. Access is an allow-list: ask an admin to add your email
+Open `https://watch-staging.opencollective.com` (the dashboard is at `/dashboard`) and sign in with Google. Sessions last 24h. Access is an allow-list: ask an admin to add your email
 to the **"Watch engineers"** Access policy (Cloudflare Zero Trust → Access controls → Policies).
 
 Useful pages:
@@ -64,6 +64,7 @@ Useful pages:
 | `<SERVICE>_HYPERWATCH_SECRET`                  | the `HYPERWATCH_SECRET` of the matching staging app                                                                                                                                                           |
 | `API_/FRONTEND_/IMAGES_HYPERWATCH_CONNECTIONS` | `1` (see below)                                                                                                                                                                                               |
 | `CLOUDFLARE_TUNNEL_TOKEN`                      | token of the `oc-staging-watch` tunnel                                                                                                                                                                        |
+| `WATCH_INSTANCE_URL`                           | `https://watch-staging.opencollective.com`, the public URL the dashboard links to                                                                                                                             |
 | `HYPERWATCH_PERSISTENCE`                       | **not set**: the dyno disk is wiped on every restart/deploy                                                                                                                                                   |
 
 `<SERVICE>` is `API`, `FRONTEND`, `IMAGES` or `REST`.
@@ -108,27 +109,31 @@ connection", no `R14`. Roll back with `heroku rollback -a oc-staging-watch`.
 
 ## What's not there yet
 
-- **Firewall and fingerprint modules**: not in the published Hyperwatch (npm 5.0.0), only in
-  unmerged branches.
+- **Firewall and fingerprint modules**: not in the published Hyperwatch (5.1.0), only in unmerged
+  branches.
 - **Persistence**: counters and history reset on every restart (at least daily). A possible next
   step is copying `.hyperwatch-data` to S3 on shutdown and restoring it at boot, in `start.js`.
-- **Dashboard**: each instance can serve `@hyperwatch/dashboard` at `/dashboard` (see the
-  README). Not deployed yet: it needs the package published, `@hyperwatch/dashboard` added to
-  `package.json`, and `WATCH_INSTANCE_URL=https://watch-staging-{service}.opencollective.com` so
-  the dashboard links the instances.
 - **Production**: would need its own app, tunnel and hostnames, and the default connection counts.
 
 ## Moving from one process per service to the merged pipeline
 
 Until [the merged pipeline](../README.md#watching-all-services) became the default, the dyno ran
-the four per-service processes, published as `watch-staging-{api,frontend,images,rest}`. Before
-deploying it, in this order so the hostname never exists unprotected:
+the four per-service processes, published as `watch-staging-{api,frontend,images,rest}`. Those
+hostnames are deprecated: the merged pipeline is published as `watch-staging.opencollective.com`.
+In this order, so the new hostname never exists unprotected and the old ones never point at
+nothing for long:
 
-1. Access application `oc-staging-watch`: add `watch-staging-all.opencollective.com`.
-2. Tunnel `oc-staging-watch`: public hostname `watch-staging-all.opencollective.com` →
-   `http://localhost:3399` (creates the proxied `CNAME`).
-3. Deploy. The four old hostnames then answer 502 (nothing listens on their ports): remove their
-   tunnel routes, DNS records and Access entries.
+1. Access application `oc-staging-watch`: add `watch-staging.opencollective.com`.
+2. Tunnel `oc-staging-watch`: public hostname `watch-staging.opencollective.com` →
+   `http://localhost:3399`, before the catch-all 404 (creates the proxied `CNAME`). Until the
+   deploy, it answers 502.
+3. `heroku config:set -a oc-staging-watch WATCH_INSTANCE_URL=https://watch-staging.opencollective.com`
+   (restarts the dyno, still on the old code: coordinate it with the deploy).
+4. Deploy (see _Deploying_). Check the new hostname: unauthenticated `302` to Cloudflare Access,
+   then the pages and `/dashboard` once signed in.
+5. Remove the four old hostnames: their tunnel public hostnames, their `CNAME` records, and their
+   entries in the Access application. They answer 502 in the meantime (nothing listens on
+   3360, 3300, 3301, 3303).
 
 ## How it was set up
 

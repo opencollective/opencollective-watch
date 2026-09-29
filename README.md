@@ -98,9 +98,11 @@ Optional environment variables:
 
 Each instance serves the [Hyperwatch dashboard](https://github.com/hyperwatch/dashboard)
 (`@hyperwatch/dashboard`) at `/dashboard`, e.g. http://localhost:3399/dashboard, with links to the
-other instances. Their URLs default to `http://localhost:<port>`; set `WATCH_INSTANCE_URL` to a
-template such as `https://watch-staging-{service}.opencollective.com` when they are elsewhere.
-Without the package installed, Watch runs without a dashboard.
+other instances started with it (`npm start -- all api`). Their URLs default to
+`http://localhost:<port>`; set `WATCH_INSTANCE_URL` to the public URL when it's elsewhere
+(`https://watch-staging.opencollective.com`), or to a template like
+`https://watch-{service}.example.org` when several instances are published. Without the package
+installed, Watch runs without a dashboard.
 
 To work on the dashboard, clone it next to Hyperwatch and link it:
 

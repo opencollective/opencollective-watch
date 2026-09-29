@@ -66,7 +66,12 @@ for (const name of selected) {
 
   const child = spawn(bin, [name], {
     cwd: __dirname,
-    env: { ...process.env, PORT: String(port) },
+    // WATCH_SERVICES: the configs running side by side, for the dashboard
+    env: {
+      ...process.env,
+      PORT: String(port),
+      WATCH_SERVICES: selected.join(','),
+    },
     stdio: [
       'ignore',
       verbose ? 'pipe' : 'ignore',
