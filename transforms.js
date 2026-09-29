@@ -70,6 +70,19 @@ function setImagesIdentity(log) {
     : log;
 }
 
+// An input whose logs go through `transform` as they're received, before
+// the pipeline and its nodes (raw, input-N), which keep them in their history
+function transformInput(websocketInput, transform) {
+  return {
+    ...websocketInput,
+    start: (handlers) =>
+      websocketInput.start({
+        ...handlers,
+        success: (log) => handlers.success(transform(log)),
+      }),
+  };
+}
+
 module.exports = {
   isAsset,
   redactSigninToken,
@@ -77,4 +90,5 @@ module.exports = {
   setGraphqlHash,
   setImagesIdentity,
   setRealIp,
+  transformInput,
 };

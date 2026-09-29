@@ -5,7 +5,12 @@ const { setClientWorkerIdentity } = require('./cloudflare-worker');
 const { mountDashboard } = require('./dashboard');
 const { hyperwatchOptions } = require('./options');
 const { registerSlowNodes } = require('./slow');
-const { isAsset, redactSigninToken, setRealIp } = require('./transforms');
+const {
+  isAsset,
+  redactSigninToken,
+  setRealIp,
+  transformInput,
+} = require('./transforms');
 
 // Each websocket gets the logs of the one server dyno the router picked. A
 // dyno keeps one websocket per clientId and cuts the others, which reconnect
@@ -38,7 +43,10 @@ for (let i = 1; i <= serverCount; i++) {
     password: process.env.FRONTEND_HYPERWATCH_SECRET,
   });
 
-  pipeline.registerInput(websocketClientInput);
+  // Sign-in tokens are redacted before any node keeps the logs
+  pipeline.registerInput(
+    transformInput(websocketClientInput, redactSigninToken),
+  );
 }
 
 pipeline
@@ -46,7 +54,6 @@ pipeline
   .map(setRealIp, 'extract oc-real-ip')
   .map(setClientWorkerIdentity, 'set client worker identity')
   .filter((log) => !isAsset(log), 'exclude /_* and /static urls')
-  .map(redactSigninToken, 'redact signin tokens')
   .registerNode('main');
 
 // Register slow nodes

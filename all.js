@@ -18,6 +18,7 @@ const {
   setGraphqlHash,
   setImagesIdentity,
   setRealIp,
+  transformInput,
 } = require('./transforms');
 
 const { pipeline, input, lib, modules } = hyperwatch;
@@ -50,18 +51,6 @@ const SOURCES = {
 };
 
 // Connect Inputs (the live servers of every service)
-
-// Transforms each log as it's received, before it enters the pipeline
-function transformInput(websocketInput, transform) {
-  return {
-    ...websocketInput,
-    start: (handlers) =>
-      websocketInput.start({
-        ...handlers,
-        success: (log) => handlers.success(transform(log)),
-      }),
-  };
-}
 
 for (const [service, { connections, prepare }] of Object.entries(SOURCES)) {
   const prefix = service.toUpperCase();
