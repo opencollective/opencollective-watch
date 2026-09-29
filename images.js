@@ -5,10 +5,12 @@ const uuid = require('uuid');
 const { setClientWorkerIdentity } = require('./cloudflare-worker');
 const { mountDashboard } = require('./dashboard');
 const { hyperwatchOptions } = require('./options');
+const { setImagesIdentity } = require('./transforms');
 
-// Each websocket gets the logs of the one server dyno the router picked, and
-// servers don't dedupe by clientId: use 1 for single-dyno services (staging),
-// or every request is counted several times
+// Each websocket gets the logs of the one server dyno the router picked. A
+// dyno keeps one websocket per clientId and cuts the others, which reconnect
+// until they reach a dyno not yet followed: open one per dyno (1 for
+// single-dyno services such as staging)
 const serverCount = Number(process.env.IMAGES_HYPERWATCH_CONNECTIONS) || 2;
 
 const { pipeline, input, lib } = hyperwatch;
@@ -17,7 +19,7 @@ const { pipeline, input, lib } = hyperwatch;
 
 hyperwatch.init(hyperwatchOptions('images'));
 
-mountDashboard('images');
+mountDashboard();
 
 // Connect Inputs (1 per live server)
 
@@ -41,14 +43,7 @@ for (let i = 0; i < serverCount; i++) {
 
 pipeline
   .getNode('main')
-  .map((log) => {
-    if (log.getIn(['agent', 'family']) === 'opencollective-images') {
-      // TODO: check secret
-      log = log.set('identity', 'Open Collective Images');
-    }
-
-    return log;
-  }, 'set images identity')
+  .map(setImagesIdentity, 'set images identity')
   .map(setClientWorkerIdentity, 'set client worker identity')
   .registerNode('main');
 

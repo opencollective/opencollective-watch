@@ -40,9 +40,6 @@
     "history": {
       "active": true,
       "capacity": 1000
-    },
-    "sparkline": {
-      "active": true
     }
   }
 }

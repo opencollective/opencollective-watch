@@ -10,7 +10,7 @@ const { pipeline, input, lib } = hyperwatch;
 
 hyperwatch.init(hyperwatchOptions('rest'));
 
-mountDashboard('rest');
+mountDashboard();
 
 // Connect Input
 

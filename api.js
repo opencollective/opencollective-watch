@@ -2,25 +2,31 @@
 // const path = require('path');
 
 const hyperwatch = require('@hyperwatch/hyperwatch');
-const { pick } = require('lodash');
 const uuid = require('uuid');
 
 const { setClientWorkerIdentity } = require('./cloudflare-worker');
 const { mountDashboard } = require('./dashboard');
+const {
+  hasGraphql,
+  registerApplicationNodes,
+  registerGraphqlNodes,
+} = require('./graphql');
 const { hyperwatchOptions } = require('./options');
+const { setApplicationAndIdentity, setGraphqlHash } = require('./transforms');
 
-const { app, pipeline, input, lib, util } = hyperwatch;
+const { pipeline, input, lib } = hyperwatch;
 
-// Each websocket gets the logs of the one server dyno the router picked, and
-// servers don't dedupe by clientId: use 1 for single-dyno services (staging),
-// or every request is counted several times
+// Each websocket gets the logs of the one server dyno the router picked. A
+// dyno keeps one websocket per clientId and cuts the others, which reconnect
+// until they reach a dyno not yet followed: open one per dyno (1 for
+// single-dyno services such as staging)
 const serverCount = Number(process.env.API_HYPERWATCH_CONNECTIONS) || 2;
 
 // Init Hyperwatch (will load modules)
 
 hyperwatch.init(hyperwatchOptions('api'));
 
-mountDashboard('api');
+mountDashboard();
 
 // Connect Inputs (1 per live server)
 
@@ -44,139 +50,16 @@ for (let i = 1; i <= serverCount; i++) {
 
 pipeline
   .getNode('main')
-  .map((log) => {
-    const application = log.getIn(['request', 'headers', 'oc-application']);
-    if (['frontend', 'images', 'rest'].includes(application)) {
-      log = log.set('application', application);
-      // Browsers also send oc-application (client-side GraphQL calls), only
-      // server-side calls send oc-secret. Its value is random per process, so
-      // we can only check it's there.
-      if (log.getIn(['request', 'headers', 'oc-secret'])) {
-        log = log.set('identity', application);
-      }
-    }
-    if (log.hasIn(['opencollective', 'collective', 'slug'])) {
-      log = log.set(
-        'identity',
-        `@${log.getIn(['opencollective', 'collective', 'slug'])}`,
-      );
-    }
-    return log;
-  }, 'set application & identity')
+  .map(setApplicationAndIdentity, 'set application & identity')
   .map(setClientWorkerIdentity, 'set client worker identity')
   // Before registering main, so every node derived from it has the hash
-  .map(
-    (log) =>
-      log.hasIn(['graphql', 'query'])
-        ? log.setIn(
-            ['graphql', 'hash'],
-            util.md5(log.getIn(['graphql', 'query'])).slice(0, 8),
-          )
-        : log,
-    'compute graphql hash',
-  )
-  .registerNode('main')
-  .filter((log) => log.has('graphql'), 'has graphql')
-  .registerNode('graphql');
+  .map(setGraphqlHash, 'compute graphql hash')
+  .registerNode('main');
 
-// Register application nodes
-
-let node, other;
-for (const application of ['frontend', 'images', 'rest']) {
-  [node, other] = (other || pipeline.getNode('main')).split(
-    (log) =>
-      log.getIn(['request', 'headers', 'oc-application']) === application,
-  );
-  node.registerNode(application);
-}
-other.registerNode('other');
-
-// GraphQL formatter
-
-const formatRequest = (log) => {
-  if (!log.has('graphql')) {
-    return lib.formatter.request(log);
-  }
-
-  const pickList = [
-    'id',
-    'slug',
-    'accountSlug',
-    'collectiveSlug',
-    'CollectiveSlug',
-    'CollectiveId',
-    'legacyExpenseId',
-    'tierId',
-    'term',
-    'type',
-    'role',
-    'tierSlug',
-    'TierId',
-    'limit',
-    'offset',
-    'action',
-    'reference',
-  ];
-
-  const hash = log.getIn(['graphql', 'hash']);
-  const operationName = log.getIn(['graphql', 'operationName'], 'unknown');
-  const variables = log.getIn(['graphql', 'variables'], {});
-
-  return `${hash} ${operationName} ${JSON.stringify(
-    pick(variables.toJS ? variables.toJS() : variables, pickList),
-  )} ${log.hasIn(['graphql', 'servedFromCache']) ? 'HIT' : 'MISS'}`;
-};
-
-lib.logger.defaultFormatter.replaceFormat('request', formatRequest);
-
-// Add GraphQL aggregator
-
-const { Aggregator } = lib.aggregator;
-
-const aggregator = new Aggregator();
-
-aggregator.setIdentifier(
-  (log) => `${log.getIn(['graphql', 'operationName']) || 'unknown'}`,
+registerApplicationNodes(pipeline.getNode('main'));
+registerGraphqlNodes(
+  pipeline.getNode('main').filter(hasGraphql, 'has graphql'),
 );
-
-aggregator.setEnricher((entry, log) => {
-  if (log.has('graphql')) {
-    entry = entry.set('graphql', log.get('graphql'));
-  }
-  if (log.has('application')) {
-    entry = entry.set('application', log.get('application'));
-  }
-  return entry;
-});
-
-const graphqlOperationFormatter = new lib.formatter.Formatter();
-
-graphqlOperationFormatter.setFormats([
-  [
-    'operation',
-    (entry) => entry.getIn(['graphql', 'operationName']) || 'unknown',
-  ],
-  ['application', (entry) => entry.getIn(['application'])],
-  ['15m', (entry) => util.aggregateCount(entry, 'per_minute')],
-  ['24h', (entry) => util.aggregateCount(entry, 'per_hour')],
-
-  [
-    'executionTime15m',
-    (entry) => util.formatDuration(util.aggregateSum(entry, 'per_minute')),
-  ],
-  [
-    'executionTime24h',
-    (entry) => util.formatDuration(util.aggregateSum(entry, 'per_hour')),
-  ],
-]);
-
-aggregator.setFormatter(graphqlOperationFormatter);
-
-pipeline
-  .getNode('graphql')
-  .map((log) => aggregator.processLog(log), 'graphql aggregator');
-
-app.api.registerAggregator('graphql', aggregator);
 
 // Write GraphQL queries to disk
 
@@ -194,31 +77,6 @@ app.api.registerAggregator('graphql', aggregator);
 //
 //   fs.writeFileSync(filepath, log.getIn(['graphql', 'query']));
 // }, 'write queries to disk');
-
-// Register mutation node
-
-const isMutation = (log) => {
-  const query = log.getIn(['graphql', 'query']) || '';
-  // Skip leading whitespace and comment lines, then look for the `mutation` keyword
-  return /^\s*(#[^\n]*\n\s*)*mutation\b/.test(query);
-};
-
-pipeline
-  .getNode('graphql')
-  .filter(isMutation, 'is mutation')
-  .registerNode('graphql-mutation');
-
-// Register slow nodes
-
-pipeline
-  .getNode('graphql')
-  .filter((log) => log.get('executionTime') > 100, 'executionTime > 100ms')
-  .registerNode('graphql-slow');
-
-pipeline
-  .getNode('graphql')
-  .filter((log) => log.get('executionTime') > 1000, 'executionTime > 1000ms')
-  .registerNode('graphql-extra-slow');
 
 // Log GraphQL queries to the console
 

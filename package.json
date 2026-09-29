@@ -15,6 +15,7 @@
     "prettier:check": "npm run prettier -- --check",
     "prettier:write": "npm run prettier -- --write",
     "start": "dotenv node start.js",
+    "start:all": "PORT=3399 dotenv hyperwatch all",
     "start:api": "PORT=3360 dotenv hyperwatch api",
     "start:server": "dotenv node index.js",
     "start:images": "PORT=3301 dotenv hyperwatch images",
@@ -23,8 +24,8 @@
     "heroku-postbuild": "bin/install-cloudflared"
   },
   "dependencies": {
-    "@hyperwatch/dashboard": "^0.1.1",
-    "@hyperwatch/hyperwatch": "^5.0.1",
+    "@hyperwatch/dashboard": "^0.1.2",
+    "@hyperwatch/hyperwatch": "^5.1.0",
     "cors": "^2.8.6",
     "dotenv-cli": "^11.0.0",
     "express": "^5.2.1",

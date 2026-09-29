@@ -12,41 +12,40 @@ staging servers (api, frontend, images, rest)
         ▼
 oc-staging-watch — one worker dyno, no web process
   bin/start-heroku
-   ├─ node start.js --stderr      4 Hyperwatch processes on localhost
-   │    api :3360  frontend :3300  images :3301  rest :3303
+   ├─ node start.js --stderr      the merged Hyperwatch pipeline (all.js) on localhost:3399
    └─ cloudflared tunnel run      outbound connection to Cloudflare
         │
         ▼
 Cloudflare Tunnel "oc-staging-watch" ── Cloudflare Access (Google login, allow-list)
         │
         ▼
-https://watch-staging-{api,frontend,images,rest}.opencollective.com
+https://watch-staging.opencollective.com
 ```
 
 - **No `web` process**, so Heroku never exposes Watch on `*.herokuapp.com`. The Node buildpack
   adds a default `web: npm start` process type: it must stay scaled to **0**.
 - `bin/start-heroku` runs Watch and `cloudflared` side by side. If either exits, it stops the other
-  and exits non-zero so Heroku restarts the dyno. `start.js` also stops everything if one
+  and exits non-zero so Heroku restarts the dyno. `start.js` also stops everything if a
   Hyperwatch process dies.
 - `cloudflared` is downloaded at build time by `bin/install-cloudflared` (`heroku-postbuild`).
   Set `CLOUDFLARED_VERSION` to pin a release (latest by default).
-- One tunnel publishes one hostname per service, each routed to that service's localhost port.
-  Anything else gets a 404.
+- One tunnel publishes `watch-staging.opencollective.com` to `localhost:3399`. Anything else gets a 404. The
+  per-service processes (`npm start -- api …`, ports 3360, 3300, 3301, 3303) aren't started on
+  Heroku.
 
 ## Accessing it
 
-Open `https://watch-staging-<service>.opencollective.com` (`api`, `frontend`, `images`, `rest`)
-and sign in with Google. Sessions last 24h. Access is an allow-list: ask an admin to add your email
+Open `https://watch-staging.opencollective.com` (the dashboard is at `/dashboard`) and sign in with Google. Sessions last 24h. Access is an allow-list: ask an admin to add your email
 to the **"Watch engineers"** Access policy (Cloudflare Zero Trust → Access controls → Policies).
 
-Useful pages on each hostname:
+Useful pages:
 
-| Page                                                   | What                                                                                 |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------ |
-| `/status`                                              | pipeline status, inputs connected                                                    |
-| `/logs/<node>`                                         | live stream, one line per request (`main`, `without-identity`, `slow`, `graphql`, …) |
-| `/history/<node>.json?limit=50`                        | last requests (up to 1000 per node); filters `address`, `identity`, `signature`      |
-| `/addresses`, `/identities`, `/signatures`, `/graphql` | aggregated views; add `.csv` or `.json`                                              |
+| Page                                                   | What                                                                                |
+| ------------------------------------------------------ | ----------------------------------------------------------------------------------- |
+| `/status`                                              | pipeline status, inputs connected                                                   |
+| `/logs/<node>`                                         | live stream, one line per request (`main`, `api`, `frontend`, `slow`, `graphql`, …) |
+| `/history/<node>.json?limit=50`                        | last requests (up to 1000 per node); filters `address`, `identity`, `signature`     |
+| `/addresses`, `/identities`, `/signatures`, `/graphql` | aggregated views; add `.csv` or `.json`                                             |
 
 ## Logs
 
@@ -78,17 +77,21 @@ heroku config:set -a oc-staging-watch \
 
 ### Connections per service
 
-Each websocket gets the logs of the one server dyno Heroku's router picked, and the servers don't
-deduplicate by `clientId`. The defaults (api 2, frontend 4, images 2, rest 1) are meant for
-production's dyno counts. Staging services have **1 dyno each**, so they must be set to `1`,
-otherwise every request is counted several times.
+Each websocket gets the logs of the one server dyno Heroku's router picked. Watch's websockets to
+one service share a `clientId`, and a dyno keeps only one websocket per `clientId`: it cuts the
+others, which reconnect until they reach a dyno not yet followed. So Watch needs one websocket per
+dyno. The defaults (api 2, frontend 4, images 2, rest 1) are meant for production's dyno counts.
+Staging services have **1 dyno each**, so they must be set to `1`, otherwise the extra websockets
+keep being cut and reconnecting.
 
 ## Sizing
 
-Standard-2X (1 GB). Each Hyperwatch process uses ~185 MB at boot (110 MB of that is the GeoIP
-database), so the 4 processes don't fit in a Basic/Standard-1X dyno (it hit R14 at 632 MB within
-seconds). History is capped at 1000 entries per node (`.hyperwatchrc`) to keep memory down. Watch
-for `R14` in the logs or the Metrics tab.
+Standard-2X (1 GB). A Hyperwatch process uses ~120–185 MB at boot (110 MB of that is the GeoIP
+database). The four per-service processes didn't fit in a Basic/Standard-1X dyno (R14 at 632 MB
+within seconds); the merged pipeline is a single process, which loads the GeoIP database once. On
+production traffic it used ~235 MB after 3 minutes, still growing as its counters fill: check a
+day of the Metrics tab before choosing a smaller dyno. History is capped at 1000 entries per node
+(`.hyperwatchrc`) to keep memory down. Watch for `R14` in the logs or the Metrics tab.
 
 ## Deploying
 
@@ -100,20 +103,34 @@ heroku ps -a oc-staging-watch        # worker.1 up, no web dyno
 heroku logs --tail -a oc-staging-watch
 ```
 
-After a deploy, check: the 4 `http://localhost:33xx` lines, `cloudflared` "Registered tunnel
+After a deploy, check: the `all http://localhost:3399` line, `cloudflared` "Registered tunnel
 connection", no `R14`. Roll back with `heroku rollback -a oc-staging-watch`.
 
 ## What's not there yet
 
-- **Firewall and fingerprint modules**: not in the published Hyperwatch (npm 5.0.0), only in
-  unmerged branches.
+- **Firewall and fingerprint modules**: not in the published Hyperwatch (5.1.0), only in unmerged
+  branches.
 - **Persistence**: counters and history reset on every restart (at least daily). A possible next
   step is copying `.hyperwatch-data` to S3 on shutdown and restoring it at boot, in `start.js`.
-- **Dashboard**: each instance can serve `@hyperwatch/dashboard` at `/dashboard` (see the
-  README). Not deployed yet: it needs the package published, `@hyperwatch/dashboard` added to
-  `package.json`, and `WATCH_INSTANCE_URL=https://watch-staging-{service}.opencollective.com` so
-  the dashboard links the four instances.
 - **Production**: would need its own app, tunnel and hostnames, and the default connection counts.
+
+## Moving from one process per service to the merged pipeline
+
+Until [the merged pipeline](../README.md#watching-all-services) became the default, the dyno ran
+the four per-service processes, published as `watch-staging-{api,frontend,images,rest}`. Those
+hostnames are deprecated: the merged pipeline is published as `watch-staging.opencollective.com`.
+In this order, so the new hostname never exists unprotected and the old ones never point at
+nothing for long:
+
+1. Access application `oc-staging-watch`: add `watch-staging.opencollective.com`.
+2. Tunnel `oc-staging-watch`: public hostname `watch-staging.opencollective.com` →
+   `http://localhost:3399`, before the catch-all 404 (creates the proxied `CNAME`). Until the
+   deploy, it answers 502.
+3. Deploy (see _Deploying_). Check the new hostname: unauthenticated `302` to Cloudflare Access,
+   then the pages and `/dashboard` once signed in.
+4. Remove the four old hostnames: their tunnel public hostnames, their `CNAME` records, and their
+   entries in the Access application. They answer 502 in the meantime (nothing listens on
+   3360, 3300, 3301, 3303).
 
 ## How it was set up
 

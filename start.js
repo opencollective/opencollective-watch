@@ -6,10 +6,11 @@
 // process. Output is silent by default; stderr is kept in logs/<name>.log.
 // If one child exits unexpectedly, the others are stopped and this exits 1.
 //
-//   npm start                  # api + frontend + images + rest, quiet
+//   npm start                  # all: the four services in one pipeline, quiet
 //   npm start -- -v            # stream prefixed output
 //   npm start -- --stderr      # stream prefixed stderr only (Heroku logs)
-//   npm start -- api images    # pick services
+//   npm start -- api images    # pick configs, e.g. one process per service
+//   npm start -- all api       # the merged pipeline and the api one
 
 const { spawn } = require('child_process');
 const fs = require('fs');
@@ -17,7 +18,9 @@ const path = require('path');
 
 const SERVICES = require('./services');
 
-const DEFAULT_SERVICES = Object.keys(SERVICES);
+const DEFAULT_SERVICES = Object.keys(SERVICES).filter(
+  (name) => !SERVICES[name].optional,
+);
 
 const args = process.argv.slice(2);
 const verbose = args.includes('-v') || args.includes('--verbose');
