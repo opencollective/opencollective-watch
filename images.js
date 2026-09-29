@@ -2,6 +2,7 @@ const hyperwatch = require('@hyperwatch/hyperwatch');
 const { pathToRegexp } = require('path-to-regexp');
 const uuid = require('uuid');
 
+const { basicAuth } = require('./basic-auth');
 const { setClientWorkerIdentity } = require('./cloudflare-worker');
 const { mountDashboard } = require('./dashboard');
 const { hyperwatchOptions } = require('./options');
@@ -20,6 +21,7 @@ const { pipeline, input, lib } = hyperwatch;
 hyperwatch.init(hyperwatchOptions('images'));
 
 mountDashboard();
+basicAuth();
 
 // Connect Inputs (1 per live server)
 
