@@ -4,6 +4,7 @@
 const hyperwatch = require('@hyperwatch/hyperwatch');
 const uuid = require('uuid');
 
+const { basicAuth } = require('./basic-auth');
 const { setClientWorkerIdentity } = require('./cloudflare-worker');
 const { mountDashboard } = require('./dashboard');
 const {
@@ -27,6 +28,7 @@ const serverCount = Number(process.env.API_HYPERWATCH_CONNECTIONS) || 2;
 hyperwatch.init(hyperwatchOptions('api'));
 
 mountDashboard();
+basicAuth();
 
 // Connect Inputs (1 per live server)
 

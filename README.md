@@ -83,6 +83,8 @@ Errors are kept in `logs/<config>.log`. If one process crashes, the others are s
 
 Optional environment variables:
 
+- `WATCH_SECRET`: puts Basic Auth in front of the whole instance (pages, JSON, CSV, log streams,
+  WebSockets), with the username `WATCH_USERNAME` (default `opencollective`). Off when not set.
 - `HYPERWATCH_PERSISTENCE=true`: save counters and history to `.hyperwatch-data/` on shutdown and
   reload them at start.
 - `HYPERWATCH_HISTORY_CAPACITY`: requests kept per pipeline node for `/history` and the live logs

@@ -6,6 +6,7 @@
 const hyperwatch = require('@hyperwatch/hyperwatch');
 const uuid = require('uuid');
 
+const { basicAuth } = require('./basic-auth');
 const { setClientWorkerIdentity } = require('./cloudflare-worker');
 const { mountDashboard } = require('./dashboard');
 const { hasGraphql, registerGraphqlNodes } = require('./graphql');
@@ -32,6 +33,7 @@ hyperwatch.init(
 );
 
 mountDashboard();
+basicAuth();
 
 const cloudflare = modules.get('cloudflare');
 
