@@ -64,6 +64,7 @@ Useful pages:
 | `<SERVICE>_HYPERWATCH_SECRET`                  | the `HYPERWATCH_SECRET` of the matching staging app                                                                                                                                                           |
 | `API_/FRONTEND_/IMAGES_HYPERWATCH_CONNECTIONS` | `1` (see below)                                                                                                                                                                                               |
 | `CLOUDFLARE_TUNNEL_TOKEN`                      | token of the `oc-staging-watch` tunnel                                                                                                                                                                        |
+| `FRONTEND_/IMAGES_/REST_OC_SECRET`             | the `OC_SECRET` of the matching staging app, to verify its calls to the API                                                                                                                                   |
 | `WATCH_SECRET`                                 | Basic Auth password, on top of Cloudflare Access (username `WATCH_USERNAME`, default `opencollective`)                                                                                                        |
 | `HYPERWATCH_PERSISTENCE`                       | **not set**: the dyno disk is wiped on every restart/deploy                                                                                                                                                   |
 

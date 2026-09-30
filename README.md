@@ -83,6 +83,10 @@ Errors are kept in `logs/<config>.log`. If one process crashes, the others are s
 
 Optional environment variables:
 
+- `FRONTEND_OC_SECRET`, `IMAGES_OC_SECRET`, `REST_OC_SECRET`: the `OC_SECRET` of each of our
+  servers. API calls whose `oc-secret` header matches get that server's identity
+  (`Open Collective Frontend`…); others don't. The header's value is replaced with `[verified]`
+  or `[unverified]` as logs arrive, so the secrets are never kept or shown.
 - `WATCH_SECRET`: puts Basic Auth in front of the whole instance (pages, JSON, CSV, log streams,
   WebSockets), with the username `WATCH_USERNAME` (default `opencollective`). Off when not set.
 - `HYPERWATCH_PERSISTENCE=true`: save counters and history to `.hyperwatch-data/` on shutdown and
