@@ -13,7 +13,12 @@ const {
   registerGraphqlNodes,
 } = require('./graphql');
 const { hyperwatchOptions } = require('./options');
-const { setApplicationAndIdentity, setGraphqlHash } = require('./transforms');
+const {
+  setApplicationAndIdentity,
+  setGraphqlHash,
+  transformInput,
+  verifyServiceSecret,
+} = require('./transforms');
 
 const { pipeline, input, lib } = hyperwatch;
 
@@ -45,7 +50,10 @@ for (let i = 1; i <= serverCount; i++) {
     password: process.env.API_HYPERWATCH_SECRET,
   });
 
-  pipeline.registerInput(websocketClientInput);
+  // oc-secret is checked and removed before any node keeps the logs
+  pipeline.registerInput(
+    transformInput(websocketClientInput, verifyServiceSecret),
+  );
 }
 
 // Setup Pipeline and data augmentation

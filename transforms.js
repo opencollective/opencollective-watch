@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 const { util } = require('@hyperwatch/hyperwatch');
 
 // Per-service log transforms, shared by the service configs (api.js,
@@ -9,6 +11,43 @@ const SERVICE_IDENTITIES = {
   images: 'Open Collective Images',
   rest: 'Open Collective REST',
 };
+
+// The environment variable holding the oc-secret each of our servers sends
+const SERVICE_SECRETS = {
+  frontend: 'FRONTEND_OC_SECRET',
+  images: 'IMAGES_OC_SECRET',
+  rest: 'REST_OC_SECRET',
+};
+
+function safeEqual(a, b) {
+  const x = Buffer.from(a);
+  const y = Buffer.from(b);
+  return x.length === y.length && crypto.timingSafeEqual(x, y);
+}
+
+// api: check the oc-secret of a call against the one its server is configured
+// with (<SERVICE>_OC_SECRET), then replace it with [verified] or [unverified]:
+// logs are kept in history and shown, the secret must not be. Runs as logs
+// arrive, before any node keeps them.
+function verifyServiceSecret(log) {
+  const secret = log.getIn(['request', 'headers', 'oc-secret']);
+  if (secret === undefined) {
+    return log;
+  }
+  const application = log.getIn(['request', 'headers', 'oc-application']);
+  const expected = SERVICE_SECRETS[application]
+    ? process.env[SERVICE_SECRETS[application]]
+    : undefined;
+  const verified =
+    Boolean(expected) &&
+    typeof secret === 'string' &&
+    safeEqual(secret, expected);
+  log = log.setIn(
+    ['request', 'headers', 'oc-secret'],
+    verified ? '[verified]' : '[unverified]',
+  );
+  return verified ? log.set('verifiedApplication', application) : log;
+}
 
 // api: identify collectives (signed-in users…), and tag calls from our own
 // services
@@ -22,11 +61,10 @@ function setApplicationAndIdentity(log) {
   const application = log.getIn(['request', 'headers', 'oc-application']);
   if (SERVICE_IDENTITIES[application]) {
     log = log.set('application', application);
-    // Browsers also send oc-application (client-side GraphQL calls), only
-    // server-side calls send oc-secret. Its value is random per process, so
-    // we can only check it's there. Our server prevails over the user it calls
-    // on behalf of.
-    if (log.getIn(['request', 'headers', 'oc-secret'])) {
+    // Browsers also send oc-application (client-side GraphQL calls): only
+    // calls with a verified oc-secret (verifyServiceSecret) are our servers.
+    // Our server prevails over the user it calls on behalf of.
+    if (log.get('verifiedApplication') === application) {
       log = log.set('identity', SERVICE_IDENTITIES[application]);
     }
   }
@@ -91,4 +129,5 @@ module.exports = {
   setImagesIdentity,
   setRealIp,
   transformInput,
+  verifyServiceSecret,
 };

@@ -20,6 +20,7 @@ const {
   setImagesIdentity,
   setRealIp,
   transformInput,
+  verifyServiceSecret,
 } = require('./transforms');
 
 const { pipeline, input, lib, modules } = hyperwatch;
@@ -43,7 +44,10 @@ const cloudflare = modules.get('cloudflare');
 // before modules (geoip, hostname, identity…) use it, and redacts sign-in
 // tokens before raw and the input nodes keep the logs in their history.
 const SOURCES = {
-  api: { connections: 2, prepare: cloudflare.augment },
+  api: {
+    connections: 2,
+    prepare: (log) => verifyServiceSecret(cloudflare.augment(log)),
+  },
   frontend: {
     connections: 4,
     prepare: (log) => redactSigninToken(setRealIp(log)),
