@@ -13,6 +13,9 @@ const SERVICE_IDENTITIES = {
 };
 
 // The environment variable holding the oc-secret each of our servers sends
+// when it calls the API. No entry for the API itself: it's the one being
+// called, and never sends oc-secret (it only reads oc-application, to name
+// GraphQL clients), so there's no API_OC_SECRET to verify.
 const SERVICE_SECRETS = {
   frontend: 'FRONTEND_OC_SECRET',
   images: 'IMAGES_OC_SECRET',
