@@ -50,10 +50,15 @@ PRE_DEPLOY_BRANCH="main"
 
 GIT_LOG_FORMAT_SHELL='short'
 GIT_LOG_FORMAT_SLACK='format:<https://github.com/opencollective/opencollective-watch/commit/%H|[%ci]> *%an* %n_%<(80,trunc)%s_%n'
-# The local branch: it's what the deploy pushes
-GIT_LOG_COMPARISON="$PRE_DEPLOY_ORIGIN/$PRE_DEPLOY_BRANCH..$LOCAL_BRANCH"
+# The commits previewed, kept in refs nothing else updates (a background
+# fetch moves the predeploy-* remote-tracking branch): the npm deploy scripts
+# push the previewed local commit, leased on the previewed remote one
+PREVIEW_REMOTE="refs/deploy/$1/remote"
+PREVIEW_LOCAL="refs/deploy/$1/local"
+# What the deploy adds
+GIT_LOG_COMPARISON="$PREVIEW_REMOTE..$PREVIEW_LOCAL"
 # Commits only on the deployed branch: a forced push (staging) removes them
-GIT_LOG_REMOVED="$LOCAL_BRANCH..$PRE_DEPLOY_ORIGIN/$PRE_DEPLOY_BRANCH"
+GIT_LOG_REMOVED="$PREVIEW_LOCAL..$PREVIEW_REMOTE"
 
 # ---- Utils ----
 
@@ -92,6 +97,8 @@ if ! git fetch $PRE_DEPLOY_ORIGIN $PRE_DEPLOY_BRANCH > /dev/null; then
   echo "⚠️  Couldn't fetch $1's state, not deploying."
   exit 1
 fi
+git update-ref "$PREVIEW_REMOTE" "$PRE_DEPLOY_ORIGIN/$PRE_DEPLOY_BRANCH"
+git update-ref "$PREVIEW_LOCAL" "$LOCAL_BRANCH"
 
 echo ""
 echo "-------------- New commits --------------"
