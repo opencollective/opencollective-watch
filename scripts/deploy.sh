@@ -105,8 +105,13 @@ if ! git fetch $PRE_DEPLOY_ORIGIN $PRE_DEPLOY_BRANCH > /dev/null; then
 fi
 # The commits previewed, kept in this run's variables: the push below uses
 # them, whatever a fetch, a commit or another run changes meanwhile
-REMOTE_OID=$(git rev-parse "$PRE_DEPLOY_ORIGIN/$PRE_DEPLOY_BRANCH")
-LOCAL_OID=$(git rev-parse "$LOCAL_BRANCH")
+# Fully qualified: a tag named main would win over the branch otherwise
+REMOTE_OID=$(git rev-parse --verify --quiet "refs/remotes/$PRE_DEPLOY_ORIGIN/$PRE_DEPLOY_BRANCH^{commit}")
+LOCAL_OID=$(git rev-parse --verify --quiet "refs/heads/$LOCAL_BRANCH^{commit}")
+if [ -z "$REMOTE_OID" ] || [ -z "$LOCAL_OID" ]; then
+  echo "⚠️  Couldn't find $LOCAL_BRANCH locally or on $1, not deploying."
+  exit 1
+fi
 # What the deploy adds
 GIT_LOG_COMPARISON="$REMOTE_OID..$LOCAL_OID"
 # Commits only on the deployed branch: a forced push (staging) removes them
