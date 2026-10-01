@@ -162,10 +162,6 @@ OC_SLACK_DEPLOY_WEBHOOK=https://hooks.slack.com/services/....
 ### Staging (heroku)
 
 ```bash
-# Before first deployment, configure staging remote
-git remote add staging https://git.heroku.com/oc-staging-watch.git
-
-# Then deploy main with
 npm run deploy:staging
 ```
 
@@ -174,10 +170,6 @@ URL: https://watch-staging.opencollective.com/
 ### Production (heroku)
 
 ```bash
-# Before first deployment, configure production remote
-git remote add production https://git.heroku.com/oc-prod-watch.git
-
-# Then deploy main with
 npm run deploy:production
 ```
 

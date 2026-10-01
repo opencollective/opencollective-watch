@@ -22,8 +22,8 @@
     "start:rest": "PORT=3303 dotenv hyperwatch rest",
     "start:frontend": "PORT=3300 dotenv hyperwatch frontend",
     "heroku-postbuild": "bin/install-cloudflared",
-    "deploy:production": "./scripts/pre-deploy.sh production && git push production refs/deploy/production/local:main",
-    "deploy:staging": "./scripts/pre-deploy.sh staging && git push --force-with-lease=main:$(git rev-parse refs/deploy/staging/remote) staging refs/deploy/staging/local:main"
+    "deploy:production": "./scripts/deploy.sh production",
+    "deploy:staging": "./scripts/deploy.sh staging"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1144.0",

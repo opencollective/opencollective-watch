@@ -140,10 +140,10 @@ heroku ps -a oc-staging-watch        # worker.1 up, no web dyno
 heroku logs --tail -a oc-staging-watch
 ```
 
-The scripts show the commits about to be deployed, ask for confirmation, then push the local
-`main` branch to the `staging` or `production` remote (see the [README](../README.md#deployment)
-to set them up). To deploy another branch to staging:
-`git push -f staging <branch>:main`.
+`scripts/deploy.sh` shows the commits about to be deployed (and, on staging, those the forced
+push removes), asks for confirmation, then pushes the local `main` commit it showed. It adds a
+`predeploy-staging` or `predeploy-production` remote the first time. To deploy another branch to
+staging: `git push -f https://git.heroku.com/oc-staging-watch.git <branch>:main`.
 
 After a deploy, check: the `all http://localhost:3399` line, the `Persistence (s3) loaded` line,
 `cloudflared` "Registered tunnel connection", no `R14`. Roll back with

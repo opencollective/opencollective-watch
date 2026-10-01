@@ -3,17 +3,18 @@
 # Description
 # ===========
 #
-# Pre-deploy hook. Does the following:
-#   1. Shows the commits about to be pushed
+# Deploys main to staging or production:
+#   1. Shows the commits about to be pushed (and, on staging, removed)
 #   2. Ask for confirmation (exit with 1 if not confirming)
 #   3. Notify Slack
+#   4. Pushes the commit that was previewed
 #
 #
 # Developing
 # ==========
 #
 # During development, the best way to test it is to call the script
-# directly with `./scripts/pre-deploy.sh staging|production`. You can also set
+# directly with `./scripts/deploy.sh staging|production` and answer no. You can also set
 # the `SLACK_CHANNEL` to your personnal channel so you don't flood the team.
 # To do that, right click on your own name in Slack, `Copy link`, then
 # only keep the last part of the URL.
@@ -50,15 +51,7 @@ PRE_DEPLOY_BRANCH="main"
 
 GIT_LOG_FORMAT_SHELL='short'
 GIT_LOG_FORMAT_SLACK='format:<https://github.com/opencollective/opencollective-watch/commit/%H|[%ci]> *%an* %n_%<(80,trunc)%s_%n'
-# The commits previewed, kept in refs nothing else updates (a background
-# fetch moves the predeploy-* remote-tracking branch): the npm deploy scripts
-# push the previewed local commit, leased on the previewed remote one
-PREVIEW_REMOTE="refs/deploy/$1/remote"
-PREVIEW_LOCAL="refs/deploy/$1/local"
-# What the deploy adds
-GIT_LOG_COMPARISON="$PREVIEW_REMOTE..$PREVIEW_LOCAL"
-# Commits only on the deployed branch: a forced push (staging) removes them
-GIT_LOG_REMOVED="$PREVIEW_LOCAL..$PREVIEW_REMOTE"
+DEPLOY_ENV="$1"
 
 # ---- Utils ----
 
@@ -78,10 +71,18 @@ function confirm()
   return 1
 }
 
-function exit_success()
+# Push the local commit that was previewed. Staging's push is forced, and
+# leased on the state previewed: a deploy made meanwhile isn't overwritten
+function deploy()
 {
   echo "🚀  Deploying now..."
-  exit 0
+  if [ "$DEPLOY_ENV" == "staging" ]; then
+    git push --force-with-lease="$PRE_DEPLOY_BRANCH:$REMOTE_OID" \
+      "$PRE_DEPLOY_ORIGIN" "$LOCAL_OID:refs/heads/$PRE_DEPLOY_BRANCH"
+  else
+    git push "$PRE_DEPLOY_ORIGIN" "$LOCAL_OID:refs/heads/$PRE_DEPLOY_BRANCH"
+  fi
+  exit $?
 }
 
 # ---- Ensure we have a reference to the remote ----
@@ -97,8 +98,14 @@ if ! git fetch $PRE_DEPLOY_ORIGIN $PRE_DEPLOY_BRANCH > /dev/null; then
   echo "⚠️  Couldn't fetch $1's state, not deploying."
   exit 1
 fi
-git update-ref "$PREVIEW_REMOTE" "$PRE_DEPLOY_ORIGIN/$PRE_DEPLOY_BRANCH"
-git update-ref "$PREVIEW_LOCAL" "$LOCAL_BRANCH"
+# The commits previewed, kept in this run's variables: the push below uses
+# them, whatever a fetch, a commit or another run changes meanwhile
+REMOTE_OID=$(git rev-parse "$PRE_DEPLOY_ORIGIN/$PRE_DEPLOY_BRANCH")
+LOCAL_OID=$(git rev-parse "$LOCAL_BRANCH")
+# What the deploy adds
+GIT_LOG_COMPARISON="$REMOTE_OID..$LOCAL_OID"
+# Commits only on the deployed branch: a forced push (staging) removes them
+GIT_LOG_REMOVED="$LOCAL_OID..$REMOTE_OID"
 
 echo ""
 echo "-------------- New commits --------------"
@@ -126,7 +133,7 @@ if [ -z "$OC_SLACK_DEPLOY_WEBHOOK" ]; then
   # Emit a warning as we don't want the deploy to crash just because we
   # havn't setup a Slack token. Get yours on https://api.slack.com/custom-integrations/legacy-tokens
   echo "ℹ️  OC_SLACK_DEPLOY_WEBHOOK is not set, I will not notify Slack about this deploy 😞  (please do it manually)"
-  exit_success
+  deploy
 fi
 
 if [ ! -z "$DEPLOY_MSG" ]; then
@@ -173,5 +180,5 @@ else
   echo "$PAYLOAD"
 fi
 
-# Always exit with 0 to continue the deploy even if slack notification failed
-exit_success
+# Deploy even if the Slack notification failed
+deploy
