@@ -119,12 +119,13 @@ cd ../watch && npm link @hyperwatch/dashboard
 ```
 
 Then run `npm run watch` in the dashboard repo: every change is rebuilt and served by the running
-instances, reload the page to see it (the instance links keep the current page and its settings).
+instances, reload the page to see it.
 `npm install` in Watch replaces the link with the published package; link again afterwards.
 
 ### Running on Heroku
 
-Watch runs on Heroku for staging, behind Cloudflare Access. See [docs/heroku.md](docs/heroku.md).
+Watch runs on Heroku for staging and production, behind Cloudflare Access. See
+[docs/heroku.md](docs/heroku.md).
 
 ### Using a development version of Hyperwatch
 
