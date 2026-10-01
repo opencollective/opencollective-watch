@@ -87,9 +87,10 @@ heroku config:set -a oc-staging-watch \
   API_HYPERWATCH_SECRET="$(heroku config:get HYPERWATCH_SECRET -a opencollective-staging-api)" > /dev/null
 ```
 
-Production has no `*_HYPERWATCH_CONNECTIONS` (the defaults fit its dyno counts) and, for now, no
-`HYPERWATCH_PERSISTENCE*` variables: only its `AWS_*` access key (IAM user `watch-production`) is
-set.
+Production has the same variables, with its own values: the bucket is
+`opencollective-production-watch`, the access key is the one of the IAM user `watch-production`,
+`WATCH_SECRET` is set, and there are no `*_HYPERWATCH_CONNECTIONS` (the defaults fit its dyno
+counts).
 
 ### Connections per service
 
@@ -146,8 +147,6 @@ connection", no `R14`. Roll back with `heroku rollback -a oc-staging-watch`.
 
 - **Firewall and fingerprint modules**: not in the published Hyperwatch (5.2.0), only in unmerged
   branches.
-- **Persistence on production**: its bucket and access key exist, the `HYPERWATCH_PERSISTENCE*`
-  variables aren't set yet.
 - **Periodic snapshots**: see _Persistence_.
 
 ## Moving from one process per service to the merged pipeline
