@@ -139,7 +139,10 @@ if command -v heroku > /dev/null; then
     '
   )
   if [ -z "$RUNNING" ]; then
-    echo "ℹ️  Couldn't find the commit $HEROKU_APP runs, assuming it's Heroku's main."
+    # Not in the last 100 releases (rolled back far), or the CLI failed:
+    # assuming Heroku's main could deploy from the wrong state
+    echo "⚠️  Couldn't find the commit $HEROKU_APP runs (see \`heroku releases -a $HEROKU_APP\`): not deploying."
+    exit 1
   elif [[ "$REMOTE_OID" != "$RUNNING"* ]]; then
     echo "⚠️  $HEROKU_APP runs $RUNNING (rolled back?), not ${REMOTE_OID:0:8} from Heroku's main: not deploying."
     echo "   Roll forward with \`heroku rollback -a $HEROKU_APP <version>\`, or push explicitly."
@@ -186,13 +189,6 @@ confirm "❔ Are you sure (yes/no) > " || exit 1
 cd -- "$(dirname $0)/.."
 eval $(cat .env | grep OC_SLACK_DEPLOY_WEBHOOK=)
 
-if [ -z "$OC_SLACK_DEPLOY_WEBHOOK" ]; then
-  # Emit a warning as we don't want the deploy to crash just because we
-  # havn't setup a Slack token. Get yours on https://api.slack.com/custom-integrations/legacy-tokens
-  echo "ℹ️  OC_SLACK_DEPLOY_WEBHOOK is not set, I will not notify Slack about this deploy 😞  (please do it manually)"
-  deploy
-fi
-
 if [ ! -z "$DEPLOY_MSG" ]; then
   CUSTOM_MESSAGE="-- _${DEPLOY_MSG}_"
 fi
@@ -218,7 +214,14 @@ PAYLOAD=$(
   '
 )
 
-if [ $PUSH_TO_SLACK = "true" ]; then
+if [ "$PUSH_TO_SLACK" != "true" ]; then
+  echo "Following message would be posted on Slack:"
+  echo "$PAYLOAD"
+elif [ -z "$OC_SLACK_DEPLOY_WEBHOOK" ]; then
+  # A warning, not an error: the deploy goes on without the Slack webhook.
+  # Get one on https://api.slack.com/custom-integrations/legacy-tokens
+  echo "ℹ️  OC_SLACK_DEPLOY_WEBHOOK is not set, I will not notify Slack about this deploy 😞  (please do it manually)"
+else
   curl \
     -H "Content-Type: application/json; charset=utf-8" \
     -d "$PAYLOAD" \
@@ -232,9 +235,6 @@ if [ $PUSH_TO_SLACK = "true" ]; then
   else
     echo "🔔  Slack notified about this deployment."
   fi
-else
-  echo "Following message would be posted on Slack:"
-  echo "$PAYLOAD"
 fi
 
 # Deploy even if the Slack notification failed
