@@ -87,7 +87,11 @@ function deploy()
 
 # ---- Ensure we have a reference to the remote ----
 
-git remote add $PRE_DEPLOY_ORIGIN $DEPLOY_ORIGIN_URL &> /dev/null
+# Added the first time, and reset if it points anywhere else: the fetch and
+# the push go to this remote
+if ! git remote add "$PRE_DEPLOY_ORIGIN" "$DEPLOY_ORIGIN_URL" 2> /dev/null; then
+  git remote set-url "$PRE_DEPLOY_ORIGIN" "$DEPLOY_ORIGIN_URL" || exit 1
+fi
 
 # ---- Show the commits about to be pushed ----
 
