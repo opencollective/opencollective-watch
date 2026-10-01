@@ -40,12 +40,12 @@ to the **"Watch engineers"** Access policy (Cloudflare Zero Trust → Access con
 
 Useful pages:
 
-| Page                                                   | What                                                                                |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------- |
-| `/status`                                              | pipeline status, inputs connected                                                   |
-| `/logs/<node>`                                         | live stream, one line per request (`main`, `api`, `frontend`, `slow`, `graphql`, …) |
-| `/history/<node>.json?limit=50`                        | last requests (up to 1000 per node); filters `address`, `identity`, `signature`     |
-| `/addresses`, `/identities`, `/signatures`, `/graphql` | aggregated views; add `.csv` or `.json`                                             |
+| Page                                                   | What                                                                                            |
+| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| `/status`                                              | pipeline status, inputs connected                                                               |
+| `/logs/<node>`                                         | live stream, one line per request (`main`, `api`, `frontend`, `slow`, `graphql`, …)             |
+| `/history/<node>.json?limit=50`                        | last requests (up to 1000 on `main`, 100 elsewhere); filters `address`, `identity`, `signature` |
+| `/addresses`, `/identities`, `/signatures`, `/graphql` | aggregated views; add `.csv` or `.json`                                                         |
 
 ## Logs
 
@@ -66,7 +66,10 @@ Useful pages:
 | `CLOUDFLARE_TUNNEL_TOKEN`                      | token of the `oc-staging-watch` tunnel                                                                                                                                                                        |
 | `FRONTEND_/IMAGES_/REST_OC_SECRET`             | the `OC_SECRET` of the matching staging app, to verify its calls to the API                                                                                                                                   |
 | `WATCH_SECRET`                                 | Basic Auth password, on top of Cloudflare Access (username `WATCH_USERNAME`, default `opencollective`)                                                                                                        |
-| `HYPERWATCH_PERSISTENCE`                       | **not set**: the dyno disk is wiped on every restart/deploy                                                                                                                                                   |
+| `HYPERWATCH_PERSISTENCE`                       | `true`, with the three variables below: counters and history are kept in S3 (the dyno disk is wiped on every restart/deploy)                                                                                  |
+| `HYPERWATCH_PERSISTENCE_BACKEND`               | `s3`                                                                                                                                                                                                          |
+| `HYPERWATCH_PERSISTENCE_S3_BUCKET`             | `opencollective-staging-watch` (`us-east-1`, like the app)                                                                                                                                                    |
+| `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`   | access key of the IAM user `watch-staging`, read by the AWS SDK                                                                                                                                               |
 
 `<SERVICE>` is `API`, `FRONTEND`, `IMAGES` or `REST`.
 
@@ -92,8 +95,9 @@ Standard-2X (1 GB). A Hyperwatch process uses ~120–185 MB at boot (110 MB of t
 database). The four per-service processes didn't fit in a Basic/Standard-1X dyno (R14 at 632 MB
 within seconds); the merged pipeline is a single process, which loads the GeoIP database once. On
 production traffic it used ~235 MB after 3 minutes, still growing as its counters fill: check a
-day of the Metrics tab before choosing a smaller dyno. History is capped at 1000 entries per node
-(`.hyperwatchrc`) to keep memory down. Watch for `R14` in the logs or the Metrics tab.
+day of the Metrics tab before choosing a smaller dyno. History is capped at 1000 entries on `main`
+and 100 on the other nodes, with none on `raw` and the inputs (`.hyperwatchrc`), to keep memory
+down. Watch for `R14` in the logs or the Metrics tab.
 
 ## Deploying
 
@@ -110,10 +114,8 @@ connection", no `R14`. Roll back with `heroku rollback -a oc-staging-watch`.
 
 ## What's not there yet
 
-- **Firewall and fingerprint modules**: not in the published Hyperwatch (5.1.0), only in unmerged
+- **Firewall and fingerprint modules**: not in the published Hyperwatch (5.2.0), only in unmerged
   branches.
-- **Persistence**: counters and history reset on every restart (at least daily). A possible next
-  step is copying `.hyperwatch-data` to S3 on shutdown and restoring it at boot, in `start.js`.
 - **Production**: would need its own app, tunnel and hostnames, and the default connection counts.
 
 ## Moving from one process per service to the merged pipeline

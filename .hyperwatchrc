@@ -39,7 +39,12 @@
     },
     "history": {
       "active": true,
-      "capacity": 1000
+      "capacity": 100,
+      "nodes": {
+        "main": 1000,
+        "raw": 0,
+        "input-*": 0
+      }
     }
   }
 }
