@@ -8,7 +8,7 @@
 //
 //   npm start                  # all: the four services in one pipeline, quiet
 //   npm start -- -v            # stream prefixed output
-//   npm start -- --stderr      # stream prefixed stderr only (Heroku logs)
+//   npm start -- --stderr      # stream prefixed stderr only
 //   npm start -- api images    # pick configs, e.g. one process per service
 //   npm start -- all api       # the merged pipeline and the api one
 

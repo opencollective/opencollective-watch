@@ -17,7 +17,7 @@ staging servers (api, frontend, images, rest)
         ▼
 oc-staging-watch — one worker dyno, no web process
   bin/start-heroku
-   ├─ node start.js --stderr      the merged Hyperwatch pipeline (all.js) on localhost:3399
+   ├─ node start.js -v            the merged Hyperwatch pipeline (all.js) on localhost:3399
    └─ cloudflared tunnel run      outbound connection to Cloudflare
         │
         ▼
@@ -54,9 +54,10 @@ Useful pages:
 
 ## Logs
 
-- `heroku logs --tail -a oc-staging-watch`: Watch's own logs. Only **stderr** of the Hyperwatch
-  processes (`start.js --stderr`), plus `cloudflared`. Per-request lines are not sent to Heroku on
-  purpose; use `/logs/<node>` above. Heroku keeps ~1500 lines, there is no log add-on.
+- `heroku logs --tail -a oc-staging-watch`: Watch's own logs, plus `cloudflared`. That's the output
+  of the Hyperwatch process (`start.js -v`), prefixed with `[all]`: inputs connecting, persistence
+  summaries, warnings and errors. The merged pipeline prints no per-request lines; use
+  `/logs/<node>` above for those. Heroku keeps ~1500 lines, there is no log add-on.
 - Expected noise: `cloudflared` "ICMP proxy feature is disabled" at boot, and `unexpected EOF`
   lines when the dyno restarts while someone has a `/logs` page open.
 
@@ -113,9 +114,9 @@ The dyno's disk is wiped on every restart and deploy, so counters and history ar
   20 seconds (Hyperwatch's `persistence.deadlines.stop`), within the 30 seconds Heroku gives.
 - **No periodic snapshots:** only a clean stop saves. A crash, or a dyno killed for memory, loses
   what was counted since the last start.
-- **Checking:** `/status` shows the latest load and dump, with documents, sizes and times. Those
-  summaries go to stdout, which isn't sent to the Heroku logs (see _Logs_): only failures show
-  there, as `Persistence: skipping …` or `Error dumping aggregators` lines.
+- **Checking:** the logs have one `Persistence (s3) loaded …` line at start and one `dumped` line
+  at shutdown, with documents, sizes and times; `/status` shows the latest ones. Failures show as
+  `Persistence: skipping …` or `Error dumping aggregators` lines.
 
 ## Sizing
 
