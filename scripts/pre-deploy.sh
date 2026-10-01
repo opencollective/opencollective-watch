@@ -42,7 +42,6 @@ fi
 PUSH_TO_SLACK=true # Setting this to false will echo the message instead of pushing to Slack
 SLACK_CHANNEL="CEZUS9WH3"
 
-LOCAL_ORIGIN="origin"
 PRE_DEPLOY_ORIGIN="predeploy-${1}"
 
 LOCAL_BRANCH="main"
@@ -50,7 +49,8 @@ PRE_DEPLOY_BRANCH="main"
 
 GIT_LOG_FORMAT_SHELL='short'
 GIT_LOG_FORMAT_SLACK='format:<https://github.com/opencollective/opencollective-watch/commit/%H|[%ci]> *%an* %n_%<(80,trunc)%s_%n'
-GIT_LOG_COMPARISON="$PRE_DEPLOY_ORIGIN/$PRE_DEPLOY_BRANCH..$LOCAL_ORIGIN/$LOCAL_BRANCH"
+# The local branch: it's what the deploy pushes
+GIT_LOG_COMPARISON="$PRE_DEPLOY_ORIGIN/$PRE_DEPLOY_BRANCH..$LOCAL_BRANCH"
 
 # ---- Utils ----
 
@@ -109,29 +109,26 @@ if [ -z "$OC_SLACK_DEPLOY_WEBHOOK" ]; then
   exit_success
 fi
 
-ESCAPED_CHANGELOG=$(
-  git log --pretty="${GIT_LOG_FORMAT_SLACK}" $GIT_LOG_COMPARISON \
-  | sed 's/"/\\\\"/g'
-)
-
 if [ ! -z "$DEPLOY_MSG" ]; then
-  CUSTOM_MESSAGE="-- _$(echo $DEPLOY_MSG | sed 's/"/\\\\"/g' | sed "s/'/\\\\'/g")_"
+  CUSTOM_MESSAGE="-- _${DEPLOY_MSG}_"
 fi
 
-read -d '' PAYLOAD << EOF
-  {
-    "channel": "${SLACK_CHANNEL}",
-    "text": ":rocket: Deploying *WATCH* to *${1}* ($(git config user.name)) ${CUSTOM_MESSAGE}",
-    "as_user": true,
-    "attachments": [{
-      "text": "
----------------------------------------------------------------------------------------------------
-
-${ESCAPED_CHANGELOG}
-"
-    }]
-  }
-EOF
+# Built by a JSON encoder: the changelog spans several lines, and quotes in
+# it or in the message must be escaped
+PAYLOAD=$(
+  SLACK_CHANNEL="$SLACK_CHANNEL" \
+  TEXT=":rocket: Deploying *WATCH* to *${1}* ($(git config user.name)) ${CUSTOM_MESSAGE}" \
+  CHANGELOG="$(git log --pretty="${GIT_LOG_FORMAT_SLACK}" $GIT_LOG_COMPARISON)" \
+  node -e '
+    const { SLACK_CHANNEL, TEXT, CHANGELOG } = process.env;
+    console.log(JSON.stringify({
+      channel: SLACK_CHANNEL,
+      text: TEXT,
+      as_user: true,
+      attachments: [{ text: `${"-".repeat(99)}\n\n${CHANGELOG}\n` }],
+    }));
+  '
+)
 
 if [ $PUSH_TO_SLACK = "true" ]; then
   curl \
