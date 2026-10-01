@@ -89,12 +89,16 @@ Optional environment variables:
   or `[unverified]` as logs arrive, so the secrets are never kept or shown.
 - `WATCH_SECRET`: puts Basic Auth in front of the whole instance (pages, JSON, CSV, log streams,
   WebSockets), with the username `WATCH_USERNAME` (default `opencollective`). Off when not set.
-- `HYPERWATCH_PERSISTENCE=true`: save counters and history to `.hyperwatch-data/` on shutdown and
-  reload them at start.
-- `HYPERWATCH_HISTORY_CAPACITY`: requests kept per pipeline node for `/history` and the live logs
+- `HYPERWATCH_PERSISTENCE=true` (or `1`): save counters and history on shutdown and reload them at
+  start, in `.hyperwatch-data/` by default.
+- `HYPERWATCH_PERSISTENCE_BACKEND=s3`: keep them in an S3 bucket instead (default `file`), named by
+  `HYPERWATCH_PERSISTENCE_S3_BUCKET` and, optionally, `HYPERWATCH_PERSISTENCE_S3_REGION`. The AWS
+  SDK reads the credentials itself (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`).
+- `HYPERWATCH_HISTORY_CAPACITY`: requests kept on the `main` node for `/history` and the live logs
   (default 1000 in `.hyperwatchrc`, sized for Heroku). Raise it locally, e.g. `10000`, at the cost
   of memory. The merged `main` node gets the traffic of every service, so 1000 requests only cover
-  a minute or two.
+  a minute or two. The other nodes keep 100, and `raw` and the `input-*` nodes none: they mostly
+  repeat `main`.
 - `API_HYPERWATCH_CONNECTIONS`, `FRONTEND_HYPERWATCH_CONNECTIONS`, `IMAGES_HYPERWATCH_CONNECTIONS`:
   websockets opened per service, one per server dyno (defaults 2, 4, 2). A dyno keeps one websocket
   from Watch and cuts the others, which keep reconnecting: use `1` against single-dyno servers such
@@ -115,12 +119,13 @@ cd ../watch && npm link @hyperwatch/dashboard
 ```
 
 Then run `npm run watch` in the dashboard repo: every change is rebuilt and served by the running
-instances, reload the page to see it (the instance links keep the current page and its settings).
+instances, reload the page to see it.
 `npm install` in Watch replaces the link with the published package; link again afterwards.
 
 ### Running on Heroku
 
-Watch runs on Heroku for staging, behind Cloudflare Access. See [docs/heroku.md](docs/heroku.md).
+Watch runs on Heroku for staging and production, behind Cloudflare Access. See
+[docs/heroku.md](docs/heroku.md).
 
 ### Using a development version of Hyperwatch
 

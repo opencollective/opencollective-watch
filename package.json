@@ -24,8 +24,9 @@
     "heroku-postbuild": "bin/install-cloudflared"
   },
   "dependencies": {
-    "@hyperwatch/dashboard": "^0.1.2",
-    "@hyperwatch/hyperwatch": "^5.1.0",
+    "@aws-sdk/client-s3": "^3.1144.0",
+    "@hyperwatch/dashboard": "^0.2.0",
+    "@hyperwatch/hyperwatch": "^5.2.0",
     "cors": "^2.8.6",
     "dotenv-cli": "^11.0.0",
     "express": "^5.2.1",

@@ -1,8 +1,13 @@
-# Running Watch on Heroku (staging)
+# Running Watch on Heroku
 
-Watch runs on Heroku as **`oc-staging-watch`**, plugged into the **staging** servers. It is not
-public: the only way in is a Cloudflare Tunnel protected by Cloudflare Access (Zero Trust), the
-same pattern as our Metabase (`oc-metabase`). Production is not deployed yet.
+Watch runs on Heroku as **`oc-staging-watch`**, plugged into the **staging** servers, and as
+**`oc-prod-watch`**, plugged into the production ones. Neither is public: the only way in is a
+Cloudflare Tunnel protected by Cloudflare Access (Zero Trust), the same pattern as our Metabase
+(`oc-metabase`).
+
+This page describes staging. Production is set up the same way, with its own tunnel and Access
+application (`oc-prod-watch`), at `https://watch.opencollective.com`; the differences are noted
+where they matter.
 
 ## How it works
 
@@ -12,7 +17,7 @@ staging servers (api, frontend, images, rest)
         ▼
 oc-staging-watch — one worker dyno, no web process
   bin/start-heroku
-   ├─ node start.js --stderr      the merged Hyperwatch pipeline (all.js) on localhost:3399
+   ├─ node start.js -v            the merged Hyperwatch pipeline (all.js) on localhost:3399
    └─ cloudflared tunnel run      outbound connection to Cloudflare
         │
         ▼
@@ -40,18 +45,19 @@ to the **"Watch engineers"** Access policy (Cloudflare Zero Trust → Access con
 
 Useful pages:
 
-| Page                                                   | What                                                                                |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------- |
-| `/status`                                              | pipeline status, inputs connected                                                   |
-| `/logs/<node>`                                         | live stream, one line per request (`main`, `api`, `frontend`, `slow`, `graphql`, …) |
-| `/history/<node>.json?limit=50`                        | last requests (up to 1000 per node); filters `address`, `identity`, `signature`     |
-| `/addresses`, `/identities`, `/signatures`, `/graphql` | aggregated views; add `.csv` or `.json`                                             |
+| Page                                                   | What                                                                                            |
+| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| `/status`                                              | pipeline status, inputs connected                                                               |
+| `/logs/<node>`                                         | live stream, one line per request (`main`, `api`, `frontend`, `slow`, `graphql`, …)             |
+| `/history/<node>.json?limit=50`                        | last requests (up to 1000 on `main`, 100 elsewhere); filters `address`, `identity`, `signature` |
+| `/addresses`, `/identities`, `/signatures`, `/graphql` | aggregated views; add `.csv` or `.json`                                                         |
 
 ## Logs
 
-- `heroku logs --tail -a oc-staging-watch`: Watch's own logs. Only **stderr** of the Hyperwatch
-  processes (`start.js --stderr`), plus `cloudflared`. Per-request lines are not sent to Heroku on
-  purpose; use `/logs/<node>` above. Heroku keeps ~1500 lines, there is no log add-on.
+- `heroku logs --tail -a oc-staging-watch`: Watch's own logs, plus `cloudflared`. That's the output
+  of the Hyperwatch process (`start.js -v`), prefixed with `[all]`: inputs connecting, persistence
+  summaries, warnings and errors. The merged pipeline prints no per-request lines; use
+  `/logs/<node>` above for those. Heroku keeps ~1500 lines, there is no log add-on.
 - Expected noise: `cloudflared` "ICMP proxy feature is disabled" at boot, and `unexpected EOF`
   lines when the dyno restarts while someone has a `/logs` page open.
 
@@ -65,8 +71,12 @@ Useful pages:
 | `API_/FRONTEND_/IMAGES_HYPERWATCH_CONNECTIONS` | `1` (see below)                                                                                                                                                                                               |
 | `CLOUDFLARE_TUNNEL_TOKEN`                      | token of the `oc-staging-watch` tunnel                                                                                                                                                                        |
 | `FRONTEND_/IMAGES_/REST_OC_SECRET`             | the `OC_SECRET` of the matching staging app, to verify its calls to the API                                                                                                                                   |
-| `WATCH_SECRET`                                 | Basic Auth password, on top of Cloudflare Access (username `WATCH_USERNAME`, default `opencollective`)                                                                                                        |
-| `HYPERWATCH_PERSISTENCE`                       | **not set**: the dyno disk is wiped on every restart/deploy                                                                                                                                                   |
+| `WATCH_SECRET`                                 | **not set** on staging, set on production: Basic Auth password, on top of Cloudflare Access (username `WATCH_USERNAME`, default `opencollective`)                                                             |
+| `HYPERWATCH_PERSISTENCE`                       | `true`, with the four variables below: counters and history are kept in S3 (see _Persistence_)                                                                                                                |
+| `HYPERWATCH_PERSISTENCE_BACKEND`               | `s3`                                                                                                                                                                                                          |
+| `HYPERWATCH_PERSISTENCE_S3_BUCKET`             | `opencollective-staging-watch`                                                                                                                                                                                |
+| `HYPERWATCH_PERSISTENCE_S3_REGION`             | `us-east-1`, the bucket's region, the same as the app's                                                                                                                                                       |
+| `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`   | access key of the IAM user `watch-staging`, read by the AWS SDK                                                                                                                                               |
 
 `<SERVICE>` is `API`, `FRONTEND`, `IMAGES` or `REST`.
 
@@ -77,6 +87,11 @@ heroku config:set -a oc-staging-watch \
   API_HYPERWATCH_SECRET="$(heroku config:get HYPERWATCH_SECRET -a opencollective-staging-api)" > /dev/null
 ```
 
+Production has the same variables, with its own values: the bucket is
+`opencollective-production-watch`, the access key is the one of the IAM user `watch-production`,
+`WATCH_SECRET` is set, and there are no `*_HYPERWATCH_CONNECTIONS` (the defaults fit its dyno
+counts).
+
 ### Connections per service
 
 Each websocket gets the logs of the one server dyno Heroku's router picked. Watch's websockets to
@@ -86,14 +101,34 @@ dyno. The defaults (api 2, frontend 4, images 2, rest 1) are meant for productio
 Staging services have **1 dyno each**, so they must be set to `1`, otherwise the extra websockets
 keep being cut and reconnecting.
 
+## Persistence
+
+The dyno's disk is wiped on every restart and deploy, so counters and history are kept in S3
+(Hyperwatch's `s3` persistence backend, configured in `options.js` from the variables above):
+
+- **Where:** one JSON object per aggregator and per node history, at `all/<name>.json` in the
+  bucket. One bucket and one IAM user per environment: `opencollective-staging-watch` /
+  `watch-staging`, `opencollective-production-watch` / `watch-production`, in `us-east-1`. Each user
+  can only read and write its own bucket.
+- **When:** restored at start, before the inputs connect, and saved at shutdown: Heroku's `SIGTERM`
+  reaches the Hyperwatch process through `bin/start-heroku` and `start.js`. The final snapshot has
+  20 seconds (Hyperwatch's `persistence.deadlines.stop`), within the 30 seconds Heroku gives.
+- **No periodic snapshots:** only a clean stop saves. A crash, or a dyno killed for memory, loses
+  what was counted since the last start.
+- **Checking:** the logs have one `Persistence (s3) loaded …` line at start and one `dumped` line
+  at shutdown, with documents, sizes and times; `/status` shows the latest ones. Failures show as
+  `Persistence: skipping …` or `Error dumping aggregators` lines.
+
 ## Sizing
 
-Standard-2X (1 GB). A Hyperwatch process uses ~120–185 MB at boot (110 MB of that is the GeoIP
-database). The four per-service processes didn't fit in a Basic/Standard-1X dyno (R14 at 632 MB
-within seconds); the merged pipeline is a single process, which loads the GeoIP database once. On
-production traffic it used ~235 MB after 3 minutes, still growing as its counters fill: check a
-day of the Metrics tab before choosing a smaller dyno. History is capped at 1000 entries per node
-(`.hyperwatchrc`) to keep memory down. Watch for `R14` in the logs or the Metrics tab.
+Staging runs on a Basic dyno (512 MB), production on Standard-2X (1 GB). A Hyperwatch process uses
+~120–185 MB at boot (110 MB of that is the GeoIP database). The four per-service processes didn't
+fit in a Basic/Standard-1X dyno (R14 at 632 MB within seconds); the merged pipeline is a single
+process, which loads the GeoIP database once. On production traffic it used ~235 MB after 3
+minutes, still growing as its counters fill: check a day of the Metrics tab before choosing a
+smaller dyno. History is capped at 1000 entries on `main` and 100 on the other nodes, with none on
+`raw` and the inputs (`.hyperwatchrc`), to keep memory down. Watch for `R14` in the logs or the
+Metrics tab.
 
 ## Deploying
 
@@ -110,11 +145,9 @@ connection", no `R14`. Roll back with `heroku rollback -a oc-staging-watch`.
 
 ## What's not there yet
 
-- **Firewall and fingerprint modules**: not in the published Hyperwatch (5.1.0), only in unmerged
+- **Firewall and fingerprint modules**: not in the published Hyperwatch (5.2.0), only in unmerged
   branches.
-- **Persistence**: counters and history reset on every restart (at least daily). A possible next
-  step is copying `.hyperwatch-data` to S3 on shutdown and restoring it at boot, in `start.js`.
-- **Production**: would need its own app, tunnel and hostnames, and the default connection counts.
+- **Periodic snapshots**: see _Persistence_.
 
 ## Moving from one process per service to the merged pipeline
 

@@ -11,7 +11,10 @@ if [ -z "${CLOUDFLARE_TUNNEL_TOKEN:-}" ]; then
   exit 1
 fi
 
-node start.js --stderr &
+# -v streams the output of the Hyperwatch process to the Heroku logs: inputs
+# connecting, persistence summaries, warnings and errors. all.js prints no
+# per-request lines (the per-service configs do: don't run them here with -v).
+node start.js -v &
 watch_pid=$!
 
 vendor/cloudflared tunnel --no-autoupdate run --token "$CLOUDFLARE_TUNNEL_TOKEN" &
