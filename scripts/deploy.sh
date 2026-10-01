@@ -32,8 +32,10 @@ fi
 # ---- Variables ----
 
 if [ "$1" == "staging" ]; then
+  HEROKU_APP="oc-staging-watch"
   DEPLOY_ORIGIN_URL="https://git.heroku.com/oc-staging-watch.git"
 elif [ "$1" == "production" ]; then
+  HEROKU_APP="oc-prod-watch"
   DEPLOY_ORIGIN_URL="https://git.heroku.com/oc-prod-watch.git"
 else
   echo "Unknwown remote $1"
@@ -111,6 +113,45 @@ LOCAL_OID=$(git rev-parse --verify --quiet "refs/heads/$LOCAL_BRANCH^{commit}")
 if [ -z "$REMOTE_OID" ] || [ -z "$LOCAL_OID" ]; then
   echo "⚠️  Couldn't find $LOCAL_BRANCH locally or on $1, not deploying."
   exit 1
+fi
+
+# After `heroku rollback`, the app runs an older release while Heroku's git
+# main stays at the last push: the changelog would start from the wrong
+# commit, and pushing the same main wouldn't redeploy anything. The running
+# commit is the one of the "Deploy <sha>" release that built the current slug
+if command -v heroku > /dev/null; then
+  RUNNING=$(
+    heroku releases -a "$HEROKU_APP" -n 100 --json 2> /dev/null | node -e '
+      let data = "";
+      process.stdin.on("data", (chunk) => (data += chunk)).on("end", () => {
+        try {
+          const releases = JSON.parse(data);
+          const current = releases.find((release) => release.current);
+          const deploy = releases.find(
+            (release) =>
+              current && release.slug && current.slug &&
+              release.slug.id === current.slug.id &&
+              /^Deploy [0-9a-f]+$/.test(release.description)
+          );
+          console.log(deploy ? deploy.description.split(" ")[1] : "");
+        } catch (err) {}
+      });
+    '
+  )
+  if [ -z "$RUNNING" ]; then
+    echo "ℹ️  Couldn't find the commit $HEROKU_APP runs, assuming it's Heroku's main."
+  elif [[ "$REMOTE_OID" != "$RUNNING"* ]]; then
+    echo "⚠️  $HEROKU_APP runs $RUNNING (rolled back?), not ${REMOTE_OID:0:8} from Heroku's main: not deploying."
+    echo "   Roll forward with \`heroku rollback -a $HEROKU_APP <version>\`, or push explicitly."
+    exit 1
+  fi
+else
+  echo "ℹ️  No heroku CLI: can't check whether $1 was rolled back."
+fi
+
+if [ "$LOCAL_OID" == "$REMOTE_OID" ]; then
+  echo "ℹ️  $1 already has $LOCAL_BRANCH (${LOCAL_OID:0:8}): nothing to deploy."
+  exit 0
 fi
 # What the deploy adds
 GIT_LOG_COMPARISON="$REMOTE_OID..$LOCAL_OID"
