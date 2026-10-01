@@ -39,8 +39,9 @@ else
   exit 1
 fi
 
-PUSH_TO_SLACK=true # Setting this to false will echo the message instead of pushing to Slack
-SLACK_CHANNEL="CEZUS9WH3"
+# Defaults, which the environment can override (see Developing above)
+PUSH_TO_SLACK=${PUSH_TO_SLACK:-true} # false echoes the message instead of pushing it to Slack
+SLACK_CHANNEL=${SLACK_CHANNEL:-"CEZUS9WH3"}
 
 PRE_DEPLOY_ORIGIN="predeploy-${1}"
 
