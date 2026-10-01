@@ -144,6 +144,45 @@ Then link in the current project:
 npm link @hyperwatch/hyperwatch
 ```
 
+## Deployment
+
+To deploy to staging or production, you need to be a core member of the Open Collective team.
+A deploy restarts the dyno: Watch saves its counters and history to S3 as it stops and restores
+them as it starts.
+
+### (Optional) Configure Slack token
+
+Setting a Slack webhook will post a message on `#engineering` with the changes you're
+about to deploy. It is not required, but you can activate it by adding it to your `.env` file:
+
+```bash
+OC_SLACK_DEPLOY_WEBHOOK=https://hooks.slack.com/services/....
+```
+
+### Staging (heroku)
+
+```bash
+# Before first deployment, configure staging remote
+git remote add staging https://git.heroku.com/oc-staging-watch.git
+
+# Then deploy main with
+npm run deploy:staging
+```
+
+URL: https://watch-staging.opencollective.com/
+
+### Production (heroku)
+
+```bash
+# Before first deployment, configure production remote
+git remote add production https://git.heroku.com/oc-prod-watch.git
+
+# Then deploy main with
+npm run deploy:production
+```
+
+URL: https://watch.opencollective.com/
+
 ## Contributing
 
 Code style? Commit convention?
