@@ -71,16 +71,17 @@ function confirm()
   return 1
 }
 
-# Push the local commit that was previewed. Staging's push is forced, and
+# Push the local commit that was previewed, straight to the app's URL (not
+# the remote, which could have a push URL of its own). Staging's push is forced, and
 # leased on the state previewed: a deploy made meanwhile isn't overwritten
 function deploy()
 {
   echo "🚀  Deploying now..."
   if [ "$DEPLOY_ENV" == "staging" ]; then
     git push --force-with-lease="$PRE_DEPLOY_BRANCH:$REMOTE_OID" \
-      "$PRE_DEPLOY_ORIGIN" "$LOCAL_OID:refs/heads/$PRE_DEPLOY_BRANCH"
+      "$DEPLOY_ORIGIN_URL" "$LOCAL_OID:refs/heads/$PRE_DEPLOY_BRANCH"
   else
-    git push "$PRE_DEPLOY_ORIGIN" "$LOCAL_OID:refs/heads/$PRE_DEPLOY_BRANCH"
+    git push "$DEPLOY_ORIGIN_URL" "$LOCAL_OID:refs/heads/$PRE_DEPLOY_BRANCH"
   fi
   exit $?
 }
@@ -116,6 +117,12 @@ echo "-------------- New commits --------------"
 git --no-pager log --pretty="${GIT_LOG_FORMAT_SHELL}" $GIT_LOG_COMPARISON
 echo "-----------------------------------------"
 if [ -n "$(git log --oneline $GIT_LOG_REMOVED)" ]; then
+  # Production isn't force-pushed: its push would be rejected
+  if [ "$DEPLOY_ENV" != "staging" ]; then
+    echo "⚠️  $1 has commits your main doesn't (below): update main first, not deploying."
+    git --no-pager log --pretty="${GIT_LOG_FORMAT_SHELL}" $GIT_LOG_REMOVED
+    exit 1
+  fi
   echo ""
   echo "--------- Commits removed from $1 ---------"
   git --no-pager log --pretty="${GIT_LOG_FORMAT_SHELL}" $GIT_LOG_REMOVED
