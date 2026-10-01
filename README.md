@@ -87,6 +87,9 @@ Optional environment variables:
   servers. API calls whose `oc-secret` header matches get that server's identity
   (`Open Collective Frontend`…); others don't. The header's value is replaced with `[verified]`
   or `[unverified]` as logs arrive, so the secrets are never kept or shown.
+- `VERCEL_FRONTEND_OC_SECRET`: the `OC_SECRET` of the frontend's Vercel deployment. Its API calls
+  get the identity `Vercel Frontend`. It must be set on Vercel too: without it, the frontend
+  sends a random secret that can't be verified.
 - `WATCH_SECRET`: puts Basic Auth in front of the whole instance (pages, JSON, CSV, log streams,
   WebSockets), with the username `WATCH_USERNAME` (default `opencollective`). Off when not set.
 - `HYPERWATCH_PERSISTENCE=true` (or `1`): save counters and history on shutdown and reload them at
