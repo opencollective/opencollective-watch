@@ -22,10 +22,23 @@ const SERVICE_SECRETS = {
   rest: 'REST_OC_SECRET',
 };
 
+// The frontend also runs on Vercel, with its own OC_SECRET
+// (VERCEL_FRONTEND_OC_SECRET) and its own identity
+const VERCEL_FRONTEND_IDENTITY = 'Vercel Frontend';
+
 function safeEqual(a, b) {
   const x = Buffer.from(a);
   const y = Buffer.from(b);
   return x.length === y.length && crypto.timingSafeEqual(x, y);
+}
+
+function matchesSecret(secret, variable) {
+  const expected = variable ? process.env[variable] : undefined;
+  return (
+    Boolean(expected) &&
+    typeof secret === 'string' &&
+    safeEqual(secret, expected)
+  );
 }
 
 // api: check the oc-secret of a call against the one its server is configured
@@ -38,17 +51,18 @@ function verifyServiceSecret(log) {
     return log;
   }
   const application = log.getIn(['request', 'headers', 'oc-application']);
-  const expected = SERVICE_SECRETS[application]
-    ? process.env[SERVICE_SECRETS[application]]
-    : undefined;
+  const vercel =
+    application === 'frontend' &&
+    matchesSecret(secret, 'VERCEL_FRONTEND_OC_SECRET');
   const verified =
-    Boolean(expected) &&
-    typeof secret === 'string' &&
-    safeEqual(secret, expected);
+    vercel || matchesSecret(secret, SERVICE_SECRETS[application]);
   log = log.setIn(
     ['request', 'headers', 'oc-secret'],
     verified ? '[verified]' : '[unverified]',
   );
+  if (vercel) {
+    log = log.set('verifiedDeployment', 'vercel');
+  }
   return verified ? log.set('verifiedApplication', application) : log;
 }
 
@@ -68,7 +82,12 @@ function setApplicationAndIdentity(log) {
     // calls with a verified oc-secret (verifyServiceSecret) are our servers.
     // Our server prevails over the user it calls on behalf of.
     if (log.get('verifiedApplication') === application) {
-      log = log.set('identity', SERVICE_IDENTITIES[application]);
+      log = log.set(
+        'identity',
+        log.get('verifiedDeployment') === 'vercel'
+          ? VERCEL_FRONTEND_IDENTITY
+          : SERVICE_IDENTITIES[application],
+      );
     }
   }
   return log;
