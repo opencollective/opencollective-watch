@@ -21,7 +21,9 @@
     "start:images": "PORT=3301 dotenv hyperwatch images",
     "start:rest": "PORT=3303 dotenv hyperwatch rest",
     "start:frontend": "PORT=3300 dotenv hyperwatch frontend",
-    "heroku-postbuild": "bin/install-cloudflared"
+    "heroku-postbuild": "bin/install-cloudflared",
+    "deploy:production": "./scripts/deploy.sh production",
+    "deploy:staging": "./scripts/deploy.sh staging"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1144.0",

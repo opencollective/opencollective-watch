@@ -135,13 +135,19 @@ Metrics tab.
 Always coordinate first: a deploy restarts the dyno.
 
 ```sh
-git push https://git.heroku.com/oc-staging-watch.git <branch>:main
+npm run deploy:staging               # or deploy:production
 heroku ps -a oc-staging-watch        # worker.1 up, no web dyno
 heroku logs --tail -a oc-staging-watch
 ```
 
-After a deploy, check: the `all http://localhost:3399` line, `cloudflared` "Registered tunnel
-connection", no `R14`. Roll back with `heroku rollback -a oc-staging-watch`.
+`scripts/deploy.sh` shows the commits about to be deployed (and, on staging, those the forced
+push removes), asks for confirmation, then pushes the local `main` commit it showed. It adds a
+`predeploy-staging` or `predeploy-production` remote the first time. To deploy another branch to
+staging: `git push -f https://git.heroku.com/oc-staging-watch.git <branch>:main`.
+
+After a deploy, check: the `all http://localhost:3399` line, the `Persistence (s3) loaded` line,
+`cloudflared` "Registered tunnel connection", no `R14`. Roll back with
+`heroku rollback -a oc-staging-watch`.
 
 ## What's not there yet
 
