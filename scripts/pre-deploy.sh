@@ -51,6 +51,8 @@ GIT_LOG_FORMAT_SHELL='short'
 GIT_LOG_FORMAT_SLACK='format:<https://github.com/opencollective/opencollective-watch/commit/%H|[%ci]> *%an* %n_%<(80,trunc)%s_%n'
 # The local branch: it's what the deploy pushes
 GIT_LOG_COMPARISON="$PRE_DEPLOY_ORIGIN/$PRE_DEPLOY_BRANCH..$LOCAL_BRANCH"
+# Commits only on the deployed branch: a forced push (staging) removes them
+GIT_LOG_REMOVED="$LOCAL_BRANCH..$PRE_DEPLOY_ORIGIN/$PRE_DEPLOY_BRANCH"
 
 # ---- Utils ----
 
@@ -84,12 +86,22 @@ git remote add $PRE_DEPLOY_ORIGIN $DEPLOY_ORIGIN_URL &> /dev/null
 
 # Update deploy remote
 echo "ℹ️  Fetching remote $1 state..."
-git fetch $PRE_DEPLOY_ORIGIN $PRE_DEPLOY_BRANCH > /dev/null
+# Without the current state, the commits shown would be wrong: stop here
+if ! git fetch $PRE_DEPLOY_ORIGIN $PRE_DEPLOY_BRANCH > /dev/null; then
+  echo "⚠️  Couldn't fetch $1's state, not deploying."
+  exit 1
+fi
 
 echo ""
 echo "-------------- New commits --------------"
 git --no-pager log --pretty="${GIT_LOG_FORMAT_SHELL}" $GIT_LOG_COMPARISON
 echo "-----------------------------------------"
+if [ -n "$(git log --oneline $GIT_LOG_REMOVED)" ]; then
+  echo ""
+  echo "--------- Commits removed from $1 ---------"
+  git --no-pager log --pretty="${GIT_LOG_FORMAT_SHELL}" $GIT_LOG_REMOVED
+  echo "-----------------------------------------"
+fi
 echo ""
 
 # ---- Ask for confirmation ----
@@ -119,13 +131,17 @@ PAYLOAD=$(
   SLACK_CHANNEL="$SLACK_CHANNEL" \
   TEXT=":rocket: Deploying *WATCH* to *${1}* ($(git config user.name)) ${CUSTOM_MESSAGE}" \
   CHANGELOG="$(git log --pretty="${GIT_LOG_FORMAT_SLACK}" $GIT_LOG_COMPARISON)" \
+  REMOVED="$(git log --pretty="${GIT_LOG_FORMAT_SLACK}" $GIT_LOG_REMOVED)" \
   node -e '
-    const { SLACK_CHANNEL, TEXT, CHANGELOG } = process.env;
+    const { SLACK_CHANNEL, TEXT, CHANGELOG, REMOVED } = process.env;
+    const removed = REMOVED ? `\n*Removed:*\n\n${REMOVED}\n` : "";
     console.log(JSON.stringify({
       channel: SLACK_CHANNEL,
       text: TEXT,
       as_user: true,
-      attachments: [{ text: `${"-".repeat(99)}\n\n${CHANGELOG}\n` }],
+      attachments: [
+        { text: `${"-".repeat(99)}\n\n${CHANGELOG}\n${removed}` },
+      ],
     }));
   '
 )
