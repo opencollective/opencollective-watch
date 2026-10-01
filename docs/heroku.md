@@ -113,8 +113,9 @@ The dyno's disk is wiped on every restart and deploy, so counters and history ar
   20 seconds (Hyperwatch's `persistence.deadlines.stop`), within the 30 seconds Heroku gives.
 - **No periodic snapshots:** only a clean stop saves. A crash, or a dyno killed for memory, loses
   what was counted since the last start.
-- **Checking:** the logs have one `Persistence (s3) loaded …` line at start and one `dumped` line
-  at shutdown, with documents, sizes and times; `/status` shows the latest ones.
+- **Checking:** `/status` shows the latest load and dump, with documents, sizes and times. Those
+  summaries go to stdout, which isn't sent to the Heroku logs (see _Logs_): only failures show
+  there, as `Persistence: skipping …` or `Error dumping aggregators` lines.
 
 ## Sizing
 
