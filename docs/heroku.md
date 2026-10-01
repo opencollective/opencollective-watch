@@ -117,13 +117,14 @@ The dyno's disk is wiped on every restart and deploy, so counters and history ar
 
 ## Sizing
 
-Staging runs on a Basic dyno (512 MB), production on Standard-2X (1 GB). A Hyperwatch process uses ~120–185 MB at boot (110 MB of that is the GeoIP
-database). The four per-service processes didn't fit in a Basic/Standard-1X dyno (R14 at 632 MB
-within seconds); the merged pipeline is a single process, which loads the GeoIP database once. On
-production traffic it used ~235 MB after 3 minutes, still growing as its counters fill: check a
-day of the Metrics tab before choosing a smaller dyno. History is capped at 1000 entries on `main`
-and 100 on the other nodes, with none on `raw` and the inputs (`.hyperwatchrc`), to keep memory
-down. Watch for `R14` in the logs or the Metrics tab.
+Staging runs on a Basic dyno (512 MB), production on Standard-2X (1 GB). A Hyperwatch process uses
+~120–185 MB at boot (110 MB of that is the GeoIP database). The four per-service processes didn't
+fit in a Basic/Standard-1X dyno (R14 at 632 MB within seconds); the merged pipeline is a single
+process, which loads the GeoIP database once. On production traffic it used ~235 MB after 3
+minutes, still growing as its counters fill: check a day of the Metrics tab before choosing a
+smaller dyno. History is capped at 1000 entries on `main` and 100 on the other nodes, with none on
+`raw` and the inputs (`.hyperwatchrc`), to keep memory down. Watch for `R14` in the logs or the
+Metrics tab.
 
 ## Deploying
 
