@@ -51,7 +51,7 @@ Each request has a `source` field, the service that logged it (`api`, `frontend`
 servers have their identity: `Open Collective Frontend`, `Open Collective Images`,
 `Open Collective REST`. Google Apps Script calls get `apps-script:<id>`, the script id from their
 user agent, when they come from Google's user-triggered fetchers ranges
-(`data/google-user-triggered-fetchers-ips.json`, refreshed by `node scripts/fetch-google-ips.js`).
+(`google-user-triggered-fetchers-ips.json` in Hyperwatch's `src/data`).
 The nodes are:
 
 - `main`: every request

@@ -6,8 +6,8 @@
 
 const net = require('net');
 
-// node scripts/fetch-google-ips.js to update
-const googleFetchersIps = require('./data/google-user-triggered-fetchers-ips.json');
+// Refreshed in Hyperwatch by `node scripts/fetch-google-ips.js`
+const googleFetchersIps = require('@hyperwatch/hyperwatch/src/data/google-user-triggered-fetchers-ips.json');
 
 const googleFetchers = new net.BlockList();
 for (const cidr of googleFetchersIps) {
