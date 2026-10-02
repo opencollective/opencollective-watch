@@ -144,7 +144,8 @@ instances, reload the page to see it.
 ### Running on Heroku
 
 Watch runs on Heroku for staging and production, behind Cloudflare Access. See
-[docs/heroku.md](docs/heroku.md).
+[docs/heroku.md](docs/heroku.md). To query or stream them from a script or another Hyperwatch
+process, see [docs/remote-access.md](docs/remote-access.md).
 
 ### Using a development version of Hyperwatch
 

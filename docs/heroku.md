@@ -42,6 +42,8 @@ https://watch-staging.opencollective.com
 
 Open `https://watch-staging.opencollective.com` (the dashboard is at `/dashboard`) and sign in with Google. Sessions last 24h. Access is an allow-list: ask an admin to add your email
 to the **"Watch engineers"** Access policy (Cloudflare Zero Trust → Access controls → Policies).
+Scripts and other Hyperwatch processes use a service token instead: see
+[remote-access.md](remote-access.md).
 
 Useful pages:
 
