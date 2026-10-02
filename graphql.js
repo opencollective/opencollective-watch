@@ -6,9 +6,9 @@ const { registerSlowNodes } = require('./slow');
 // API nodes: the GraphQL ones are shared by the api config (below main) and
 // the merged one (below the api node, see all.js)
 
-// Splits API calls by the oc-application header: frontend, images, rest and
-// other, the clients calling the API directly
-const APPLICATIONS = ['frontend', 'images', 'rest'];
+// Splits API calls by the oc-application header: frontend, images, rest, pdf
+// and other, the clients calling the API directly
+const APPLICATIONS = ['frontend', 'images', 'rest', 'pdf'];
 
 const getApplication = (log) =>
   log.getIn(['request', 'headers', 'oc-application']);
