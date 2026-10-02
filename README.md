@@ -113,8 +113,7 @@ Optional environment variables:
 - `FIREWALL_SYNC=true` (or `1`): sync the linked lists with their Cloudflare rules (needs
   `CLOUDFLARE_API_TOKEN`, Zone WAF: Edit only, and `CLOUDFLARE_ZONE_ID`). One instance per zone:
   production only.
-- Edits through `POST /firewall/lists/:id/add|remove` are on with `WATCH_SECRET` (Basic Auth), or
-  with `FIREWALL_EDITS=true` behind other authentication (Cloudflare Access). With the sync on, they
+- The lists can be edited through `POST /firewall/lists/:id/add|remove`. With the sync on, edits
   reach Cloudflare within seconds.
 - `API_HYPERWATCH_CONNECTIONS`, `FRONTEND_HYPERWATCH_CONNECTIONS`, `IMAGES_HYPERWATCH_CONNECTIONS`:
   websockets opened per service, one per server dyno (defaults 2, 4, 2). A dyno keeps one websocket

@@ -52,10 +52,8 @@ function firewallOptions() {
   }
   return {
     lists,
-    // Edits through the HTTP API (/firewall/lists/:id/add|remove) reach
-    // Cloudflare when syncing: on behind Basic Auth (basic-auth.js), or with
-    // FIREWALL_EDITS=true behind other authentication (Cloudflare Access)
-    edits: process.env.WATCH_SECRET ? true : process.env.FIREWALL_EDITS,
+    // Edits through the HTTP API (/firewall/lists/:id/add|remove)
+    edits: true,
     sync: { auto: process.env.FIREWALL_SYNC },
   };
 }
@@ -74,8 +72,6 @@ function firewallOptions() {
 //   other nodes keep what .hyperwatchrc says
 // - FIREWALL_*_RULE_ID: the Cloudflare custom rule each firewall list is
 //   linked to (see firewallOptions)
-// - FIREWALL_EDITS=true (or 1) allows editing the lists without
-//   WATCH_SECRET, e.g. behind Cloudflare Access only
 // - FIREWALL_SYNC=true (or 1) syncs the linked lists with Cloudflare, with
 //   CLOUDFLARE_API_TOKEN and CLOUDFLARE_ZONE_ID. One instance per zone:
 //   production only

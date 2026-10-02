@@ -80,7 +80,6 @@ Useful pages:
 | `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`   | access key of the IAM user `watch-staging`, read by the AWS SDK                                                                                                                                               |
 | `FIREWALL_*_RULE_ID`                           | **not set** on staging. Production: the IDs of the four linked rules (`FIREWALL_BLOCK_IPS_RULE_ID`…, see the README)                                                                                          |
 | `FIREWALL_SYNC`                                | **not set** on staging. Production: `true`, with `CLOUDFLARE_API_TOKEN` (dedicated, Zone WAF: Edit) and `CLOUDFLARE_ZONE_ID`                                                                                  |
-| `FIREWALL_EDITS`                               | `true` on staging, to edit the lists behind Cloudflare Access alone (they stay local: no sync)                                                                                                                |
 
 `<SERVICE>` is `API`, `FRONTEND`, `IMAGES` or `REST`.
 
@@ -157,8 +156,7 @@ After a deploy, check: the `all http://localhost:3399` line, the `Persistence (s
 
 - **Fingerprint module**: not in the published Hyperwatch (5.3.0), only in an unmerged branch.
 - **Firewall sync**: the firewall module is in 5.3.0, but staging has no Cloudflare token, rule IDs
-  or `FIREWALL_SYNC`: its six lists are local only (tagging, kept in S3), and edits need
-  `FIREWALL_EDITS=true` (no `WATCH_SECRET`).
+  or `FIREWALL_SYNC`: its six lists are local only (tagging, kept in S3), and edits stay there.
 - **Periodic snapshots**: see _Persistence_.
 
 ## Moving from one process per service to the merged pipeline
