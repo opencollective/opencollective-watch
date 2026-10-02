@@ -77,6 +77,7 @@ Useful pages:
 | `HYPERWATCH_PERSISTENCE_BACKEND`               | `s3`                                                                                                                                                                                                          |
 | `HYPERWATCH_PERSISTENCE_S3_BUCKET`             | `opencollective-staging-watch`                                                                                                                                                                                |
 | `HYPERWATCH_PERSISTENCE_S3_REGION`             | `us-east-1`, the bucket's region, the same as the app's                                                                                                                                                       |
+| `HYPERWATCH_PERSISTENCE_INTERVAL`              | `600`: a snapshot every 10 minutes, on top of the one at shutdown (see _Persistence_)                                                                                                                         |
 | `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`   | access key of the IAM user `watch-staging`, read by the AWS SDK                                                                                                                                               |
 | `FIREWALL_*_RULE_ID`                           | **not set** on staging. Production: the IDs of the four linked rules (`FIREWALL_BLOCK_IPS_RULE_ID`…, see the README)                                                                                          |
 | `FIREWALL_SYNC`                                | **not set** on staging. Production: `true`, with `CLOUDFLARE_API_TOKEN` (dedicated, Zone WAF: Edit) and `CLOUDFLARE_ZONE_ID`                                                                                  |
@@ -116,10 +117,11 @@ The dyno's disk is wiped on every restart and deploy, so counters and history ar
 - **When:** restored at start, before the inputs connect, and saved at shutdown: Heroku's `SIGTERM`
   reaches the Hyperwatch process through `bin/start-heroku` and `start.js`. The final snapshot has
   20 seconds (Hyperwatch's `persistence.deadlines.stop`), within the 30 seconds Heroku gives.
-- **No periodic snapshots:** only a clean stop saves. A crash, or a dyno killed for memory, loses
-  what was counted since the last start.
-- **Checking:** the logs have one `Persistence (s3) loaded …` line at start and one `dumped` line
-  at shutdown, with documents, sizes and times; `/status` shows the latest ones. Failures show as
+- **Periodic snapshots:** every `HYPERWATCH_PERSISTENCE_INTERVAL` seconds, so a crash or a dyno
+  killed for memory loses at most that much. Without it, only a clean stop saves. Each snapshot
+  builds its JSON in memory, on top of the live state: watch for `R14` around them.
+- **Checking:** the logs have one `Persistence (s3) loaded …` line at start and a `dumped` line
+  per snapshot and at shutdown, with documents, sizes and times; `/status` shows the latest ones. Failures show as
   `Persistence: skipping …` or `Error dumping aggregators` lines.
 
 ## Sizing
@@ -157,7 +159,6 @@ After a deploy, check: the `all http://localhost:3399` line, the `Persistence (s
 - **Fingerprint module**: not in the published Hyperwatch (5.3.0), only in an unmerged branch.
 - **Firewall sync**: the firewall module is in 5.3.0, but staging has no Cloudflare token, rule IDs
   or `FIREWALL_SYNC`: its six lists are local only (tagging, kept in S3), and edits stay there.
-- **Periodic snapshots**: see _Persistence_.
 
 ## Moving from one process per service to the merged pipeline
 
