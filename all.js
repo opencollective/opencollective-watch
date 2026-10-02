@@ -1,5 +1,5 @@
 // All services in one pipeline. Every log is tagged with the service that sent
-// it (`source`: api, frontend, images, rest or contributors-svg), whoever
+// it (`source`: api, frontend, images, rest, pdf or contributors-svg), whoever
 // issued the request, and each source gets its own node derived from main, so
 // aggregators (addresses, signatures, identities…) count a client across all
 // of them.
@@ -56,6 +56,7 @@ const SOURCES = {
   },
   images: { connections: 2, prepare: cloudflare.augment },
   rest: { connections: 1, prepare: cloudflare.augment },
+  pdf: { connections: 1, prepare: cloudflare.augment },
   'contributors-svg': { connections: 1, prepare: cloudflare.augment },
 };
 
