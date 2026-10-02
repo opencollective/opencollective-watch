@@ -3,8 +3,10 @@ const { merge } = require('lodash');
 // The firewall lists, in the order of their Cloudflare rules (the first
 // matching list tags a request). They apply when no lists are stored yet;
 // once stored (firewall.json, or the persistence storage), the stored lists
-// win and these only add the missing ones. A linked list is only declared
-// when its rule ID is set.
+// win and these only add the missing ones. Each list is linked to its
+// Cloudflare rule when the rule ID is set, and local only otherwise (tagging,
+// no sync). A list stored unlinked stays unlinked: set the rule IDs before
+// the lists are first edited or synced.
 const FIREWALL_LISTS = [
   {
     id: 'block-ips',
@@ -44,18 +46,16 @@ const FIREWALL_LISTS = [
 function firewallOptions() {
   const lists = [];
   for (const { rule, ...list } of FIREWALL_LISTS) {
-    if (!rule) {
-      lists.push(list);
-    } else if (process.env[rule]) {
-      // eslint-disable-next-line camelcase
-      lists.push({ ...list, cloudflare: { rule_id: process.env[rule] } });
-    }
+    const ruleId = rule && process.env[rule];
+    // eslint-disable-next-line camelcase
+    lists.push(ruleId ? { ...list, cloudflare: { rule_id: ruleId } } : list);
   }
   return {
     lists,
     // Edits through the HTTP API (/firewall/lists/:id/add|remove) reach
-    // Cloudflare when syncing: only behind Basic Auth (basic-auth.js)
-    edits: Boolean(process.env.WATCH_SECRET),
+    // Cloudflare when syncing: on behind Basic Auth (basic-auth.js), or with
+    // FIREWALL_EDITS=true behind other authentication (Cloudflare Access)
+    edits: process.env.WATCH_SECRET ? true : process.env.FIREWALL_EDITS,
     sync: { auto: process.env.FIREWALL_SYNC },
   };
 }
@@ -74,6 +74,8 @@ function firewallOptions() {
 //   other nodes keep what .hyperwatchrc says
 // - FIREWALL_*_RULE_ID: the Cloudflare custom rule each firewall list is
 //   linked to (see firewallOptions)
+// - FIREWALL_EDITS=true (or 1) allows editing the lists without
+//   WATCH_SECRET, e.g. behind Cloudflare Access only
 // - FIREWALL_SYNC=true (or 1) syncs the linked lists with Cloudflare, with
 //   CLOUDFLARE_API_TOKEN and CLOUDFLARE_ZONE_ID. One instance per zone:
 //   production only
