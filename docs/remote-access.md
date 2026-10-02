@@ -15,8 +15,9 @@ and JSON endpoints (`/addresses.csv`, `/history/main.json`, …) work the same w
 | Cloudflare Access                    | headers `CF-Access-Client-Id`, `CF-Access-Client-Secret`                     | `302` to the Access login page (`ws`: `Unexpected server response: 302`) |
 | Watch's Basic Auth (`basic-auth.js`) | `WATCH_USERNAME` (default `opencollective`) / `WATCH_SECRET` of the instance | `401`                                                                    |
 
-Production (`watch.opencollective.com`) has both. Staging has no `WATCH_SECRET` (so no Basic
-Auth) and, as of 2026-10-02, no Service Auth policy: only the Google login gets in.
+Both instances have Basic Auth, each with its own `WATCH_SECRET`. Only production
+(`watch.opencollective.com`) has a Service Auth policy, as of 2026-10-02: staging
+(`watch-staging.opencollective.com`) only lets in the Google login.
 
 ## Setting it up
 
@@ -29,7 +30,7 @@ Auth) and, as of 2026-10-02, no Service Auth policy: only the Google login gets 
    `oc-staging-watch` first). Keep it separate from "Watch engineers": an _Allow_ policy needs a
    user identity and rejects service tokens.
 3. **Basic Auth:** give the consumer the instance's `WATCH_SECRET`
-   (`heroku config:get WATCH_SECRET -a oc-prod-watch`, never printed).
+   (`heroku config:get WATCH_SECRET -a oc-prod-watch` or `-a oc-staging-watch`, never printed).
 
 ## Using it
 

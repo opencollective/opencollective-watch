@@ -74,7 +74,7 @@ Useful pages:
 | `CLOUDFLARE_TUNNEL_TOKEN`                      | token of the `oc-staging-watch` tunnel                                                                                                                                                                        |
 | `FRONTEND_/IMAGES_/REST_OC_SECRET`             | the `OC_SECRET` of the matching staging app, to verify its calls to the API                                                                                                                                   |
 | `VERCEL_FRONTEND_OC_SECRET`                    | the `OC_SECRET` of the frontend's Vercel deployments calling this API (Preview ones on staging, the Production one on production): their calls get the identity `Vercel Frontend`                             |
-| `WATCH_SECRET`                                 | **not set** on staging, set on production: Basic Auth password, on top of Cloudflare Access (username `WATCH_USERNAME`, default `opencollective`)                                                             |
+| `WATCH_SECRET`                                 | Basic Auth password, different on staging and production, on top of Cloudflare Access (username `WATCH_USERNAME`, default `opencollective`)                                                                   |
 | `HYPERWATCH_PERSISTENCE`                       | `true`, with the four variables below: counters and history are kept in S3 (see _Persistence_)                                                                                                                |
 | `HYPERWATCH_PERSISTENCE_BACKEND`               | `s3`                                                                                                                                                                                                          |
 | `HYPERWATCH_PERSISTENCE_S3_BUCKET`             | `opencollective-staging-watch`                                                                                                                                                                                |
@@ -94,7 +94,7 @@ heroku config:set -a oc-staging-watch \
 
 Production has the same variables, with its own values: the bucket is
 `opencollective-production-watch`, the access key is the one of the IAM user `watch-production`,
-`WATCH_SECRET` is set, and there are no `*_HYPERWATCH_CONNECTIONS` (the defaults fit its dyno
+`WATCH_SECRET` is its own, and there are no `*_HYPERWATCH_CONNECTIONS` (the defaults fit its dyno
 counts).
 
 ### Connections per service
