@@ -78,6 +78,8 @@ Useful pages:
 | `HYPERWATCH_PERSISTENCE_S3_BUCKET`             | `opencollective-staging-watch`                                                                                                                                                                                |
 | `HYPERWATCH_PERSISTENCE_S3_REGION`             | `us-east-1`, the bucket's region, the same as the app's                                                                                                                                                       |
 | `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`   | access key of the IAM user `watch-staging`, read by the AWS SDK                                                                                                                                               |
+| `FIREWALL_*_RULE_ID`                           | **not set** on staging. Production: the IDs of the four linked rules (`FIREWALL_BLOCK_IPS_RULE_ID`…, see the README)                                                                                          |
+| `FIREWALL_SYNC`                                | **not set** on staging. Production: `true`, with `CLOUDFLARE_API_TOKEN` (dedicated, Zone WAF: Edit) and `CLOUDFLARE_ZONE_ID`                                                                                  |
 
 `<SERVICE>` is `API`, `FRONTEND`, `IMAGES` or `REST`.
 
@@ -152,8 +154,9 @@ After a deploy, check: the `all http://localhost:3399` line, the `Persistence (s
 
 ## What's not there yet
 
-- **Firewall and fingerprint modules**: not in the published Hyperwatch (5.2.0), only in unmerged
-  branches.
+- **Fingerprint module**: not in the published Hyperwatch (5.3.0), only in an unmerged branch.
+- **Firewall sync**: the firewall module is in 5.3.0, but staging has no Cloudflare token, rule IDs
+  or `FIREWALL_SYNC`: only the local monitor lists, and no edits (no `WATCH_SECRET`).
 - **Periodic snapshots**: see _Persistence_.
 
 ## Moving from one process per service to the merged pipeline
