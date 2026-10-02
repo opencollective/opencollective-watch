@@ -3,6 +3,7 @@ const hyperwatch = require('@hyperwatch/hyperwatch');
 const { basicAuth } = require('./basic-auth');
 const { setClientWorkerIdentity } = require('./cloudflare-worker');
 const { mountDashboard } = require('./dashboard');
+const { attributeFirewallEdits } = require('./firewall-edits');
 const { hyperwatchOptions } = require('./options');
 
 const { pipeline, input, lib } = hyperwatch;
@@ -13,6 +14,7 @@ hyperwatch.init(hyperwatchOptions('rest'));
 
 mountDashboard();
 basicAuth();
+attributeFirewallEdits();
 
 // Connect Input
 

@@ -78,6 +78,8 @@ Useful pages:
 | `HYPERWATCH_PERSISTENCE_S3_BUCKET`             | `opencollective-staging-watch`                                                                                                                                                                                |
 | `HYPERWATCH_PERSISTENCE_S3_REGION`             | `us-east-1`, the bucket's region, the same as the app's                                                                                                                                                       |
 | `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`   | access key of the IAM user `watch-staging`, read by the AWS SDK                                                                                                                                               |
+| `CLOUDFLARE_ACCESS_TEAM_DOMAIN`                | `ofico.cloudflareaccess.com`, to attribute firewall list edits (see the README)                                                                                                                               |
+| `CLOUDFLARE_ACCESS_AUD`                        | the Application Audience (AUD) tag of the app's Access application (`oc-staging-watch` / `oc-prod-watch`)                                                                                                     |
 
 `<SERVICE>` is `API`, `FRONTEND`, `IMAGES` or `REST`.
 

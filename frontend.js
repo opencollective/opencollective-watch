@@ -4,6 +4,7 @@ const uuid = require('uuid');
 const { basicAuth } = require('./basic-auth');
 const { setClientWorkerIdentity } = require('./cloudflare-worker');
 const { mountDashboard } = require('./dashboard');
+const { attributeFirewallEdits } = require('./firewall-edits');
 const { hyperwatchOptions } = require('./options');
 const { registerSlowNodes } = require('./slow');
 const {
@@ -29,6 +30,7 @@ hyperwatch.init(
 
 mountDashboard();
 basicAuth();
+attributeFirewallEdits();
 
 // Connect Inputs (1 per live server)
 

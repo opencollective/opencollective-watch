@@ -92,6 +92,12 @@ Optional environment variables:
   sends a random secret that can't be verified.
 - `WATCH_SECRET`: puts Basic Auth in front of the whole instance (pages, JSON, CSV, log streams,
   WebSockets), with the username `WATCH_USERNAME` (default `opencollective`). Off when not set.
+- `CLOUDFLARE_ACCESS_TEAM_DOMAIN` (`ofico.cloudflareaccess.com`) and `CLOUDFLARE_ACCESS_AUD` (the
+  Application Audience tag of the instance's Access application): firewall list edits
+  (`POST /firewall/lists/:id/add|remove`) record who made them, from the JWT Cloudflare Access
+  adds to each request (`Cf-Access-Jwt-Assertion`), checked against the team's keys. The entry's
+  `source` becomes e.g. `francois@opencollective.com via dashboard`, and edits without a valid
+  token are refused. Off when not set.
 - `HYPERWATCH_PERSISTENCE=true` (or `1`): save counters and history on shutdown and reload them at
   start, in `.hyperwatch-data/` by default.
 - `HYPERWATCH_PERSISTENCE_BACKEND=s3`: keep them in an S3 bucket instead (default `file`), named by
