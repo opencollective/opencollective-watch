@@ -67,6 +67,8 @@ function firewallOptions() {
 // - HYPERWATCH_PERSISTENCE_S3_BUCKET, HYPERWATCH_PERSISTENCE_S3_REGION: the
 //   bucket of the `s3` backend. Its credentials are read by the AWS SDK
 //   (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY), never by Watch
+// - HYPERWATCH_PERSISTENCE_INTERVAL: seconds between periodic snapshots, on
+//   top of the one at shutdown. Off when not set
 // - HYPERWATCH_HISTORY_CAPACITY overrides the number of requests kept on the
 //   main node (/history, live logs), e.g. more locally than on Heroku. The
 //   other nodes keep what .hyperwatchrc says
@@ -76,8 +78,8 @@ function firewallOptions() {
 //   CLOUDFLARE_API_TOKEN and CLOUDFLARE_ZONE_ID. One instance per zone:
 //   production only
 //
-// Hyperwatch reads `enabled` and `auto` as given in the environment (a
-// string), and ignores the variables that aren't set (merge skips
+// Hyperwatch reads `enabled`, `interval` and `auto` as given in the
+// environment (a string), and ignores the variables that aren't set (merge skips
 // undefined).
 function hyperwatchOptions(service, extra = {}) {
   const capacity = Number(process.env.HYPERWATCH_HISTORY_CAPACITY);
@@ -91,6 +93,7 @@ function hyperwatchOptions(service, extra = {}) {
         enabled: process.env.HYPERWATCH_PERSISTENCE,
         namespace: service,
         backend: process.env.HYPERWATCH_PERSISTENCE_BACKEND,
+        interval: process.env.HYPERWATCH_PERSISTENCE_INTERVAL,
         s3: {
           bucket: process.env.HYPERWATCH_PERSISTENCE_S3_BUCKET,
           region: process.env.HYPERWATCH_PERSISTENCE_S3_REGION,

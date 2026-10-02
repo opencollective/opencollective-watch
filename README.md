@@ -100,6 +100,8 @@ Optional environment variables:
 - `HYPERWATCH_PERSISTENCE_BACKEND=s3`: keep them in an S3 bucket instead (default `file`), named by
   `HYPERWATCH_PERSISTENCE_S3_BUCKET` and, optionally, `HYPERWATCH_PERSISTENCE_S3_REGION`. The AWS
   SDK reads the credentials itself (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`).
+- `HYPERWATCH_PERSISTENCE_INTERVAL`: also save every that many seconds (e.g. `600`), so a crash
+  loses at most that much. Off when not set: only a clean shutdown saves.
 - `HYPERWATCH_HISTORY_CAPACITY`: requests kept on the `main` node for `/history` and the live logs
   (default 1000 in `.hyperwatchrc`, sized for Heroku). Raise it locally, e.g. `10000`, at the cost
   of memory. The merged `main` node gets the traffic of every service, so 1000 requests only cover
