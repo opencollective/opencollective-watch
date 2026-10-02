@@ -49,7 +49,10 @@ services. `/addresses`, `/signatures` and `/identities` count a client across al
 Each request has a `source` field, the service that logged it (`api`, `frontend`, `images`,
 `rest`), whoever issued it: API calls made by our own frontend are in `api` too. Calls from our own
 servers have their identity: `Open Collective Frontend`, `Open Collective Images`,
-`Open Collective REST`. The nodes are:
+`Open Collective REST`. Google Apps Script calls get `apps-script:<id>`, the script id from their
+user agent, when they come from Google's user-triggered fetchers ranges
+(`data/google-user-triggered-fetchers-ips.json`, refreshed by `node scripts/fetch-google-ips.js`).
+The nodes are:
 
 - `main`: every request
 - `api`, `frontend`, `images`, `rest`: one source each
