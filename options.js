@@ -3,8 +3,10 @@ const { merge } = require('lodash');
 // The firewall lists, in the order of their Cloudflare rules (the first
 // matching list tags a request). They apply when no lists are stored yet;
 // once stored (firewall.json, or the persistence storage), the stored lists
-// win and these only add the missing ones. A linked list is only declared
-// when its rule ID is set.
+// win and these only add the missing ones. Each list is linked to its
+// Cloudflare rule when the rule ID is set, and local only otherwise (tagging,
+// no sync). A list stored unlinked stays unlinked: set the rule IDs before
+// the lists are first edited or synced.
 const FIREWALL_LISTS = [
   {
     id: 'block-ips',
@@ -44,18 +46,14 @@ const FIREWALL_LISTS = [
 function firewallOptions() {
   const lists = [];
   for (const { rule, ...list } of FIREWALL_LISTS) {
-    if (!rule) {
-      lists.push(list);
-    } else if (process.env[rule]) {
-      // eslint-disable-next-line camelcase
-      lists.push({ ...list, cloudflare: { rule_id: process.env[rule] } });
-    }
+    const ruleId = rule && process.env[rule];
+    // eslint-disable-next-line camelcase
+    lists.push(ruleId ? { ...list, cloudflare: { rule_id: ruleId } } : list);
   }
   return {
     lists,
-    // Edits through the HTTP API (/firewall/lists/:id/add|remove) reach
-    // Cloudflare when syncing: only behind Basic Auth (basic-auth.js)
-    edits: Boolean(process.env.WATCH_SECRET),
+    // Edits through the HTTP API (/firewall/lists/:id/add|remove)
+    edits: true,
     sync: { auto: process.env.FIREWALL_SYNC },
   };
 }

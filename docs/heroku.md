@@ -156,7 +156,7 @@ After a deploy, check: the `all http://localhost:3399` line, the `Persistence (s
 
 - **Fingerprint module**: not in the published Hyperwatch (5.3.0), only in an unmerged branch.
 - **Firewall sync**: the firewall module is in 5.3.0, but staging has no Cloudflare token, rule IDs
-  or `FIREWALL_SYNC`: only the local monitor lists, and no edits (no `WATCH_SECRET`).
+  or `FIREWALL_SYNC`: its six lists are local only (tagging, kept in S3), and edits stay there.
 - **Periodic snapshots**: see _Persistence_.
 
 ## Moving from one process per service to the merged pipeline
