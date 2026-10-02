@@ -8,6 +8,7 @@ const uuid = require('uuid');
 
 const { basicAuth } = require('./basic-auth');
 const { setClientWorkerIdentity } = require('./cloudflare-worker');
+const { setAppsScriptIdentity } = require('./google-apps-script');
 const { mountDashboard } = require('./dashboard');
 const { hasGraphql, registerGraphqlNodes } = require('./graphql');
 const { hyperwatchOptions } = require('./options');
@@ -105,6 +106,7 @@ pipeline
   )
   .map(forSource('images', setImagesIdentity), 'images: set images identity')
   .map(setClientWorkerIdentity, 'set client worker identity')
+  .map(setAppsScriptIdentity, 'set apps script identity')
   .registerNode('main');
 
 // Register source nodes

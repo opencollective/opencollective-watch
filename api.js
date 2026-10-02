@@ -6,6 +6,7 @@ const uuid = require('uuid');
 
 const { basicAuth } = require('./basic-auth');
 const { setClientWorkerIdentity } = require('./cloudflare-worker');
+const { setAppsScriptIdentity } = require('./google-apps-script');
 const { mountDashboard } = require('./dashboard');
 const {
   hasGraphql,
@@ -62,6 +63,7 @@ pipeline
   .getNode('main')
   .map(setApplicationAndIdentity, 'set application & identity')
   .map(setClientWorkerIdentity, 'set client worker identity')
+  .map(setAppsScriptIdentity, 'set apps script identity')
   // Before registering main, so every node derived from it has the hash
   .map(setGraphqlHash, 'compute graphql hash')
   .registerNode('main');
