@@ -1,7 +1,7 @@
 // All services in one pipeline. Every log is tagged with the service that sent
-// it (`source`: api, frontend, images or rest), whoever issued the request, and
-// each source gets its own node derived from main, so aggregators (addresses,
-// signatures, identities…) count a client across all of them.
+// it (`source`: api, frontend, images, rest or pdf), whoever issued the
+// request, and each source gets its own node derived from main, so aggregators
+// (addresses, signatures, identities…) count a client across all of them.
 
 const hyperwatch = require('@hyperwatch/hyperwatch');
 const uuid = require('uuid');
@@ -54,6 +54,7 @@ const SOURCES = {
   },
   images: { connections: 2, prepare: cloudflare.augment },
   rest: { connections: 1, prepare: cloudflare.augment },
+  pdf: { connections: 1, prepare: cloudflare.augment },
 };
 
 // Connect Inputs (the live servers of every service)
