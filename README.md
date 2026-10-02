@@ -102,6 +102,16 @@ Optional environment variables:
   of memory. The merged `main` node gets the traffic of every service, so 1000 requests only cover
   a minute or two. The other nodes keep 100, and `raw` and the `input-*` nodes none: they mostly
   repeat `main`.
+- `FIREWALL_BLOCK_IPS_RULE_ID`, `FIREWALL_BLOCK_USER_AGENTS_RULE_ID`,
+  `FIREWALL_CHALLENGE_USER_AGENTS_RULE_ID`, `FIREWALL_CHALLENGE_IPS_RULE_ID`: the Cloudflare custom
+  rule each firewall list (`block-ips`…) is linked to. Unset, the list isn't declared. Declared
+  lists apply when none are stored yet (`firewall.json`, or the persistence storage); stored lists
+  win, the declared ones only add those missing. `monitor-ips` and `monitor-user-agents` are
+  always declared, local only. Needs a Hyperwatch with the firewall module (not 5.2.0).
+- `FIREWALL_SYNC=true` (or `1`): sync the linked lists with their Cloudflare rules (needs
+  `CLOUDFLARE_API_TOKEN`, Zone WAF: Edit only, and `CLOUDFLARE_ZONE_ID`). One instance per zone:
+  production only. With `WATCH_SECRET` set, the lists can also be edited through
+  `POST /firewall/lists/:id/add|remove`, and those edits reach Cloudflare within seconds.
 - `API_HYPERWATCH_CONNECTIONS`, `FRONTEND_HYPERWATCH_CONNECTIONS`, `IMAGES_HYPERWATCH_CONNECTIONS`:
   websockets opened per service, one per server dyno (defaults 2, 4, 2). A dyno keeps one websocket
   from Watch and cuts the others, which keep reconnecting: use `1` against single-dyno servers such
