@@ -20,6 +20,7 @@
     "start:server": "dotenv node index.js",
     "start:images": "PORT=3301 dotenv hyperwatch images",
     "start:rest": "PORT=3303 dotenv hyperwatch rest",
+    "start:pdf": "PORT=3302 dotenv hyperwatch pdf",
     "start:frontend": "PORT=3300 dotenv hyperwatch frontend",
     "heroku-postbuild": "bin/install-cloudflared",
     "deploy:production": "./scripts/deploy.sh production",

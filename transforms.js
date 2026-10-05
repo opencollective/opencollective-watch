@@ -3,13 +3,14 @@ const crypto = require('crypto');
 const { util } = require('@hyperwatch/hyperwatch');
 
 // Per-service log transforms, shared by the service configs (api.js,
-// frontend.js, images.js) and the merged one (all.js)
+// frontend.js, images.js…) and the merged one (all.js)
 
 // Identities of our own servers, whichever service logs their requests
 const SERVICE_IDENTITIES = {
   frontend: 'Open Collective Frontend',
   images: 'Open Collective Images',
   rest: 'Open Collective REST',
+  pdf: 'Open Collective PDF',
   'contributors-svg': 'Contributors SVG',
 };
 
@@ -21,6 +22,7 @@ const SERVICE_SECRETS = {
   frontend: 'FRONTEND_OC_SECRET',
   images: 'IMAGES_OC_SECRET',
   rest: 'REST_OC_SECRET',
+  pdf: 'PDF_OC_SECRET',
   'contributors-svg': 'CONTRIBUTORS_SVG_OC_SECRET',
 };
 
