@@ -38,7 +38,7 @@ npm start -- -v            # stream the output
 npm start -- --stderr      # stream only errors
 ```
 
-Watch runs one Hyperwatch pipeline, on http://localhost:3399, that merges the requests of the four
+Watch runs one Hyperwatch pipeline, on http://localhost:3399, that merges the requests of the
 services. `/addresses`, `/signatures` and `/identities` count a client across all of them:
 
 - see pipeline status: http://localhost:3399/status
@@ -47,16 +47,17 @@ services. `/addresses`, `/signatures` and `/identities` count a client across al
 - watch real time logs: http://localhost:3399/logs/main
 
 Each request has a `source` field, the service that logged it (`api`, `frontend`, `images`,
-`rest`), whoever issued it: API calls made by our own frontend are in `api` too. Calls from our own
-servers have their identity: `Open Collective Frontend`, `Open Collective Images`,
-`Open Collective REST`, `Contributors SVG` (not followed as a source, only its API calls are seen).
+`rest`, `contributors-svg`), whoever issued it: API calls made by our own frontend are in `api` too.
+Calls from our own servers have their identity: `Open Collective Frontend`,
+`Open Collective Images`, `Open Collective REST`, `Contributors SVG`.
 Google Apps Script calls get `apps-script:<id>`, the script id from their user agent, when they
 come from Google's user-triggered fetchers ranges (`google-user-triggered-fetchers-ips.json` in
 Hyperwatch's `src/data`).
 The nodes are:
 
 - `main`: every request
-- `api`, `frontend`, `images`, `rest`: one source each
+- `api`, `frontend`, `images`, `rest`, `contributors-svg`: one source each. `contributors-svg` is
+  production only (it has no staging), skipped while `CONTRIBUTORS_SVG_HYPERWATCH_URL` isn't set
 - below `api`: `graphql` (with `graphql-mutation`, `graphql-slow`, `graphql-extra-slow` and the
   `/graphql` aggregator) and `other`, the API requests that aren't GraphQL
 - below `frontend`: `slow` and `extra-slow`

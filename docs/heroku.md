@@ -82,7 +82,10 @@ Useful pages:
 | `FIREWALL_*_RULE_ID`                           | **not set** on staging. Production: the IDs of the four linked rules (`FIREWALL_BLOCK_IPS_RULE_ID`…, see the README)                                                                                          |
 | `FIREWALL_SYNC`                                | **not set** on staging. Production: `true`, with `CLOUDFLARE_API_TOKEN` (dedicated, Zone WAF: Edit) and `CLOUDFLARE_ZONE_ID`                                                                                  |
 
-`<SERVICE>` is `API`, `FRONTEND`, `IMAGES` or `REST`.
+`<SERVICE>` is `API`, `FRONTEND`, `IMAGES`, `REST` or `CONTRIBUTORS_SVG`. contributors-svg has no
+staging: its variables are **not set** on staging. Production:
+`wss://contributors-svg.opencollective.com/_hyperwatch/logs/raw`, the `HYPERWATCH_SECRET` of the
+`contributors-svg` app.
 
 Copy a secret without printing it:
 
@@ -101,9 +104,9 @@ counts).
 Each websocket gets the logs of the one server dyno Heroku's router picked. Watch's websockets to
 one service share a `clientId`, and a dyno keeps only one websocket per `clientId`: it cuts the
 others, which reconnect until they reach a dyno not yet followed. So Watch needs one websocket per
-dyno. The defaults (api 2, frontend 4, images 2, rest 1) are meant for production's dyno counts.
-Staging services have **1 dyno each**, so they must be set to `1`, otherwise the extra websockets
-keep being cut and reconnecting.
+dyno. The defaults (api 2, frontend 4, images 2, rest 1, contributors-svg 1) are meant for
+production's dyno counts. Staging services have **1 dyno each**, so they must be set to `1`,
+otherwise the extra websockets keep being cut and reconnecting.
 
 ## Persistence
 
