@@ -10,6 +10,7 @@ const SERVICE_IDENTITIES = {
   frontend: 'Open Collective Frontend',
   images: 'Open Collective Images',
   rest: 'Open Collective REST',
+  'contributors-svg': 'Contributors SVG',
 };
 
 // The environment variable holding the oc-secret each of our servers sends
@@ -20,6 +21,7 @@ const SERVICE_SECRETS = {
   frontend: 'FRONTEND_OC_SECRET',
   images: 'IMAGES_OC_SECRET',
   rest: 'REST_OC_SECRET',
+  'contributors-svg': 'CONTRIBUTORS_SVG_OC_SECRET',
 };
 
 // The frontend also runs on Vercel, with its own OC_SECRET

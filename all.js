@@ -1,7 +1,8 @@
 // All services in one pipeline. Every log is tagged with the service that sent
-// it (`source`: api, frontend, images or rest), whoever issued the request, and
-// each source gets its own node derived from main, so aggregators (addresses,
-// signatures, identities…) count a client across all of them.
+// it (`source`: api, frontend, images, rest or contributors-svg), whoever
+// issued the request, and each source gets its own node derived from main, so
+// aggregators (addresses, signatures, identities…) count a client across all
+// of them.
 
 const hyperwatch = require('@hyperwatch/hyperwatch');
 const uuid = require('uuid');
@@ -55,12 +56,14 @@ const SOURCES = {
   },
   images: { connections: 2, prepare: cloudflare.augment },
   rest: { connections: 1, prepare: cloudflare.augment },
+  'contributors-svg': { connections: 1, prepare: cloudflare.augment },
 };
 
 // Connect Inputs (the live servers of every service)
 
 for (const [service, { connections, prepare }] of Object.entries(SOURCES)) {
-  const prefix = service.toUpperCase();
+  // contributors-svg → CONTRIBUTORS_SVG_HYPERWATCH_URL…
+  const prefix = service.toUpperCase().replace(/-/g, '_');
   const url = process.env[`${prefix}_HYPERWATCH_URL`];
   if (!url) {
     console.warn(`${prefix}_HYPERWATCH_URL is not set, skipping ${service}`);

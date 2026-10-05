@@ -71,6 +71,7 @@ Useful pages:
 | `API_/FRONTEND_/IMAGES_HYPERWATCH_CONNECTIONS` | `1` (see below)                                                                                                                                                                                               |
 | `CLOUDFLARE_TUNNEL_TOKEN`                      | token of the `oc-staging-watch` tunnel                                                                                                                                                                        |
 | `FRONTEND_/IMAGES_/REST_OC_SECRET`             | the `OC_SECRET` of the matching staging app, to verify its calls to the API                                                                                                                                   |
+| `CONTRIBUTORS_SVG_OC_SECRET`                   | **not set** on staging (contributors-svg has no staging). Production: the `OC_SECRET` of the `contributors-svg` app, to verify its calls to the API                                                           |
 | `VERCEL_FRONTEND_OC_SECRET`                    | the `OC_SECRET` of the frontend's Vercel deployments calling this API (Preview ones on staging, the Production one on production): their calls get the identity `Vercel Frontend`                             |
 | `WATCH_SECRET`                                 | **not set** on staging, set on production: Basic Auth password, on top of Cloudflare Access (username `WATCH_USERNAME`, default `opencollective`)                                                             |
 | `HYPERWATCH_PERSISTENCE`                       | `true`, with the four variables below: counters and history are kept in S3 (see _Persistence_)                                                                                                                |
@@ -81,7 +82,10 @@ Useful pages:
 | `FIREWALL_*_RULE_ID`                           | **not set** on staging. Production: the IDs of the four linked rules (`FIREWALL_BLOCK_IPS_RULE_ID`…, see the README)                                                                                          |
 | `FIREWALL_SYNC`                                | **not set** on staging. Production: `true`, with `CLOUDFLARE_API_TOKEN` (dedicated, Zone WAF: Edit) and `CLOUDFLARE_ZONE_ID`                                                                                  |
 
-`<SERVICE>` is `API`, `FRONTEND`, `IMAGES` or `REST`.
+`<SERVICE>` is `API`, `FRONTEND`, `IMAGES`, `REST` or `CONTRIBUTORS_SVG`. contributors-svg has no
+staging: its variables are **not set** on staging. Production:
+`wss://contributors-svg.opencollective.com/_hyperwatch/logs/raw`, the `HYPERWATCH_SECRET` of the
+`contributors-svg` app.
 
 Copy a secret without printing it:
 
@@ -100,9 +104,9 @@ counts).
 Each websocket gets the logs of the one server dyno Heroku's router picked. Watch's websockets to
 one service share a `clientId`, and a dyno keeps only one websocket per `clientId`: it cuts the
 others, which reconnect until they reach a dyno not yet followed. So Watch needs one websocket per
-dyno. The defaults (api 2, frontend 4, images 2, rest 1) are meant for production's dyno counts.
-Staging services have **1 dyno each**, so they must be set to `1`, otherwise the extra websockets
-keep being cut and reconnecting.
+dyno. The defaults (api 2, frontend 4, images 2, rest 1, contributors-svg 1) are meant for
+production's dyno counts. Staging services have **1 dyno each**, so they must be set to `1`,
+otherwise the extra websockets keep being cut and reconnecting.
 
 ## Persistence
 

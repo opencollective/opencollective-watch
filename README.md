@@ -38,7 +38,7 @@ npm start -- -v            # stream the output
 npm start -- --stderr      # stream only errors
 ```
 
-Watch runs one Hyperwatch pipeline, on http://localhost:3399, that merges the requests of the four
+Watch runs one Hyperwatch pipeline, on http://localhost:3399, that merges the requests of the
 services. `/addresses`, `/signatures` and `/identities` count a client across all of them:
 
 - see pipeline status: http://localhost:3399/status
@@ -47,15 +47,17 @@ services. `/addresses`, `/signatures` and `/identities` count a client across al
 - watch real time logs: http://localhost:3399/logs/main
 
 Each request has a `source` field, the service that logged it (`api`, `frontend`, `images`,
-`rest`), whoever issued it: API calls made by our own frontend are in `api` too. Calls from our own
-servers have their identity: `Open Collective Frontend`, `Open Collective Images`,
-`Open Collective REST`. Google Apps Script calls get `apps-script:<id>`, the script id from their
-user agent, when they come from Google's user-triggered fetchers ranges
-(`google-user-triggered-fetchers-ips.json` in Hyperwatch's `src/data`).
+`rest`, `contributors-svg`), whoever issued it: API calls made by our own frontend are in `api` too.
+Calls from our own servers have their identity: `Open Collective Frontend`,
+`Open Collective Images`, `Open Collective REST`, `Contributors SVG`.
+Google Apps Script calls get `apps-script:<id>`, the script id from their user agent, when they
+come from Google's user-triggered fetchers ranges (`google-user-triggered-fetchers-ips.json` in
+Hyperwatch's `src/data`).
 The nodes are:
 
 - `main`: every request
-- `api`, `frontend`, `images`, `rest`: one source each
+- `api`, `frontend`, `images`, `rest`, `contributors-svg`: one source each. `contributors-svg` is
+  production only (it has no staging), skipped while `CONTRIBUTORS_SVG_HYPERWATCH_URL` isn't set
 - below `api`: `graphql` (with `graphql-mutation`, `graphql-slow`, `graphql-extra-slow` and the
   `/graphql` aggregator) and `other`, the API requests that aren't GraphQL
 - below `frontend`: `slow` and `extra-slow`
@@ -73,12 +75,12 @@ npm start -- all api       # the merged pipeline and the api one
 npm run start:api          # or start:frontend, start:images, start:rest
 ```
 
-| Config     | Port | Nodes                                                                                    |
-| ---------- | ---- | ---------------------------------------------------------------------------------------- |
-| `api`      | 3360 | `graphql`… as in `all`, and `frontend` / `images` / `rest` / `other` by `oc-application` |
-| `frontend` | 3300 | `slow`, `extra-slow`, `with-identity`, `without-identity`                                |
-| `images`   | 3301 | one per image route: `avatar`, `banner`, `badge`, `proxy`…                               |
-| `rest`     | 3303 | `main` only                                                                              |
+| Config     | Port | Nodes                                                                                                         |
+| ---------- | ---- | ------------------------------------------------------------------------------------------------------------- |
+| `api`      | 3360 | `graphql`… as in `all`, and `frontend` / `images` / `rest` / `contributors-svg` / `other` by `oc-application` |
+| `frontend` | 3300 | `slow`, `extra-slow`, `with-identity`, `without-identity`                                                     |
+| `images`   | 3301 | one per image route: `avatar`, `banner`, `badge`, `proxy`…                                                    |
+| `rest`     | 3303 | `main` only                                                                                                   |
 
 Errors are kept in `logs/<config>.log`. If one process crashes, the others are stopped.
 
@@ -86,10 +88,10 @@ Errors are kept in `logs/<config>.log`. If one process crashes, the others are s
 
 Optional environment variables:
 
-- `FRONTEND_OC_SECRET`, `IMAGES_OC_SECRET`, `REST_OC_SECRET`: the `OC_SECRET` of each of our
-  servers. API calls whose `oc-secret` header matches get that server's identity
-  (`Open Collective Frontend`…); others don't. The header's value is replaced with `[verified]`
-  or `[unverified]` as logs arrive, so the secrets are never kept or shown.
+- `FRONTEND_OC_SECRET`, `IMAGES_OC_SECRET`, `REST_OC_SECRET`, `CONTRIBUTORS_SVG_OC_SECRET`: the
+  `OC_SECRET` of each of our servers. API calls whose `oc-secret` header matches get that server's
+  identity (`Open Collective Frontend`…); others don't. The header's value is replaced with
+  `[verified]` or `[unverified]` as logs arrive, so the secrets are never kept or shown.
 - `VERCEL_FRONTEND_OC_SECRET`: the `OC_SECRET` of the frontend's Vercel deployment. Its API calls
   get the identity `Vercel Frontend`. It must be set on Vercel too: without it, the frontend
   sends a random secret that can't be verified.
