@@ -87,6 +87,15 @@ function getOperationName(graphql) {
   return names.length === 1 ? names[0] : null;
 }
 
+// The variables of a request that the logs show (VARIABLES_SHOWN), as JSON
+function shownVariables(graphql) {
+  // Missing, or null when the client sends "variables": null
+  const variables = (graphql && graphql.get('variables')) || {};
+  return JSON.stringify(
+    pick(variables.toJS ? variables.toJS() : variables, VARIABLES_SHOWN),
+  );
+}
+
 const formatRequest = (log) => {
   if (!log.has('graphql')) {
     return lib.formatter.request(log);
@@ -94,15 +103,11 @@ const formatRequest = (log) => {
 
   const hash = log.getIn(['graphql', 'hash']);
   const operationName = getOperationName(log.get('graphql'));
-  // Missing, or null when the client sends "variables": null
-  const variables = log.getIn(['graphql', 'variables']) || {};
 
   return [
     hash,
     operationName,
-    JSON.stringify(
-      pick(variables.toJS ? variables.toJS() : variables, VARIABLES_SHOWN),
-    ),
+    shownVariables(log.get('graphql')),
     log.hasIn(['graphql', 'servedFromCache']) ? 'HIT' : 'MISS',
   ]
     .filter(Boolean)
@@ -206,6 +211,14 @@ function createAggregator() {
   graphqlOperationFormatter.setFormats([
     ['hash', (entry) => entry.getIn(['graphql', 'hash']) || ''],
     ['operation', operation],
+    // The latest request's variables, as the logs show them (empty without any)
+    [
+      'lastVariables',
+      (entry) => {
+        const shown = shownVariables(entry.get('graphql'));
+        return shown === '{}' ? '' : shown;
+      },
+    ],
     ['lastAgent', lastAgent],
     ['lastIdentity', lastIdentity],
     // Named like the default sorters (count15m, execTime24h…), so the table
@@ -255,6 +268,7 @@ function registerGraphqlNodes(graphql) {
     columns: [
       'hash',
       'operation',
+      'lastVariables',
       'lastAgent',
       'lastIdentity',
       'count',
