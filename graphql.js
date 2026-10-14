@@ -137,10 +137,14 @@ function queryStart(query) {
     )
     .replace(/\s+/g, ' ')
     .trim();
-  return text.length > QUERY_START_LENGTH
+  return shorten(text);
+}
+
+// At most QUERY_START_LENGTH characters, then …
+const shorten = (text) =>
+  text.length > QUERY_START_LENGTH
     ? `${text.slice(0, QUERY_START_LENGTH)}…`
     : text;
-}
 
 function createAggregator() {
   const { Aggregator } = lib.aggregator;
@@ -214,9 +218,17 @@ function createAggregator() {
     // The latest request's variables, as the logs show them (empty without any)
     [
       'lastVariables',
-      (entry) => {
+      (entry, output) => {
         const shown = shownVariables(entry.get('graphql'));
-        return shown === '{}' ? '' : shown;
+        if (shown === '{}' || output !== 'html') {
+          return shown === '{}' ? '' : shown;
+        }
+        // In HTML, in grey and on one line, cut like the start of a query
+        return util.safeHtml(
+          `<span class="grey" style="white-space: nowrap">${util.escapeHtml(
+            shorten(shown),
+          )}</span>`,
+        );
       },
     ],
     ['lastAgent', lastAgent],
