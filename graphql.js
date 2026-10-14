@@ -33,30 +33,31 @@ function registerApplicationNodes(parent) {
 
 // GraphQL formatter
 
+// The variables shown in the logs
+const VARIABLES_SHOWN = [
+  'id',
+  'slug',
+  'accountSlug',
+  'collectiveSlug',
+  'CollectiveSlug',
+  'CollectiveId',
+  'legacyExpenseId',
+  'tierId',
+  'term',
+  'type',
+  'role',
+  'tierSlug',
+  'TierId',
+  'limit',
+  'offset',
+  'action',
+  'reference',
+];
+
 const formatRequest = (log) => {
   if (!log.has('graphql')) {
     return lib.formatter.request(log);
   }
-
-  const pickList = [
-    'id',
-    'slug',
-    'accountSlug',
-    'collectiveSlug',
-    'CollectiveSlug',
-    'CollectiveId',
-    'legacyExpenseId',
-    'tierId',
-    'term',
-    'type',
-    'role',
-    'tierSlug',
-    'TierId',
-    'limit',
-    'offset',
-    'action',
-    'reference',
-  ];
 
   const hash = log.getIn(['graphql', 'hash']);
   const operationName = log.getIn(['graphql', 'operationName']);
@@ -67,7 +68,7 @@ const formatRequest = (log) => {
     hash,
     operationName,
     JSON.stringify(
-      pick(variables.toJS ? variables.toJS() : variables, pickList),
+      pick(variables.toJS ? variables.toJS() : variables, VARIABLES_SHOWN),
     ),
     log.hasIn(['graphql', 'servedFromCache']) ? 'HIT' : 'MISS',
   ]
@@ -78,16 +79,24 @@ const formatRequest = (log) => {
 // GraphQL aggregator
 
 // The start of a query on one line, without comments or the values written in
-// it (string literals can hold anything a client sends), e.g.
-// `query { account(slug: "…") { id name …`
+// it (string literals can hold anything a client sends), except slugs: the
+// arguments named like the slug variables shown in the logs, e.g.
+// `query { account(slug: "babel") { id name …`
 const QUERY_START_LENGTH = 60;
+const SLUG_ARGUMENTS = VARIABLES_SHOWN.filter((name) => /slug/i.test(name));
+const STRING_LITERAL = new RegExp(
+  `(\\b(?:${SLUG_ARGUMENTS.join('|')})\\s*:\\s*)?("""[\\s\\S]*?"""|"(?:[^"\\\\]|\\\\.)*")`,
+  'g',
+);
 function queryStart(query) {
   if (typeof query !== 'string') {
     return '';
   }
   const text = query
     .replace(/#[^\n]*/g, ' ')
-    .replace(/"""[\s\S]*?"""|"(?:[^"\\]|\\.)*"/g, '"…"')
+    .replace(STRING_LITERAL, (literal, slugArgument) =>
+      slugArgument ? literal : '"…"',
+    )
     .replace(/\s+/g, ' ')
     .trim();
   return text.length > QUERY_START_LENGTH
