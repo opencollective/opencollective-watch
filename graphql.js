@@ -97,8 +97,30 @@ function createAggregator() {
     if (log.has('application')) {
       entry = entry.set('application', log.get('application'));
     }
+    // Who sent the latest request (see lastIdentity below)
+    for (const field of ['identity', 'agent']) {
+      entry = log.has(field)
+        ? entry.set(field, log.get(field))
+        : entry.delete(field);
+    }
     return entry;
   });
+
+  // The identity of the latest request, as on /addresses: in HTML, it falls
+  // back to the agent, in grey
+  const { formats, colors } = lib.aggregator.defaultFormatter;
+  const identityFormat = formats.find(([key]) => key === 'identity');
+  const agentFormat = formats.find(([key]) => key === 'agent');
+  const lastIdentity = (entry, output) => {
+    const value = identityFormat ? identityFormat[1](entry, output) : '';
+    if (value || output !== 'html' || !agentFormat) {
+      return value;
+    }
+    const lastAgent = agentFormat[1](entry, output);
+    return lastAgent
+      ? util.safeHtml(`<span class="grey">${util.toHtml(lastAgent)}</span>`)
+      : '';
+  };
 
   const graphqlOperationFormatter = new lib.formatter.Formatter();
 
@@ -106,6 +128,7 @@ function createAggregator() {
     ['hash', (entry) => entry.getIn(['graphql', 'hash']) || ''],
     ['operation', (entry) => entry.getIn(['graphql', 'operationName']) || ''],
     ['application', (entry) => entry.getIn(['application'])],
+    ['lastIdentity', lastIdentity],
     // Named like the default sorters (count15m, execTime24h…), so the table
     // headings sort by them, as on /identities
     ['count15m', (entry) => util.aggregateCount(entry, 'per_minute')],
@@ -120,6 +143,8 @@ function createAggregator() {
     ],
     ['lastSeen', lib.aggregator.lastSeen],
   ]);
+
+  graphqlOperationFormatter.colors.lastIdentity = colors.identity;
 
   aggregator.setFormatter(graphqlOperationFormatter);
 
@@ -145,10 +170,12 @@ function registerGraphqlNodes(graphql) {
   const aggregator = createAggregator();
   graphql.map((log) => aggregator.processLog(log), 'graphql aggregator');
   app.api.registerAggregator('graphql', aggregator, {
+    nav: true,
     columns: [
       'hash',
       'operation',
       'application',
+      'lastIdentity',
       'count',
       'execTime',
       'lastSeen',
