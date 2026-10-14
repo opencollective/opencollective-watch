@@ -115,12 +115,13 @@ function createAggregator() {
     }
     // Who sent the latest request: its identity, or its address when it has
     // none, as /identities groups them (see lastIdentity below), and its agent
-    entry = log.has('agent')
-      ? entry.set('agent', log.get('agent'))
-      : entry.delete('agent');
-    return entry
-      .set('lastIdentity', util.identityKey(log) || '')
-      .set('lastIdentified', log.has('identity'));
+    // identity is also what the identified / unidentified filter checks
+    for (const field of ['identity', 'agent']) {
+      entry = log.has(field)
+        ? entry.set(field, log.get(field))
+        : entry.delete(field);
+    }
+    return entry.set('lastIdentity', util.identityKey(log) || '');
   });
 
   // In HTML, it links to its logs, like on /identities: an address (no
@@ -131,7 +132,7 @@ function createAggregator() {
       return key;
     }
     return util.safeHtml(
-      entry.get('lastIdentified')
+      entry.get('identity')
         ? html.logsLink('identity', key)
         : html.logsLink('identity', key, 'grey'),
     );
@@ -208,6 +209,7 @@ function registerGraphqlNodes(graphql) {
   graphql.map((log) => aggregator.processLog(log), 'graphql aggregator');
   app.api.registerAggregator('graphql', aggregator, {
     nav: true,
+    identityFilter: true,
     columns: [
       'hash',
       'operation',
