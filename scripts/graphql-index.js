@@ -133,7 +133,9 @@ function createIndexer(modulesDir) {
     const modules = new Map();
     for (const file of files) {
       const text = fs.readFileSync(path.join(root, file), 'utf8');
-      if (/gql|graphql/.test(text)) {
+      // Files with documents, and those re-exporting from others (a barrel
+      // re-exporting a fragment mentions neither gql nor graphql)
+      if (/gql|graphql|\bexport\b[^;]*\bfrom\b/.test(text)) {
         modules.set(file, parseModule(ts, file, text));
       }
     }
