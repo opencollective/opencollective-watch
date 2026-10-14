@@ -150,8 +150,11 @@ const definitionUrl = (index, def) => {
 // `query { account(slug: "babel") { id name …`
 const QUERY_START_LENGTH = 60;
 const SLUG_ARGUMENTS = VARIABLES_SHOWN.filter((name) => /slug/i.test(name));
-const STRING_LITERAL = new RegExp(
-  `(\\b(?:${SLUG_ARGUMENTS.join('|')})\\s*:\\s*)?("""[\\s\\S]*?"""|"(?:[^"\\\\]|\\\\.)*")`,
+// String literals (with the slug argument before them, if any) and comments,
+// in one pass: a # inside a string isn't a comment, a " inside a comment
+// isn't a string
+const LITERAL_OR_COMMENT = new RegExp(
+  `(\\b(?:${SLUG_ARGUMENTS.join('|')})\\s*:\\s*)?("""[\\s\\S]*?"""|"(?:[^"\\\\]|\\\\.)*")|#[^\\n]*`,
   'g',
 );
 function queryStart(query) {
@@ -159,10 +162,12 @@ function queryStart(query) {
     return '';
   }
   const text = query
-    .replace(/#[^\n]*/g, ' ')
-    .replace(STRING_LITERAL, (literal, slugArgument) =>
-      slugArgument ? literal : '"…"',
-    )
+    .replace(LITERAL_OR_COMMENT, (match, slugArgument, literal) => {
+      if (literal === undefined) {
+        return ' '; // a comment
+      }
+      return slugArgument ? match : '"…"';
+    })
     .replace(/\s+/g, ' ')
     .trim();
   return shorten(text);
