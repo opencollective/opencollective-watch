@@ -132,6 +132,9 @@ function loadIndex() {
   }
 }
 
+// Queries our code defines are colored like identities (magenta)
+const RECOGNIZED_COLOR = lib.aggregator.defaultFormatter.colors.identity;
+
 const definitionUrl = (index, def) => {
   const repo = index.services[def.service] && index.services[def.service].repo;
   return repo
@@ -218,8 +221,8 @@ function createAggregator() {
   const index = loadIndex();
 
   // The operation name, sent or read from the query. In HTML, a query our
-  // code defines shows it, linked to its definition on GitHub (all of them in
-  // the tooltip); any other query shows its start instead, in grey and on one
+  // code defines shows it in the color of identities, linked to its
+  // definition on GitHub (all of them in the tooltip); any other query shows its start instead, in grey and on one
   // line, which says more about an unknown client than its name.
   const operation = (entry, output) => {
     const name = getOperationName(entry.get('graphql'));
@@ -243,7 +246,7 @@ function createAggregator() {
       .map((def) => `${def.service}: ${def.file}:${def.line}`)
       .join('\n');
     return util.safeHtml(
-      `<a href="${util.escapeHtml(url)}" title="${util.escapeHtml(title)}" style="white-space: nowrap">${text}</a>`,
+      `<a href="${util.escapeHtml(url)}" title="${util.escapeHtml(title)}" class="${RECOGNIZED_COLOR}" style="white-space: nowrap">${text}</a>`,
     );
   };
 
