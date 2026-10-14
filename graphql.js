@@ -217,29 +217,28 @@ function createAggregator() {
   // Where our services define each query (graphql-index.json)
   const index = loadIndex();
 
-  // The operation name, sent or read from the query. In HTML, an anonymous
-  // operation shows the start of its query instead, in grey and on one line,
-  // and a query our code defines links to its definition on GitHub (all of
-  // them in the tooltip).
+  // The operation name, sent or read from the query. In HTML, a query our
+  // code defines shows it, linked to its definition on GitHub (all of them in
+  // the tooltip); any other query shows its start instead, in grey and on one
+  // line, which says more about an unknown client than its name.
   const operation = (entry, output) => {
     const name = getOperationName(entry.get('graphql'));
     if (output !== 'html') {
       return name || '';
     }
-    const start = name ? '' : queryStart(entry.getIn(['graphql', 'query']));
-    if (!name && !start) {
-      return '';
+    const definitions = index.queries[entry.getIn(['graphql', 'hash'])] || [];
+    const url = definitions.length && definitionUrl(index, definitions[0]);
+    const start = queryStart(entry.getIn(['graphql', 'query']));
+    if (!url) {
+      return start
+        ? util.safeHtml(
+            `<span class="grey" style="white-space: nowrap">${util.escapeHtml(start)}</span>`,
+          )
+        : name || '';
     }
     const text = name
       ? util.escapeHtml(name)
       : `<span class="grey">${util.escapeHtml(start)}</span>`;
-    const definitions = index.queries[entry.getIn(['graphql', 'hash'])] || [];
-    const url = definitions.length && definitionUrl(index, definitions[0]);
-    if (!url) {
-      return util.safeHtml(
-        name ? text : `<span style="white-space: nowrap">${text}</span>`,
-      );
-    }
     const title = definitions
       .map((def) => `${def.service}: ${def.file}:${def.line}`)
       .join('\n');
