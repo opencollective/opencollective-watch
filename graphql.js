@@ -81,9 +81,13 @@ function createAggregator() {
 
   const aggregator = new Aggregator();
 
-  // Anonymous operations are grouped together, with an empty name
+  // One entry per query (its hash, see setGraphqlHash): an operation name can
+  // be sent with different queries. Logs without a query text are grouped by
+  // operation name, anonymous ones together.
   aggregator.setIdentifier(
-    (log) => log.getIn(['graphql', 'operationName']) || '',
+    (log) =>
+      log.getIn(['graphql', 'hash']) ||
+      `operation:${log.getIn(['graphql', 'operationName']) || ''}`,
   );
 
   aggregator.setEnricher((entry, log) => {
@@ -99,6 +103,7 @@ function createAggregator() {
   const graphqlOperationFormatter = new lib.formatter.Formatter();
 
   graphqlOperationFormatter.setFormats([
+    ['hash', (entry) => entry.getIn(['graphql', 'hash']) || ''],
     ['operation', (entry) => entry.getIn(['graphql', 'operationName']) || ''],
     ['application', (entry) => entry.getIn(['application'])],
     // Named like the default sorters (count15m, execTime24h…), so the table
@@ -140,7 +145,14 @@ function registerGraphqlNodes(graphql) {
   const aggregator = createAggregator();
   graphql.map((log) => aggregator.processLog(log), 'graphql aggregator');
   app.api.registerAggregator('graphql', aggregator, {
-    columns: ['operation', 'application', 'count', 'execTime', 'lastSeen'],
+    columns: [
+      'hash',
+      'operation',
+      'application',
+      'count',
+      'execTime',
+      'lastSeen',
+    ],
   });
 
   graphql.filter(isMutation, 'is mutation').registerNode('graphql-mutation');
