@@ -54,13 +54,46 @@ const VARIABLES_SHOWN = [
   'reference',
 ];
 
+// The operation's name: the one the client sends, or else the one in the
+// query, when it holds a single named operation (`query AccountBySlug(…)`)
+function getOperationName(graphql) {
+  const sent = graphql && graphql.get('operationName');
+  if (sent) {
+    return sent;
+  }
+  const query = graphql && graphql.get('query');
+  if (typeof query !== 'string') {
+    return null;
+  }
+  // The definitions at the top level: braces outside comments and strings
+  const text = query.replace(/#[^\n]*|"""[\s\S]*?"""|"(?:[^"\\]|\\.)*"/g, ' ');
+  const names = [];
+  let depth = 0;
+  const definition =
+    /^\s*(query|mutation|subscription)\b\s*([_A-Za-z][_0-9A-Za-z]*)?/;
+  for (let i = 0; i < text.length; i++) {
+    if (depth === 0 && (i === 0 || text[i - 1] === '}')) {
+      const match = definition.exec(text.slice(i));
+      if (match) {
+        names.push(match[2] || null);
+      }
+    }
+    if (text[i] === '{') {
+      depth++;
+    } else if (text[i] === '}') {
+      depth = Math.max(0, depth - 1);
+    }
+  }
+  return names.length === 1 ? names[0] : null;
+}
+
 const formatRequest = (log) => {
   if (!log.has('graphql')) {
     return lib.formatter.request(log);
   }
 
   const hash = log.getIn(['graphql', 'hash']);
-  const operationName = log.getIn(['graphql', 'operationName']);
+  const operationName = getOperationName(log.get('graphql'));
   // Missing, or null when the client sends "variables": null
   const variables = log.getIn(['graphql', 'variables']) || {};
 
@@ -147,10 +180,10 @@ function createAggregator() {
     );
   };
 
-  // Anonymous operations: in HTML, the start of their query, in grey and on
-  // one line
+  // The operation name, sent or read from the query. Anonymous operations: in
+  // HTML, the start of their query, in grey and on one line
   const operation = (entry, output) => {
-    const name = entry.getIn(['graphql', 'operationName']);
+    const name = getOperationName(entry.get('graphql'));
     if (name || output !== 'html') {
       return name || '';
     }
