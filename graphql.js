@@ -113,11 +113,11 @@ function createAggregator() {
     if (log.has('graphql')) {
       entry = entry.set('graphql', log.get('graphql'));
     }
-    if (log.has('application')) {
-      entry = entry.set('application', log.get('application'));
-    }
     // Who sent the latest request: its identity, or its address when it has
-    // none, as /identities groups them (see lastIdentity below)
+    // none, as /identities groups them (see lastIdentity below), and its agent
+    entry = log.has('agent')
+      ? entry.set('agent', log.get('agent'))
+      : entry.delete('agent');
     return entry
       .set('lastIdentity', util.identityKey(log) || '')
       .set('lastIdentified', log.has('identity'));
@@ -152,12 +152,18 @@ function createAggregator() {
       : '';
   };
 
+  // The agent of the latest request, formatted as on /identities
+  const { formats, colors } = lib.aggregator.defaultFormatter;
+  const agentFormat = formats.find(([key]) => key === 'agent');
+  const lastAgent = (entry, output) =>
+    agentFormat ? agentFormat[1](entry, output) : '';
+
   const graphqlOperationFormatter = new lib.formatter.Formatter();
 
   graphqlOperationFormatter.setFormats([
     ['hash', (entry) => entry.getIn(['graphql', 'hash']) || ''],
     ['operation', operation],
-    ['application', (entry) => entry.getIn(['application'])],
+    ['lastAgent', lastAgent],
     ['lastIdentity', lastIdentity],
     // Named like the default sorters (count15m, execTime24h…), so the table
     // headings sort by them, as on /identities
@@ -174,8 +180,8 @@ function createAggregator() {
     ['lastSeen', lib.aggregator.lastSeen],
   ]);
 
-  graphqlOperationFormatter.colors.lastIdentity =
-    lib.aggregator.defaultFormatter.colors.identity;
+  graphqlOperationFormatter.colors.lastIdentity = colors.identity;
+  graphqlOperationFormatter.colors.lastAgent = colors.agent;
 
   aggregator.setFormatter(graphqlOperationFormatter);
 
@@ -205,7 +211,7 @@ function registerGraphqlNodes(graphql) {
     columns: [
       'hash',
       'operation',
-      'application',
+      'lastAgent',
       'lastIdentity',
       'count',
       'execTime',
