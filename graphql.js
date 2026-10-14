@@ -1,5 +1,8 @@
 const { app, lib, util } = require('@hyperwatch/hyperwatch');
 const html = require('@hyperwatch/hyperwatch/src/app/html');
+const fs = require('fs');
+const path = require('path');
+
 const { pick } = require('lodash');
 
 const { registerSlowNodes } = require('./slow');
@@ -114,6 +117,28 @@ const formatRequest = (log) => {
     .join(' ');
 };
 
+// Where our services define each query, by hash: graphql-index.json, written
+// by scripts/graphql-index.js. Without the file, the source column is empty.
+const INDEX_FILE = path.join(__dirname, 'graphql-index.json');
+
+function loadIndex() {
+  try {
+    return JSON.parse(fs.readFileSync(INDEX_FILE, 'utf8'));
+  } catch (error) {
+    if (error.code !== 'ENOENT') {
+      console.error(`Can't read ${INDEX_FILE}: ${error.message}`);
+    }
+    return { services: {}, queries: {} };
+  }
+}
+
+const definitionUrl = (index, def) => {
+  const repo = index.services[def.service] && index.services[def.service].repo;
+  return repo
+    ? `https://github.com/${repo}/blob/${def.commit}/${def.file}#L${def.line}-L${def.endLine}`
+    : null;
+};
+
 // GraphQL aggregator
 
 // The start of a query on one line, without comments or the values written in
@@ -204,6 +229,29 @@ function createAggregator() {
       : '';
   };
 
+  // Where the query is defined in our code: the GitHub link of its first
+  // definition (the others are counted in HTML), empty for other clients
+  const index = loadIndex();
+  const source = (entry, output) => {
+    const definitions = index.queries[entry.getIn(['graphql', 'hash'])] || [];
+    const [first] = definitions;
+    if (!first) {
+      return '';
+    }
+    const url = definitionUrl(index, first);
+    if (output !== 'html') {
+      return url || '';
+    }
+    const text = `${first.service}:${path.basename(first.file)}:${first.line}`;
+    const more = definitions.length > 1 ? ` +${definitions.length - 1}` : '';
+    const title = definitions
+      .map((def) => `${def.service}: ${def.file}:${def.line}`)
+      .join('\n');
+    return util.safeHtml(
+      `<a href="${util.escapeHtml(url || '')}" title="${util.escapeHtml(title)}" style="white-space: nowrap">${util.escapeHtml(text)}</a>${more}`,
+    );
+  };
+
   // The agent of the latest request, formatted as on /identities
   const { formats, colors } = lib.aggregator.defaultFormatter;
   const agentFormat = formats.find(([key]) => key === 'agent');
@@ -231,6 +279,7 @@ function createAggregator() {
         );
       },
     ],
+    ['source', source],
     ['lastAgent', lastAgent],
     ['lastIdentity', lastIdentity],
     // Named like the default sorters (count15m, execTime24h…), so the table
@@ -281,6 +330,7 @@ function registerGraphqlNodes(graphql) {
       'hash',
       'operation',
       'lastVariables',
+      'source',
       'lastAgent',
       'lastIdentity',
       'count',
