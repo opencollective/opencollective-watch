@@ -1,4 +1,8 @@
 const { app, lib, util } = require('@hyperwatch/hyperwatch');
+const html = require('@hyperwatch/hyperwatch/src/app/html');
+const fs = require('fs');
+const path = require('path');
+
 const { pick } = require('lodash');
 
 const { registerSlowNodes } = require('./slow');
@@ -32,87 +36,271 @@ function registerApplicationNodes(parent) {
 
 // GraphQL formatter
 
+// The variables shown in the logs
+const VARIABLES_SHOWN = [
+  'id',
+  'slug',
+  'accountSlug',
+  'collectiveSlug',
+  'CollectiveSlug',
+  'CollectiveId',
+  'legacyExpenseId',
+  'tierId',
+  'term',
+  'type',
+  'role',
+  'tierSlug',
+  'TierId',
+  'limit',
+  'offset',
+  'action',
+  'reference',
+];
+
+// The operation's name: the one the client sends, or else the one in the
+// query, when it holds a single named operation (`query AccountBySlug(…)`)
+function getOperationName(graphql) {
+  const sent = graphql && graphql.get('operationName');
+  if (sent) {
+    return sent;
+  }
+  const query = graphql && graphql.get('query');
+  if (typeof query !== 'string') {
+    return null;
+  }
+  // The definitions at the top level: braces outside comments and strings
+  const text = query.replace(/#[^\n]*|"""[\s\S]*?"""|"(?:[^"\\]|\\.)*"/g, ' ');
+  const names = [];
+  let depth = 0;
+  const definition =
+    /^\s*(query|mutation|subscription)\b\s*([_A-Za-z][_0-9A-Za-z]*)?/;
+  for (let i = 0; i < text.length; i++) {
+    if (depth === 0 && (i === 0 || text[i - 1] === '}')) {
+      const match = definition.exec(text.slice(i));
+      if (match) {
+        names.push(match[2] || null);
+      }
+    }
+    if (text[i] === '{') {
+      depth++;
+    } else if (text[i] === '}') {
+      depth = Math.max(0, depth - 1);
+    }
+  }
+  return names.length === 1 ? names[0] : null;
+}
+
+// The variables of a request that the logs show (VARIABLES_SHOWN), as JSON
+function shownVariables(graphql) {
+  // Missing, or null when the client sends "variables": null
+  const variables = (graphql && graphql.get('variables')) || {};
+  return JSON.stringify(
+    pick(variables.toJS ? variables.toJS() : variables, VARIABLES_SHOWN),
+  );
+}
+
 const formatRequest = (log) => {
   if (!log.has('graphql')) {
     return lib.formatter.request(log);
   }
 
-  const pickList = [
-    'id',
-    'slug',
-    'accountSlug',
-    'collectiveSlug',
-    'CollectiveSlug',
-    'CollectiveId',
-    'legacyExpenseId',
-    'tierId',
-    'term',
-    'type',
-    'role',
-    'tierSlug',
-    'TierId',
-    'limit',
-    'offset',
-    'action',
-    'reference',
-  ];
-
   const hash = log.getIn(['graphql', 'hash']);
-  const operationName = log.getIn(['graphql', 'operationName']);
-  // Missing, or null when the client sends "variables": null
-  const variables = log.getIn(['graphql', 'variables']) || {};
+  const operationName = getOperationName(log.get('graphql'));
 
   return [
     hash,
     operationName,
-    JSON.stringify(
-      pick(variables.toJS ? variables.toJS() : variables, pickList),
-    ),
+    shownVariables(log.get('graphql')),
     log.hasIn(['graphql', 'servedFromCache']) ? 'HIT' : 'MISS',
   ]
     .filter(Boolean)
     .join(' ');
 };
 
+// Where our services define each query, by hash: graphql-index.json, written
+// by scripts/graphql-index.js. Without the file, operations aren't linked.
+const INDEX_FILE = path.join(__dirname, 'graphql-index.json');
+
+function loadIndex() {
+  try {
+    return JSON.parse(fs.readFileSync(INDEX_FILE, 'utf8'));
+  } catch (error) {
+    if (error.code !== 'ENOENT') {
+      console.error(`Can't read ${INDEX_FILE}: ${error.message}`);
+    }
+    return { services: {}, queries: {} };
+  }
+}
+
+// Queries our code defines are colored like identities (magenta)
+const RECOGNIZED_COLOR = lib.aggregator.defaultFormatter.colors.identity;
+
+const definitionUrl = (index, def) => {
+  const repo = index.services[def.service] && index.services[def.service].repo;
+  return repo
+    ? `https://github.com/${repo}/blob/${def.commit}/${def.file}#L${def.line}-L${def.endLine}`
+    : null;
+};
+
 // GraphQL aggregator
+
+// The start of a query on one line, without comments or the values written in
+// it (string literals can hold anything a client sends), except slugs: the
+// arguments named like the slug variables shown in the logs, e.g.
+// `query { account(slug: "babel") { id name …`
+const QUERY_START_LENGTH = 60;
+const SLUG_ARGUMENTS = VARIABLES_SHOWN.filter((name) => /slug/i.test(name));
+// String literals (with the slug argument before them, if any) and comments,
+// in one pass: a # inside a string isn't a comment, a " inside a comment
+// isn't a string
+const LITERAL_OR_COMMENT = new RegExp(
+  `(\\b(?:${SLUG_ARGUMENTS.join('|')})\\s*:\\s*)?("""[\\s\\S]*?"""|"(?:[^"\\\\]|\\\\.)*")|#[^\\n]*`,
+  'g',
+);
+function queryStart(query) {
+  if (typeof query !== 'string') {
+    return '';
+  }
+  const text = query
+    .replace(LITERAL_OR_COMMENT, (match, slugArgument, literal) => {
+      if (literal === undefined) {
+        return ' '; // a comment
+      }
+      return slugArgument ? match : '"…"';
+    })
+    .replace(/\s+/g, ' ')
+    .trim();
+  return shorten(text);
+}
+
+// At most QUERY_START_LENGTH characters, then …
+const shorten = (text) =>
+  text.length > QUERY_START_LENGTH
+    ? `${text.slice(0, QUERY_START_LENGTH)}…`
+    : text;
 
 function createAggregator() {
   const { Aggregator } = lib.aggregator;
 
   const aggregator = new Aggregator();
 
-  // Anonymous operations are grouped together, with an empty name
+  // One entry per query (its hash, see setGraphqlHash): an operation name can
+  // be sent with different queries. Logs without a query text are grouped by
+  // operation name, anonymous ones together.
   aggregator.setIdentifier(
-    (log) => log.getIn(['graphql', 'operationName']) || '',
+    (log) =>
+      log.getIn(['graphql', 'hash']) ||
+      `operation:${log.getIn(['graphql', 'operationName']) || ''}`,
   );
 
   aggregator.setEnricher((entry, log) => {
     if (log.has('graphql')) {
       entry = entry.set('graphql', log.get('graphql'));
     }
-    if (log.has('application')) {
-      entry = entry.set('application', log.get('application'));
+    // Who sent the latest request: its identity, or its address when it has
+    // none, as /identities groups them (see lastIdentity below), and its agent
+    // identity is also what the identified / unidentified filter checks
+    for (const field of ['identity', 'agent']) {
+      entry = log.has(field)
+        ? entry.set(field, log.get(field))
+        : entry.delete(field);
     }
-    return entry;
+    return entry.set('lastIdentity', util.identityKey(log) || '');
   });
+
+  // In HTML, it links to its logs, like on /identities: an address (no
+  // identity) in grey
+  const lastIdentity = (entry, output) => {
+    const key = entry.get('lastIdentity') || '';
+    if (!key || output !== 'html') {
+      return key;
+    }
+    return util.safeHtml(
+      entry.get('identity')
+        ? html.logsLink('identity', key)
+        : html.logsLink('identity', key, 'grey'),
+    );
+  };
+
+  // Where our services define each query (graphql-index.json)
+  const index = loadIndex();
+
+  // The operation name, sent or read from the query. In HTML, a query our
+  // code defines shows it in the color of identities, linked to its
+  // definition on GitHub (all of them in the tooltip); any other query shows its start instead, in grey and on one
+  // line, which says more about an unknown client than its name.
+  const operation = (entry, output) => {
+    const name = getOperationName(entry.get('graphql'));
+    if (output !== 'html') {
+      return name || '';
+    }
+    const definitions = index.queries[entry.getIn(['graphql', 'hash'])] || [];
+    const url = definitions.length && definitionUrl(index, definitions[0]);
+    const start = queryStart(entry.getIn(['graphql', 'query']));
+    if (!url) {
+      return start
+        ? util.safeHtml(
+            `<span class="grey" style="white-space: nowrap">${util.escapeHtml(start)}</span>`,
+          )
+        : name || '';
+    }
+    const text = name
+      ? util.escapeHtml(name)
+      : `<span class="grey">${util.escapeHtml(start)}</span>`;
+    const title = definitions
+      .map((def) => `${def.service}: ${def.file}:${def.line}`)
+      .join('\n');
+    return util.safeHtml(
+      `<a href="${util.escapeHtml(url)}" title="${util.escapeHtml(title)}" class="${RECOGNIZED_COLOR}" style="white-space: nowrap">${text}</a>`,
+    );
+  };
+
+  // The agent of the latest request, formatted as on /identities
+  const { formats, colors } = lib.aggregator.defaultFormatter;
+  const agentFormat = formats.find(([key]) => key === 'agent');
+  const lastAgent = (entry, output) =>
+    agentFormat ? agentFormat[1](entry, output) : '';
 
   const graphqlOperationFormatter = new lib.formatter.Formatter();
 
   graphqlOperationFormatter.setFormats([
-    ['operation', (entry) => entry.getIn(['graphql', 'operationName']) || ''],
-    ['application', (entry) => entry.getIn(['application'])],
-    ['15m', (entry) => util.aggregateCount(entry, 'per_minute')],
-    ['24h', (entry) => util.aggregateCount(entry, 'per_hour')],
-
+    ['hash', (entry) => entry.getIn(['graphql', 'hash']) || ''],
+    ['operation', operation],
+    // The latest request's variables, as the logs show them (empty without any)
     [
-      'executionTime15m',
+      'lastVariables',
+      (entry, output) => {
+        const shown = shownVariables(entry.get('graphql'));
+        if (shown === '{}' || output !== 'html') {
+          return shown === '{}' ? '' : shown;
+        }
+        // In HTML, in grey and on one line, cut like the start of a query
+        return util.safeHtml(
+          `<span class="grey" style="white-space: nowrap">${util.escapeHtml(
+            shorten(shown),
+          )}</span>`,
+        );
+      },
+    ],
+    ['lastAgent', lastAgent],
+    ['lastIdentity', lastIdentity],
+    // Named like the default sorters (count15m, execTime24h…), so the table
+    // headings sort by them, as on /identities
+    ['count15m', (entry) => util.aggregateCount(entry, 'per_minute')],
+    ['count24h', (entry) => util.aggregateCount(entry, 'per_hour')],
+    [
+      'execTime15m',
       (entry) => util.formatDuration(util.aggregateSum(entry, 'per_minute')),
     ],
     [
-      'executionTime24h',
+      'execTime24h',
       (entry) => util.formatDuration(util.aggregateSum(entry, 'per_hour')),
     ],
+    ['lastSeen', lib.aggregator.lastSeen],
   ]);
+
+  graphqlOperationFormatter.colors.lastIdentity = colors.identity;
+  graphqlOperationFormatter.colors.lastAgent = colors.agent;
 
   aggregator.setFormatter(graphqlOperationFormatter);
 
@@ -137,7 +325,20 @@ function registerGraphqlNodes(graphql) {
 
   const aggregator = createAggregator();
   graphql.map((log) => aggregator.processLog(log), 'graphql aggregator');
-  app.api.registerAggregator('graphql', aggregator);
+  app.api.registerAggregator('graphql', aggregator, {
+    nav: true,
+    identityFilter: true,
+    columns: [
+      'hash',
+      'operation',
+      'lastVariables',
+      'lastAgent',
+      'lastIdentity',
+      'count',
+      'execTime',
+      'lastSeen',
+    ],
+  });
 
   graphql.filter(isMutation, 'is mutation').registerNode('graphql-mutation');
 
