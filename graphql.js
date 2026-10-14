@@ -101,17 +101,19 @@ function createAggregator() {
   graphqlOperationFormatter.setFormats([
     ['operation', (entry) => entry.getIn(['graphql', 'operationName']) || ''],
     ['application', (entry) => entry.getIn(['application'])],
-    ['15m', (entry) => util.aggregateCount(entry, 'per_minute')],
-    ['24h', (entry) => util.aggregateCount(entry, 'per_hour')],
-
+    // Named like the default sorters (count15m, execTime24h…), so the table
+    // headings sort by them, as on /identities
+    ['count15m', (entry) => util.aggregateCount(entry, 'per_minute')],
+    ['count24h', (entry) => util.aggregateCount(entry, 'per_hour')],
     [
-      'executionTime15m',
+      'execTime15m',
       (entry) => util.formatDuration(util.aggregateSum(entry, 'per_minute')),
     ],
     [
-      'executionTime24h',
+      'execTime24h',
       (entry) => util.formatDuration(util.aggregateSum(entry, 'per_hour')),
     ],
+    ['lastSeen', lib.aggregator.lastSeen],
   ]);
 
   aggregator.setFormatter(graphqlOperationFormatter);
@@ -137,7 +139,9 @@ function registerGraphqlNodes(graphql) {
 
   const aggregator = createAggregator();
   graphql.map((log) => aggregator.processLog(log), 'graphql aggregator');
-  app.api.registerAggregator('graphql', aggregator);
+  app.api.registerAggregator('graphql', aggregator, {
+    columns: ['operation', 'application', 'count', 'execTime', 'lastSeen'],
+  });
 
   graphql.filter(isMutation, 'is mutation').registerNode('graphql-mutation');
 
