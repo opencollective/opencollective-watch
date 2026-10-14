@@ -76,6 +76,24 @@ const formatRequest = (log) => {
 
 // GraphQL aggregator
 
+// The start of a query on one line, without comments or the values written in
+// it (string literals can hold anything a client sends), e.g.
+// `query { account(slug: "…") { id name …`
+const QUERY_START_LENGTH = 60;
+function queryStart(query) {
+  if (typeof query !== 'string') {
+    return '';
+  }
+  const text = query
+    .replace(/#[^\n]*/g, ' ')
+    .replace(/"""[\s\S]*?"""|"(?:[^"\\]|\\.)*"/g, '"…"')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return text.length > QUERY_START_LENGTH
+    ? `${text.slice(0, QUERY_START_LENGTH)}…`
+    : text;
+}
+
 function createAggregator() {
   const { Aggregator } = lib.aggregator;
 
@@ -122,11 +140,26 @@ function createAggregator() {
       : '';
   };
 
+  // Anonymous operations: in HTML, the start of their query, in grey and on
+  // one line
+  const operation = (entry, output) => {
+    const name = entry.getIn(['graphql', 'operationName']);
+    if (name || output !== 'html') {
+      return name || '';
+    }
+    const start = queryStart(entry.getIn(['graphql', 'query']));
+    return start
+      ? util.safeHtml(
+          `<span class="grey" style="white-space: nowrap">${util.toHtml(start)}</span>`,
+        )
+      : '';
+  };
+
   const graphqlOperationFormatter = new lib.formatter.Formatter();
 
   graphqlOperationFormatter.setFormats([
     ['hash', (entry) => entry.getIn(['graphql', 'hash']) || ''],
-    ['operation', (entry) => entry.getIn(['graphql', 'operationName']) || ''],
+    ['operation', operation],
     ['application', (entry) => entry.getIn(['application'])],
     ['lastIdentity', lastIdentity],
     // Named like the default sorters (count15m, execTime24h…), so the table
