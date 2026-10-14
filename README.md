@@ -72,9 +72,9 @@ Slow nodes (`slow`, `graphql-slow`…) hold requests over 300 ms, extra-slow one
 ### GraphQL queries and their source
 
 `/graphql` has one row per query, by hash (the first 8 characters of the MD5 of the query text).
-Its `source` column links the queries our services send to their definition on GitHub, from
-`graphql-index.json`. Rows without a source come from other clients, or from code older than the
-index.
+The operations our services send link to their definition on GitHub (all of them in the
+tooltip), from `graphql-index.json`. Unlinked ones come from other clients, or from code older
+than the index.
 
 `node scripts/graphql-index.js` rebuilds the index: for the latest deploys of each service
 (`--releases 3` by default, from `heroku releases`), it checks the commit out in a temporary

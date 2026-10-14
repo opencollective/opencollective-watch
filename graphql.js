@@ -118,7 +118,7 @@ const formatRequest = (log) => {
 };
 
 // Where our services define each query, by hash: graphql-index.json, written
-// by scripts/graphql-index.js. Without the file, the source column is empty.
+// by scripts/graphql-index.js. Without the file, operations aren't linked.
 const INDEX_FILE = path.join(__dirname, 'graphql-index.json');
 
 function loadIndex() {
@@ -214,41 +214,37 @@ function createAggregator() {
     );
   };
 
-  // The operation name, sent or read from the query. Anonymous operations: in
-  // HTML, the start of their query, in grey and on one line
+  // Where our services define each query (graphql-index.json)
+  const index = loadIndex();
+
+  // The operation name, sent or read from the query. In HTML, an anonymous
+  // operation shows the start of its query instead, in grey and on one line,
+  // and a query our code defines links to its definition on GitHub (all of
+  // them in the tooltip).
   const operation = (entry, output) => {
     const name = getOperationName(entry.get('graphql'));
-    if (name || output !== 'html') {
+    if (output !== 'html') {
       return name || '';
     }
-    const start = queryStart(entry.getIn(['graphql', 'query']));
-    return start
-      ? util.safeHtml(
-          `<span class="grey" style="white-space: nowrap">${util.toHtml(start)}</span>`,
-        )
-      : '';
-  };
-
-  // Where the query is defined in our code: the GitHub link of its first
-  // definition (the others are counted in HTML), empty for other clients
-  const index = loadIndex();
-  const source = (entry, output) => {
-    const definitions = index.queries[entry.getIn(['graphql', 'hash'])] || [];
-    const [first] = definitions;
-    if (!first) {
+    const start = name ? '' : queryStart(entry.getIn(['graphql', 'query']));
+    if (!name && !start) {
       return '';
     }
-    const url = definitionUrl(index, first);
-    if (output !== 'html') {
-      return url || '';
+    const text = name
+      ? util.escapeHtml(name)
+      : `<span class="grey">${util.escapeHtml(start)}</span>`;
+    const definitions = index.queries[entry.getIn(['graphql', 'hash'])] || [];
+    const url = definitions.length && definitionUrl(index, definitions[0]);
+    if (!url) {
+      return util.safeHtml(
+        name ? text : `<span style="white-space: nowrap">${text}</span>`,
+      );
     }
-    const text = `${first.service}:${path.basename(first.file)}:${first.line}`;
-    const more = definitions.length > 1 ? ` +${definitions.length - 1}` : '';
     const title = definitions
       .map((def) => `${def.service}: ${def.file}:${def.line}`)
       .join('\n');
     return util.safeHtml(
-      `<a href="${util.escapeHtml(url || '')}" title="${util.escapeHtml(title)}" style="white-space: nowrap">${util.escapeHtml(text)}</a>${more}`,
+      `<a href="${util.escapeHtml(url)}" title="${util.escapeHtml(title)}" style="white-space: nowrap">${text}</a>`,
     );
   };
 
@@ -279,7 +275,6 @@ function createAggregator() {
         );
       },
     ],
-    ['source', source],
     ['lastAgent', lastAgent],
     ['lastIdentity', lastIdentity],
     // Named like the default sorters (count15m, execTime24h…), so the table
@@ -330,7 +325,6 @@ function registerGraphqlNodes(graphql) {
       'hash',
       'operation',
       'lastVariables',
-      'source',
       'lastAgent',
       'lastIdentity',
       'count',
