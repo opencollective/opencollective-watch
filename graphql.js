@@ -1,4 +1,5 @@
 const { app, lib, util } = require('@hyperwatch/hyperwatch');
+const html = require('@hyperwatch/hyperwatch/src/app/html');
 const { pick } = require('lodash');
 
 const { registerSlowNodes } = require('./slow');
@@ -115,29 +116,25 @@ function createAggregator() {
     if (log.has('application')) {
       entry = entry.set('application', log.get('application'));
     }
-    // Who sent the latest request (see lastIdentity below)
-    for (const field of ['identity', 'agent']) {
-      entry = log.has(field)
-        ? entry.set(field, log.get(field))
-        : entry.delete(field);
-    }
-    return entry;
+    // Who sent the latest request: its identity, or its address when it has
+    // none, as /identities groups them (see lastIdentity below)
+    return entry
+      .set('lastIdentity', util.identityKey(log) || '')
+      .set('lastIdentified', log.has('identity'));
   });
 
-  // The identity of the latest request, as on /addresses: in HTML, it falls
-  // back to the agent, in grey
-  const { formats, colors } = lib.aggregator.defaultFormatter;
-  const identityFormat = formats.find(([key]) => key === 'identity');
-  const agentFormat = formats.find(([key]) => key === 'agent');
+  // In HTML, it links to its logs, like on /identities: an address (no
+  // identity) in grey
   const lastIdentity = (entry, output) => {
-    const value = identityFormat ? identityFormat[1](entry, output) : '';
-    if (value || output !== 'html' || !agentFormat) {
-      return value;
+    const key = entry.get('lastIdentity') || '';
+    if (!key || output !== 'html') {
+      return key;
     }
-    const lastAgent = agentFormat[1](entry, output);
-    return lastAgent
-      ? util.safeHtml(`<span class="grey">${util.toHtml(lastAgent)}</span>`)
-      : '';
+    return util.safeHtml(
+      entry.get('lastIdentified')
+        ? html.logsLink('identity', key)
+        : html.logsLink('identity', key, 'grey'),
+    );
   };
 
   // Anonymous operations: in HTML, the start of their query, in grey and on
@@ -177,7 +174,8 @@ function createAggregator() {
     ['lastSeen', lib.aggregator.lastSeen],
   ]);
 
-  graphqlOperationFormatter.colors.lastIdentity = colors.identity;
+  graphqlOperationFormatter.colors.lastIdentity =
+    lib.aggregator.defaultFormatter.colors.identity;
 
   aggregator.setFormatter(graphqlOperationFormatter);
 
