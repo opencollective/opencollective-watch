@@ -115,63 +115,76 @@ if [ -z "$REMOTE_OID" ] || [ -z "$LOCAL_OID" ]; then
   exit 1
 fi
 
-# After `heroku rollback`, the app runs an older release while Heroku's git
-# main stays at the last push: the changelog would start from the wrong
-# commit, and pushing the same main wouldn't redeploy anything. The running
-# commit is the one of the "Deploy <sha>" release that built the current slug
-if command -v heroku > /dev/null; then
-  RUNNING=$(
-    heroku releases -a "$HEROKU_APP" -n 100 --json 2> /dev/null | node -e '
-      let data = "";
-      process.stdin.on("data", (chunk) => (data += chunk)).on("end", () => {
-        try {
-          const releases = JSON.parse(data);
-          const current = releases.find((release) => release.current);
-          const deploy = releases.find(
-            (release) =>
-              current && release.slug && current.slug &&
-              release.slug.id === current.slug.id &&
-              /^Deploy [0-9a-f]+$/.test(release.description)
-          );
-          console.log(deploy ? deploy.description.split(" ")[1] : "");
-        } catch (err) {}
-      });
-    '
-  )
-  if [ -z "$RUNNING" ]; then
-    # Not in the last 100 releases (rolled back far), or the CLI failed:
-    # assuming Heroku's main could deploy from the wrong state
-    echo "⚠️  Couldn't find the commit $HEROKU_APP runs (see \`heroku releases -a $HEROKU_APP\`): not deploying."
-    exit 1
-  elif [[ "$REMOTE_OID" != "$RUNNING"* ]]; then
-    echo "⚠️  $HEROKU_APP runs $RUNNING (rolled back?), not ${REMOTE_OID:0:8} from Heroku's main: not deploying."
-    echo "   Roll forward with \`heroku rollback -a $HEROKU_APP <version>\`, or push explicitly."
-    exit 1
-  fi
+# The commit the app runs: the one of the current release's slug. Heroku's
+# git main is only the last `git push`: it is behind after a deploy by the
+# GitHub integration, and ahead after `heroku rollback`. The latest release
+# isn't always the current one (a failed release phase leaves the previous
+# one serving). Prints nothing when the CLI is missing or fails, returns 2
+# when no current release is found (as in the frontend's pre-deploy.sh)
+function get_deployed_commit()
+{
+  local token releases slug_id
+  command -v heroku &> /dev/null || return 1
+  token=$(heroku auth:token 2> /dev/null) || return 1
+  # 1000 is the largest page the Heroku API returns
+  releases=$(heroku releases -a "$HEROKU_APP" --json -n 1000 2> /dev/null) || return 1
+  slug_id=$(node -e "process.stdout.write(JSON.parse(require('fs').readFileSync(0)).find(release => release.current)?.slug?.id ?? '')" <<< "$releases") || return 1
+  [ -n "$slug_id" ] || return 2
+  curl -s --fail \
+    -H "Authorization: Bearer $token" \
+    -H "Accept: application/vnd.heroku+json; version=3" \
+    "https://api.heroku.com/apps/$HEROKU_APP/slugs/$slug_id" \
+    | node -e "process.stdout.write(JSON.parse(require('fs').readFileSync(0)).commit ?? '')"
+}
+
+DEPLOYED=$(get_deployed_commit)
+if [ $? -eq 2 ]; then
+  echo "⚠️  Couldn't find the current release of $HEROKU_APP in its latest 1000 releases: not deploying."
+  exit 1
+fi
+# A commit pushed from elsewhere (e.g. merged on GitHub since the last fetch)
+if [ -n "$DEPLOYED" ] && ! git cat-file -e "$DEPLOYED^{commit}" 2> /dev/null; then
+  git fetch -q origin 2> /dev/null
+fi
+if [ -n "$DEPLOYED" ] && git cat-file -e "$DEPLOYED^{commit}" 2> /dev/null; then
+  BASE_OID=$(git rev-parse "$DEPLOYED^{commit}")
+elif [ -n "$DEPLOYED" ]; then
+  echo "⚠️  $HEROKU_APP runs ${DEPLOYED:0:8}, which isn't in this repository: not deploying."
+  exit 1
 else
-  echo "ℹ️  No heroku CLI: can't check whether $1 was rolled back."
+  # Only right when the app is deployed with `git push` and never rolled back
+  echo "ℹ️  Couldn't get the commit $HEROKU_APP runs from the Heroku CLI (installed and logged in?): comparing with Heroku's git main instead."
+  BASE_OID=$REMOTE_OID
 fi
 
-if [ "$LOCAL_OID" == "$REMOTE_OID" ]; then
-  echo "ℹ️  $1 already has $LOCAL_BRANCH (${LOCAL_OID:0:8}): nothing to deploy."
+if [ "$LOCAL_OID" == "$BASE_OID" ]; then
+  echo "✅  $1 already runs $LOCAL_BRANCH (${LOCAL_OID:0:8}): nothing to deploy."
   exit 0
 fi
-# What the deploy adds
-GIT_LOG_COMPARISON="$REMOTE_OID..$LOCAL_OID"
-# Commits only on the deployed branch: a forced push (staging) removes them
-GIT_LOG_REMOVED="$LOCAL_OID..$REMOTE_OID"
+# A push only creates a release when it moves Heroku's git main: after a
+# rollback, it can already be at main while an older release runs
+if [ "$LOCAL_OID" == "$REMOTE_OID" ]; then
+  echo "⚠️  Heroku's git main is already at $LOCAL_BRANCH (${LOCAL_OID:0:8}) but $HEROKU_APP runs ${BASE_OID:0:8} (rolled back?): pushing would deploy nothing."
+  echo "   Roll forward with \`heroku releases:rollback <version> -a $HEROKU_APP\` (this also restores that release's config vars)."
+  exit 1
+fi
+# What the deploy adds, compared with what runs
+GIT_LOG_COMPARISON="$BASE_OID..$LOCAL_OID"
+# Commits running that main doesn't have: the deploy removes them
+GIT_LOG_REMOVED="$LOCAL_OID..$BASE_OID"
 
 echo ""
 echo "-------------- New commits --------------"
 git --no-pager log --pretty="${GIT_LOG_FORMAT_SHELL}" $GIT_LOG_COMPARISON
 echo "-----------------------------------------"
+# Production isn't force-pushed: its push is rejected unless it moves
+# Heroku's git main forward
+if [ "$DEPLOY_ENV" != "staging" ] && ! git merge-base --is-ancestor "$REMOTE_OID" "$LOCAL_OID"; then
+  echo "⚠️  Heroku's git main has commits your main doesn't (below): update main first, not deploying."
+  git --no-pager log --pretty="${GIT_LOG_FORMAT_SHELL}" "$LOCAL_OID..$REMOTE_OID"
+  exit 1
+fi
 if [ -n "$(git log --oneline $GIT_LOG_REMOVED)" ]; then
-  # Production isn't force-pushed: its push would be rejected
-  if [ "$DEPLOY_ENV" != "staging" ]; then
-    echo "⚠️  $1 has commits your main doesn't (below): update main first, not deploying."
-    git --no-pager log --pretty="${GIT_LOG_FORMAT_SHELL}" $GIT_LOG_REMOVED
-    exit 1
-  fi
   echo ""
   echo "--------- Commits removed from $1 ---------"
   git --no-pager log --pretty="${GIT_LOG_FORMAT_SHELL}" $GIT_LOG_REMOVED
