@@ -119,42 +119,54 @@ fi
 # git main is only the last `git push`: it is behind after a deploy by the
 # GitHub integration, and ahead after `heroku rollback`. The latest release
 # isn't always the current one (a failed release phase leaves the previous
-# one serving). Prints nothing when the CLI is missing or fails, returns 2
-# when no current release is found (as in the frontend's pre-deploy.sh)
+# one serving). Returns 1 when the CLI isn't installed, 2 when no current
+# release is found, 3 when the CLI or the API fails or the slug has no commit
 function get_deployed_commit()
 {
-  local token releases slug_id
+  local token releases slug_id slug commit
   command -v heroku &> /dev/null || return 1
-  token=$(heroku auth:token 2> /dev/null) || return 1
+  token=$(heroku auth:token 2> /dev/null) || return 3
   # 1000 is the largest page the Heroku API returns
-  releases=$(heroku releases -a "$HEROKU_APP" --json -n 1000 2> /dev/null) || return 1
-  slug_id=$(node -e "process.stdout.write(JSON.parse(require('fs').readFileSync(0)).find(release => release.current)?.slug?.id ?? '')" <<< "$releases") || return 1
+  releases=$(heroku releases -a "$HEROKU_APP" --json -n 1000 2> /dev/null) || return 3
+  slug_id=$(node -e "process.stdout.write(JSON.parse(require('fs').readFileSync(0)).find(release => release.current)?.slug?.id ?? '')" <<< "$releases" 2> /dev/null) || return 3
   [ -n "$slug_id" ] || return 2
-  curl -s --fail \
+  slug=$(curl -s --fail \
     -H "Authorization: Bearer $token" \
     -H "Accept: application/vnd.heroku+json; version=3" \
-    "https://api.heroku.com/apps/$HEROKU_APP/slugs/$slug_id" \
-    | node -e "process.stdout.write(JSON.parse(require('fs').readFileSync(0)).commit ?? '')"
+    "https://api.heroku.com/apps/$HEROKU_APP/slugs/$slug_id") || return 3
+  commit=$(node -e "process.stdout.write(JSON.parse(require('fs').readFileSync(0)).commit ?? '')" <<< "$slug" 2> /dev/null) || return 3
+  [ -n "$commit" ] || return 3
+  echo "$commit"
 }
 
 DEPLOYED=$(get_deployed_commit)
-if [ $? -eq 2 ]; then
-  echo "⚠️  Couldn't find the current release of $HEROKU_APP in its latest 1000 releases: not deploying."
-  exit 1
-fi
+case $? in
+  0) ;;
+  1)
+    # Only right when the app is deployed with `git push` and never rolled back
+    echo "ℹ️  No heroku CLI: can't get the commit $HEROKU_APP runs, comparing with Heroku's git main instead."
+    ;;
+  2)
+    echo "⚠️  Couldn't find the current release of $HEROKU_APP in its latest 1000 releases: not deploying."
+    exit 1
+    ;;
+  *)
+    # With the CLI installed, a failure isn't a reason to guess what runs
+    echo "⚠️  Couldn't get the commit $HEROKU_APP runs from the Heroku CLI (logged in? see \`heroku releases -a $HEROKU_APP\`): not deploying."
+    exit 1
+    ;;
+esac
 # A commit pushed from elsewhere (e.g. merged on GitHub since the last fetch)
 if [ -n "$DEPLOYED" ] && ! git cat-file -e "$DEPLOYED^{commit}" 2> /dev/null; then
   git fetch -q origin 2> /dev/null
 fi
-if [ -n "$DEPLOYED" ] && git cat-file -e "$DEPLOYED^{commit}" 2> /dev/null; then
+if [ -z "$DEPLOYED" ]; then
+  BASE_OID=$REMOTE_OID
+elif git cat-file -e "$DEPLOYED^{commit}" 2> /dev/null; then
   BASE_OID=$(git rev-parse "$DEPLOYED^{commit}")
-elif [ -n "$DEPLOYED" ]; then
+else
   echo "⚠️  $HEROKU_APP runs ${DEPLOYED:0:8}, which isn't in this repository: not deploying."
   exit 1
-else
-  # Only right when the app is deployed with `git push` and never rolled back
-  echo "ℹ️  Couldn't get the commit $HEROKU_APP runs from the Heroku CLI (installed and logged in?): comparing with Heroku's git main instead."
-  BASE_OID=$REMOTE_OID
 fi
 
 if [ "$LOCAL_OID" == "$BASE_OID" ]; then
