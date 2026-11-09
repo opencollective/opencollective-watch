@@ -97,16 +97,6 @@ function setApplicationAndIdentity(log) {
   return log;
 }
 
-// api
-function setGraphqlHash(log) {
-  return log.hasIn(['graphql', 'query'])
-    ? log.setIn(
-        ['graphql', 'hash'],
-        util.md5(log.getIn(['graphql', 'query'])).slice(0, 8),
-      )
-    : log;
-}
-
 // frontend: the client address, as seen by our Cloudflare Worker
 function setRealIp(log) {
   const realIp = log.getIn(['request', 'headers', 'oc-real-ip']);
@@ -151,7 +141,6 @@ module.exports = {
   isAsset,
   redactSigninToken,
   setApplicationAndIdentity,
-  setGraphqlHash,
   setImagesIdentity,
   setRealIp,
   transformInput,
