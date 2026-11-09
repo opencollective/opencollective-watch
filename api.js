@@ -12,11 +12,11 @@ const {
   hasGraphql,
   registerApplicationNodes,
   registerGraphqlNodes,
+  setGraphqlHash,
 } = require('./graphql');
 const { hyperwatchOptions } = require('./options');
 const {
   setApplicationAndIdentity,
-  setGraphqlHash,
   transformInput,
   verifyServiceSecret,
 } = require('./transforms');

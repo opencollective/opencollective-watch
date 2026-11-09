@@ -12,14 +12,18 @@ const { setClientWorkerIdentity } = require('./cloudflare-worker');
 const { setContributorsSvgIdentity } = require('./contributors-svg');
 const { setAppsScriptIdentity } = require('./google-apps-script');
 const { mountDashboard } = require('./dashboard');
-const { hasGraphql, registerGraphqlNodes } = require('./graphql');
+const { createDiskCodec } = require('./disk');
+const {
+  hasGraphql,
+  registerGraphqlNodes,
+  setGraphqlHash,
+} = require('./graphql');
 const { hyperwatchOptions } = require('./options');
 const { registerSlowNodes } = require('./slow');
 const {
   isAsset,
   redactSigninToken,
   setApplicationAndIdentity,
-  setGraphqlHash,
   setImagesIdentity,
   setRealIp,
   transformInput,
@@ -31,9 +35,32 @@ const { pipeline, input, lib, modules } = hyperwatch;
 // Init Hyperwatch (will load modules)
 
 // frontend.js doesn't use the cloudflare module: it's applied per service
-// below instead
+// below instead.
+// Logs of main also go to disk, one NDJSON file per hour
+// (/history/main/disk.json reads them back, /history/disk.json shows their
+// size), without credentials nor the headers our infrastructure sets, and
+// GraphQL query texts once each in graphql-queries.ndjson next to them, put
+// back when read (see disk.js). Filtered views (/logs/main?identity=…, the
+// dashboard panels) start with them, then go on live. Only this process writes them, in its own
+// directory (HYPERWATCH_DISK_HISTORY_DIR overrides it). On Heroku the dyno's
+// disk is wiped on restart and deploy: the files go with it.
+const diskDir =
+  process.env.HYPERWATCH_DISK_HISTORY_DIR || '.hyperwatch-data/logs/all';
+const diskCodec = createDiskCodec(diskDir);
 hyperwatch.init(
-  hyperwatchOptions('all', { modules: { cloudflare: { active: false } } }),
+  hyperwatchOptions('all', {
+    modules: {
+      cloudflare: { active: false },
+      history: {
+        disk: {
+          dir: diskDir,
+          nodes: { main: true },
+          transform: diskCodec.transform,
+          restore: diskCodec.restore,
+        },
+      },
+    },
+  }),
 );
 
 mountDashboard();
@@ -49,7 +76,9 @@ const cloudflare = modules.get('cloudflare');
 const SOURCES = {
   api: {
     connections: 2,
-    prepare: (log) => verifyServiceSecret(cloudflare.augment(log)),
+    // The GraphQL hash before main, so the logs on disk have it too
+    prepare: (log) =>
+      setGraphqlHash(verifyServiceSecret(cloudflare.augment(log))),
   },
   frontend: {
     connections: 4,
@@ -118,13 +147,9 @@ pipeline
 // Register source nodes
 
 for (const source of Object.keys(SOURCES)) {
-  let node = pipeline
+  const node = pipeline
     .getNode('main')
     .filter((log) => log.get('source') === source, `source = ${source}`);
-  // Only the api nodes use it, before registering api so they all have it
-  if (source === 'api') {
-    node = node.map(setGraphqlHash, 'compute graphql hash');
-  }
   node.registerNode(source);
 }
 

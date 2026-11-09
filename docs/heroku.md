@@ -45,12 +45,14 @@ to the **"Watch engineers"** Access policy (Cloudflare Zero Trust → Access con
 
 Useful pages:
 
-| Page                                                   | What                                                                                            |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
-| `/status`                                              | pipeline status, inputs connected                                                               |
-| `/logs/<node>`                                         | live stream, one line per request (`main`, `api`, `frontend`, `slow`, `graphql`, …)             |
-| `/history/<node>.json?limit=50`                        | last requests (up to 1000 on `main`, 100 elsewhere); filters `address`, `identity`, `signature` |
-| `/addresses`, `/identities`, `/signatures`, `/graphql` | aggregated views; add `.csv` or `.json`                                                         |
+| Page                                                   | What                                                                                                                   |
+| ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| `/status`                                              | pipeline status, inputs connected                                                                                      |
+| `/logs/<node>`                                         | live stream, one line per request (`main`, `api`, `frontend`, `slow`, `graphql`, …)                                    |
+| `/history/<node>.json?limit=50`                        | last requests (up to 1000 on `main`, 100 elsewhere); filters `address`, `identity`, `signature`                        |
+| `/history/main/disk.json?identity=…`                   | older requests of `main`, from disk (see _Logs on disk_); same filters, `limit` up to 1000, `cursor` for the next page |
+| `/history/disk.json`                                   | size of the logs on disk, logs written, dropped and lost                                                               |
+| `/addresses`, `/identities`, `/signatures`, `/graphql` | aggregated views; add `.csv` or `.json`                                                                                |
 
 ## Logs
 
@@ -108,6 +110,29 @@ others, which reconnect until they reach a dyno not yet followed. So Watch needs
 dyno. The defaults (api 2, frontend 4, images 2, rest 1, pdf 1, contributors-svg 1) are meant for
 production's dyno counts. Staging services have **1 dyno each**, so they must be set to `1`,
 otherwise the extra websockets keep being cut and reconnecting.
+
+## Logs on disk
+
+Memory history only keeps the latest 1000 requests of `main`, so a rare identity or address may have
+none. The `all` process also writes every request of `main` to the dyno's disk, one NDJSON file per
+hour: `.hyperwatch-data/logs/all/node-main/<YYYY-MM-DDTHH>.ndjson` (UTC; `HYPERWATCH_DISK_HISTORY_DIR`
+overrides the directory).
+
+- **Lost on restart and deploy**, like everything on the dyno's disk, and the daily cycling restarts
+  the dyno at most ~27.6 hours apart. They are never uploaded to S3.
+- **GraphQL query texts** are written once each to `graphql-queries.ndjson` (`{ hash, query }` per line) next to `node-main/`; logs keep `graphql.hash` (the hash of the `/graphql` table). Look one up with `grep '"hash":"<hash>"' graphql-queries.ndjson`.
+- **Left out of the files** (`disk.js`): tracing headers (`baggage`, `sentry-trace`, `x-request-id`,
+  `x-request-start`), and the headers our infrastructure sets when they have their usual value
+  (`x-forwarded-proto: https`, `server: Heroku`, `oc-env: production`…; any other value is kept).
+  Credentials are replaced by `[redacted]`: `authorization` (its scheme kept), cookie values (names
+  kept), `api-key`, `personal-token`, `oc-secret` and the like, and `api_key`, `access_token`,
+  `personalToken`… in URLs and the referer. Memory history, tables and live logs keep everything.
+- **No cap yet:** about 1.4 KB per request (4.4 KB with full logs). Check growth, drops and errors with `/history/disk.json`
+  (`bytes`, `dropped`, `lost`, `lastError`) and decide on a limit from there.
+- **Filtered views start with them:** `/logs/main?identity=…` (or `address=`, `signature=`), `/history/main.json?identity=…` and the dashboard's identity and address panels show the latest logs from disk (up to 1000, `?history=` / `?limit=`), then go on live. GraphQL query texts are put back. Unfiltered views use the 1000 logs in memory.
+- **Reading:** `/history/main/disk.json?identity=…` reads the files back, newest first. A read stops
+  early (`truncated: true`) after 200 MB, 10 s or 10 MB of results; pass `cursor` back for the next
+  page, `null` means the oldest file was reached.
 
 ## Persistence
 

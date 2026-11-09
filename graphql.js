@@ -315,6 +315,160 @@ const isMutation = (log) => {
 
 const hasGraphql = (log) => log.has('graphql');
 
+// The hash of a log's GraphQL query, the first 8 characters of its MD5: the
+// key of the /graphql table and of graphql-index.json. Set before main (see
+// the api source in all.js), so every node and the logs on disk have it
+function setGraphqlHash(log) {
+  return log.hasIn(['graphql', 'query'])
+    ? log.setIn(
+        ['graphql', 'hash'],
+        util.md5(log.getIn(['graphql', 'query'])).slice(0, 8),
+      )
+    : log;
+}
+
+// Query texts indexed at most: past this number (a client sending unique
+// queries), new queries stay in their logs
+const MAX_KNOWN_QUERIES = 10000;
+
+/**
+ * What Watch writes of GraphQL logs to disk, and reads back (Hyperwatch's
+ * modules.history.disk transform and restore). Query texts are most of a
+ * GraphQL log, and the same ones keep coming: each one is written once to
+ * <dir>/graphql-queries.ndjson ({ hash, query } per line), and logs keep
+ * graphql.hash only. restore() puts the text back.
+ */
+function createDiskCompactor(dir) {
+  const file = path.join(dir, 'graphql-queries.ndjson');
+  // hash → [offset, length, full MD5 of the text] of its line in the file.
+  // The hash is 8 characters: two texts may share one, the full MD5 tells
+  const index = new Map();
+  let size = 0;
+  // Whether the file ends with a newline (or is empty)
+  let endsWithNewline = true;
+
+  // Texts written before a restart: logs written then refer to them
+  try {
+    const content = fs.readFileSync(file);
+    let offset = 0;
+    while (offset < content.length && index.size < MAX_KNOWN_QUERIES) {
+      const end = content.indexOf(0x0a, offset);
+      if (end === -1) {
+        break;
+      }
+      try {
+        const { hash, query } = JSON.parse(content.subarray(offset, end));
+        if (
+          typeof hash === 'string' &&
+          typeof query === 'string' &&
+          !index.has(hash)
+        ) {
+          index.set(hash, [offset, end - offset, util.md5(query)]);
+        }
+      } catch (err) {
+        // A line cut by a crash
+      }
+      offset = end + 1;
+    }
+    size = content.length;
+    endsWithNewline = !size || content[size - 1] === 0x0a;
+  } catch (err) {
+    // No file yet
+  }
+  let dirReady = false;
+  // The file couldn't be checked after a failed write: texts stay in logs
+  let broken = false;
+
+  // After a failed write (e.g. disk full), part of the line may be in the
+  // file: read where it really ends
+  function resync() {
+    try {
+      const fd = fs.openSync(file, 'r');
+      try {
+        size = fs.fstatSync(fd).size;
+        const byte = Buffer.alloc(1);
+        if (size) {
+          fs.readSync(fd, byte, 0, 1, size - 1);
+        }
+        endsWithNewline = !size || byte[0] === 0x0a;
+      } finally {
+        fs.closeSync(fd);
+      }
+    } catch (err) {
+      broken = err.code !== 'ENOENT';
+      if (!broken) {
+        size = 0;
+        endsWithNewline = true;
+      }
+    }
+  }
+
+  // Whether the text of `hash` is in the file. Synchronous, so a text is
+  // never left behind a log that refers to it; only new queries are written
+  // (one append each), and a text whose hash is taken by another stays in
+  // its log
+  function record(hash, query) {
+    const md5 = util.md5(query);
+    if (index.has(hash)) {
+      return index.get(hash)[2] === md5;
+    }
+    if (broken || index.size >= MAX_KNOWN_QUERIES) {
+      return false;
+    }
+    const line = Buffer.from(`${JSON.stringify({ hash, query })}\n`);
+    // A line cut by a crash: start a line of our own
+    const prefix = endsWithNewline ? '' : '\n';
+    try {
+      if (!dirReady) {
+        fs.mkdirSync(dir, { recursive: true });
+        dirReady = true;
+      }
+      fs.appendFileSync(file, Buffer.concat([Buffer.from(prefix), line]));
+    } catch (err) {
+      resync();
+      return false;
+    }
+    size += prefix.length;
+    endsWithNewline = true;
+    index.set(hash, [size, line.length - 1, md5]);
+    size += line.length;
+    return true;
+  }
+
+  function transform(log) {
+    const query = log.getIn(['graphql', 'query']);
+    if (typeof query !== 'string') {
+      return log;
+    }
+    const withHash = log.hasIn(['graphql', 'hash']) ? log : setGraphqlHash(log);
+    if (!record(withHash.getIn(['graphql', 'hash']), query)) {
+      return log;
+    }
+    return withHash.deleteIn(['graphql', 'query']);
+  }
+
+  async function restore(log) {
+    const hash = log.getIn(['graphql', 'hash']);
+    if (!hash || log.hasIn(['graphql', 'query']) || !index.has(hash)) {
+      return log;
+    }
+    const [offset, length, md5] = index.get(hash);
+    const handle = await fs.promises.open(file, 'r');
+    try {
+      const buffer = Buffer.alloc(length);
+      await handle.read(buffer, 0, length, offset);
+      const { query } = JSON.parse(buffer);
+      return typeof query === 'string' && util.md5(query) === md5
+        ? log.setIn(['graphql', 'query'], query)
+        : log;
+    } finally {
+      await handle.close();
+    }
+  }
+
+  return { transform, restore };
+}
+
 // Registers `graphql`, a branch of GraphQL logs (they need their graphql hash
 // first, see setGraphqlHash), as the graphql node with its mutation and slow
 // nodes, the /graphql aggregator and the GraphQL request format
@@ -345,4 +499,10 @@ function registerGraphqlNodes(graphql) {
   registerSlowNodes(graphql, { prefix: 'graphql-' });
 }
 
-module.exports = { hasGraphql, registerApplicationNodes, registerGraphqlNodes };
+module.exports = {
+  createDiskCompactor,
+  hasGraphql,
+  registerApplicationNodes,
+  registerGraphqlNodes,
+  setGraphqlHash,
+};
