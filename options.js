@@ -58,6 +58,21 @@ function firewallOptions() {
   };
 }
 
+// Web Bot Auth signatures cover the public host the robot sent the request
+// to (@authority). Through a proxy, such as the opencollective.com Worker,
+// the Host header our servers see is internal: the public host is then in
+// x-forwarded-host, or cf-worker. The module also tries the Host header
+// itself, which is the public host when a service is reached directly
+// (api., images., rest.opencollective.com…).
+function webBotAuthAuthority(log) {
+  const headers = log.getIn(['request', 'headers']);
+  return headers
+    ? [headers.get('x-forwarded-host'), headers.get('cf-worker')].filter(
+        Boolean,
+      )
+    : [];
+}
+
 // hyperwatch.init() options shared by the service configs, on top of
 // .hyperwatchrc:
 // - HYPERWATCH_PERSISTENCE=true (or 1) saves aggregators and history on
@@ -86,6 +101,7 @@ function hyperwatchOptions(service, extra = {}) {
       modules: {
         history: capacity > 0 ? { nodes: { main: capacity } } : {},
         firewall: firewallOptions(),
+        webbotauth: { authority: webBotAuthAuthority },
       },
       persistence: {
         enabled: process.env.HYPERWATCH_PERSISTENCE,
