@@ -59,11 +59,11 @@ function firewallOptions() {
 }
 
 // Web Bot Auth signatures cover the public host the robot sent the request
-// to (@authority), while the Host header our servers see is internal
-// (frontend., images., api., rest.opencollective.com). The public host is in
-// x-forwarded-host, or cf-worker for requests through the opencollective.com
-// Worker; the module also tries the Host header itself, for services reached
-// directly (images.opencollective.com).
+// to (@authority). Through a proxy, such as the opencollective.com Worker,
+// the Host header our servers see is internal: the public host is then in
+// x-forwarded-host, or cf-worker. The module also tries the Host header
+// itself, which is the public host when a service is reached directly
+// (api., images., rest.opencollective.com…).
 function webBotAuthAuthority(log) {
   const headers = log.getIn(['request', 'headers']);
   return headers
