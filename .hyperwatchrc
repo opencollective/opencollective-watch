@@ -31,6 +31,9 @@
     "signature": {
       "active": true
     },
+    "webbotauth": {
+      "active": true
+    },
     "fingerprint": {
       "active": true
     },
