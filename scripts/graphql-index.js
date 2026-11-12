@@ -13,7 +13,9 @@
 // clone's node_modules are used, so they should be installed.
 //
 // Writes graphql-index.json. Older deploys are indexed too: browsers keep
-// running an older frontend bundle for a while.
+// running an older frontend bundle for a while. So is the default branch
+// (origin/HEAD), newest: its queries are known as soon as they're merged,
+// before they're deployed (e.g. by a frontend deploy that isn't on Heroku).
 const crypto = require('crypto');
 const fs = require('fs');
 const os = require('os');
@@ -402,6 +404,19 @@ function parseModule(ts, file, text) {
   return mod;
 }
 
+// origin/HEAD (the remote's default branch), or origin/main when the clone
+// doesn't know it
+function defaultBranch(clone) {
+  try {
+    return run('git', ['symbolic-ref', '--short', 'refs/remotes/origin/HEAD'], {
+      cwd: clone,
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim();
+  } catch {
+    return 'origin/main';
+  }
+}
+
 // Main
 
 function main() {
@@ -422,14 +437,22 @@ function main() {
       log(`${service.name}: no clone in ${clone}, skipped`);
       continue;
     }
-    const commits = deployedCommits(service.app, releases);
-    if (commits.length === 0) {
+    const deployed = deployedCommits(service.app, releases);
+    if (deployed.length === 0) {
       log(
         `${service.name}: no deploy found in the releases of ${service.app}, skipped`,
       );
       continue;
     }
     run('git', ['fetch', '--quiet', 'origin'], { cwd: clone });
+    // The default branch, newest of all, unless it is the latest deploy
+    const branch = defaultBranch(clone);
+    const head = run('git', ['rev-parse', `${branch}^{commit}`], {
+      cwd: clone,
+    }).trim();
+    const commits = deployed.some((short) => head.startsWith(short))
+      ? deployed
+      : [head, ...deployed];
     const indexer = createIndexer(path.join(clone, 'node_modules'));
     const deploys = [];
     // Oldest first, so the newest definition of a hash wins
@@ -456,9 +479,15 @@ function main() {
             { service: service.name, commit, ...query },
           ];
         }
-        deploys.push({ commit, queries: queries.length, errors });
+        const ref = commit === head && commits[0] === head ? branch : null;
+        deploys.push({
+          commit,
+          ...(ref && { ref }),
+          queries: queries.length,
+          errors,
+        });
         log(
-          `${service.name} ${commit.slice(0, 8)}: ${queries.length} queries, ${errors.length} unresolved`,
+          `${service.name} ${commit.slice(0, 8)}${ref ? ` (${ref})` : ''}: ${queries.length} queries, ${errors.length} unresolved`,
         );
         for (const error of errors) {
           log(`  ${error.file}:${error.line} ${error.error}`);

@@ -1,9 +1,20 @@
 {
-  "generatedAt": "2026-11-10T07:33:40.109Z",
+  "generatedAt": "2026-11-12T09:02:13.375Z",
   "services": {
     "frontend": {
       "repo": "opencollective/opencollective-frontend",
       "deploys": [
+        {
+          "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+          "ref": "origin/main",
+          "queries": 534,
+          "errors": []
+        },
+        {
+          "commit": "00df02ecbe53989e15a64d647c4c736eb91bebee",
+          "queries": 534,
+          "errors": []
+        },
         {
           "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
           "queries": 534,
@@ -13,17 +24,18 @@
           "commit": "fd22921fdde9410db7ac64a1adb051da0f01079e",
           "queries": 534,
           "errors": []
-        },
-        {
-          "commit": "0de9371f0d6fec8ffed8a157e609e7f6f198a859",
-          "queries": 534,
-          "errors": []
         }
       ]
     },
     "rest": {
       "repo": "opencollective/opencollective-rest",
       "deploys": [
+        {
+          "commit": "e67c37f3719cd772ae294eb152dbb16c34f9d1ff",
+          "ref": "origin/main",
+          "queries": 10,
+          "errors": []
+        },
         {
           "commit": "e64b2d206fdd20a841026527e2f7d512033fe532",
           "queries": 10,
@@ -45,6 +57,12 @@
       "repo": "opencollective/opencollective-images",
       "deploys": [
         {
+          "commit": "b11f9c3f2e20fd4f27dd7ed1a1a1290ffb44af83",
+          "ref": "origin/main",
+          "queries": 5,
+          "errors": []
+        },
+        {
           "commit": "14f354b12597bdba48985bd0755e42feed6b8ca2",
           "queries": 5,
           "errors": []
@@ -65,17 +83,17 @@
       "repo": "opencollective/opencollective-pdf",
       "deploys": [
         {
+          "commit": "417b7fc69fb1c35fb7d6b8b06f390027a7f6ea23",
+          "queries": 3,
+          "errors": []
+        },
+        {
+          "commit": "69bf983b456def98457a6696ea4376cabb8dac58",
+          "queries": 3,
+          "errors": []
+        },
+        {
           "commit": "b9d20f947072dbbfd1cb6b02ec18eb12381776ce",
-          "queries": 3,
-          "errors": []
-        },
-        {
-          "commit": "f43ab0228ebabdc5c3344ed13ae1452bd72f3347",
-          "queries": 3,
-          "errors": []
-        },
-        {
-          "commit": "fe967d9f45360e910be93393794ab0f3d64e7a26",
           "queries": 3,
           "errors": []
         }
@@ -84,6 +102,12 @@
     "contributors-svg": {
       "repo": "opencollective/contributors-svg",
       "deploys": [
+        {
+          "commit": "7ba92580e8cbda7b9ab825aa497f6192b55af16a",
+          "ref": "origin/main",
+          "queries": 3,
+          "errors": []
+        },
         {
           "commit": "a9600e516c4a8e1ced3f8aa90d759b408ccb313a",
           "queries": 1,
@@ -106,7 +130,7 @@
     "20438807": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DeleteTransactionsImport",
         "kind": "mutation",
         "file": "components/dashboard/sections/transactions-imports/TransactionsImportSettingsModal.tsx",
@@ -117,7 +141,7 @@
     "54055165": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateVendorFromMiniForm",
         "kind": "mutation",
         "file": "components/vendors/queries.ts",
@@ -128,7 +152,7 @@
     "56876158": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "BudgetSectionContributions",
         "kind": "query",
         "file": "components/collective-page/sections/Budget/ContributionsBudget.tsx",
@@ -139,7 +163,7 @@
     "58839142": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UserPickerSearch",
         "kind": "query",
         "file": "components/UserPicker.tsx",
@@ -150,7 +174,7 @@
     "61744591": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AddTwoFactorAuthToIndividual",
         "kind": "mutation",
         "file": "components/two-factor-authentication/DevicesSettings.tsx",
@@ -161,7 +185,7 @@
     "68633010": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostRefundPayment",
         "kind": "mutation",
         "file": "components/dashboard/sections/transactions/HostRefundChargeModal.tsx",
@@ -172,7 +196,7 @@
     "86345177": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ActiveFiscalHost",
         "kind": "query",
         "file": "components/edit-collective/sections/fiscal-host/ActiveFiscalHost.tsx",
@@ -183,7 +207,7 @@
     "96850524": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "Subscribers",
         "kind": "query",
         "file": "components/dashboard/sections/subscriptions/queries.ts",
@@ -194,7 +218,7 @@
     "99584621": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditConversation",
         "kind": "mutation",
         "file": "pages/conversation.tsx",
@@ -205,7 +229,7 @@
     "0004e43e": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "PlatformSubscriptionTiers",
         "kind": "query",
         "file": "components/new-pricing/index.tsx",
@@ -216,7 +240,7 @@
     "00b5093b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostFiscalHostNote",
         "kind": "query",
         "file": "components/AccountHoverCard.tsx",
@@ -227,7 +251,7 @@
     "00b62dbb": [
       {
         "service": "rest",
-        "commit": "e64b2d206fdd20a841026527e2f7d512033fe532",
+        "commit": "e67c37f3719cd772ae294eb152dbb16c34f9d1ff",
         "operation": "HostedCollectives",
         "kind": "query",
         "file": "src/server/controllers/hosted-collectives.ts",
@@ -238,7 +262,7 @@
     "0129d368": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "PaymentAccounts",
         "kind": "query",
         "file": "components/dashboard/sections/accounting/PaymentAccountsTable.tsx",
@@ -249,7 +273,7 @@
     "013df131": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AdminAccountingCategories",
         "kind": "query",
         "file": "components/dashboard/sections/accounting/index.tsx",
@@ -260,7 +284,7 @@
     "01b1cbe8": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdatesDashboard",
         "kind": "query",
         "file": "components/dashboard/sections/updates/queries.ts",
@@ -271,7 +295,7 @@
     "01d157fb": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SignupPage",
         "kind": "query",
         "file": "pages/signup/index.tsx",
@@ -282,7 +306,7 @@
     "01d3c9da": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "PayoutBankInformationRequiredFields",
         "kind": "query",
         "file": "components/expenses/PayoutBankInformationForm.tsx",
@@ -293,7 +317,7 @@
     "01ef346b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "PersonalTokens",
         "kind": "query",
         "file": "components/personal-token/PersonalTokensList.tsx",
@@ -304,7 +328,7 @@
     "028204d6": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostedAccountFilterSearch",
         "kind": "query",
         "file": "components/dashboard/filters/HostedAccountFilter.tsx",
@@ -312,10 +336,32 @@
         "endLine": 31
       }
     ],
+    "03e0ca86": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "ConversationsPage",
+        "kind": "query",
+        "file": "pages/conversations.tsx",
+        "line": 198,
+        "endLine": 238
+      }
+    ],
+    "041c9e82": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "EditCollective",
+        "kind": "mutation",
+        "file": "lib/graphql/v1/mutations.ts",
+        "line": 95,
+        "endLine": 104
+      }
+    ],
     "0653da4e": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdateOrder",
         "kind": "mutation",
         "file": "components/recurring-contributions/UpdateOrderPopUp.tsx",
@@ -326,7 +372,7 @@
     "07b22185": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ApplyToHost",
         "kind": "mutation",
         "file": "components/ApplyToHostModal.tsx",
@@ -337,7 +383,7 @@
     "07ba2d13": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SetFiscalHostNote",
         "kind": "mutation",
         "file": "components/FiscalHostNoteModal.tsx",
@@ -348,7 +394,7 @@
     "07c3c8b8": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DeleteConnectedAccount",
         "kind": "mutation",
         "file": "components/dashboard/sections/transactions-imports/TransactionsImportSettingsModal.tsx",
@@ -359,7 +405,7 @@
     "07f7c1de": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateCollective",
         "kind": "mutation",
         "file": "components/CreateCollectiveMiniForm.tsx",
@@ -370,7 +416,7 @@
     "084d5a92": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "OffPlatformTransactions",
         "kind": "query",
         "file": "components/dashboard/sections/transactions-imports/OffPlatformTransactions.tsx",
@@ -381,7 +427,7 @@
     "08ae2586": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "Orders",
         "kind": "query",
         "file": "components/orders/OrdersWithData.tsx",
@@ -392,7 +438,7 @@
     "08f7a143": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "FindOrderMatchForOffPlatformCredit",
         "kind": "query",
         "file": "components/dashboard/sections/transactions-imports/MatchCreditDialog.tsx",
@@ -403,7 +449,7 @@
     "09e8dc2f": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "RegenerateRecoveryCodes",
         "kind": "mutation",
         "file": "components/two-factor-authentication/RecoverySettings.tsx",
@@ -414,7 +460,7 @@
     "0a2df14a": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditCollectiveSettingsExpenseTypes",
         "kind": "mutation",
         "file": "components/dashboard/sections/community/EditCollectiveSettingsModal.tsx",
@@ -425,7 +471,7 @@
     "0a95b3b8": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "MoveReceivedContributions",
         "kind": "mutation",
         "file": "components/root-actions/MoveReceivedContributions.tsx",
@@ -436,7 +482,7 @@
     "0aad7ef2": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostedFinancialSummarySeries",
         "kind": "query",
         "file": "components/dashboard/sections/community/HostedFinancialSummaryCard.tsx",
@@ -447,7 +493,7 @@
     "0b225d7c": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DashboardDeleteUpdate",
         "kind": "mutation",
         "file": "components/dashboard/sections/updates/SingleUpdateView.tsx",
@@ -458,7 +504,7 @@
     "0bfef17e": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostFinancialContributionsMetadata",
         "kind": "query",
         "file": "components/dashboard/sections/contributions/IncomingContributionsForOrganizations.tsx",
@@ -469,7 +515,7 @@
     "0c77957e": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "PersonalToken",
         "kind": "query",
         "file": "components/personal-token/PersonalTokenSettings.tsx",
@@ -480,7 +526,7 @@
     "0cf73b29": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "PaypalPlan",
         "kind": "query",
         "file": "components/PayWithPaypalButton.tsx",
@@ -491,7 +537,7 @@
     "0d093452": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "StripeOAuthUrl",
         "kind": "mutation",
         "file": "components/edit-collective/EditStripeAccount.tsx",
@@ -502,7 +548,7 @@
     "0d53e536": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SetManualPaymentProviderBalanceAccountingCategory",
         "kind": "mutation",
         "file": "components/dashboard/sections/accounting/PaymentAccountsTable.tsx",
@@ -513,7 +559,7 @@
     "0d62c411": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdateAccountSettings",
         "kind": "mutation",
         "file": "components/edit-collective/sections/HostVirtualCardsSettings.tsx",
@@ -524,7 +570,7 @@
     "0f019bca": [
       {
         "service": "rest",
-        "commit": "e64b2d206fdd20a841026527e2f7d512033fe532",
+        "commit": "e67c37f3719cd772ae294eb152dbb16c34f9d1ff",
         "operation": "Collective",
         "kind": "query",
         "file": "src/server/lib/graphql.ts",
@@ -535,7 +581,7 @@
     "0f0259f3": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateCollectiveForTest",
         "kind": "mutation",
         "file": "test/cypress/support/commands.js",
@@ -557,7 +603,7 @@
     "0fafad91": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdatePaymentMethodPopUpPaymentMethod",
         "kind": "query",
         "file": "components/recurring-contributions/UpdatePaymentMethodPopUp.tsx",
@@ -568,7 +614,7 @@
     "1134cece": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ExpenseFormSchema",
         "kind": "query",
         "file": "components/submit-expense/lib/form-query.ts",
@@ -579,7 +625,7 @@
     "115bbdac": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "MoneyManagingOrgTodo",
         "kind": "query",
         "file": "components/dashboard/sections/overview/TodoList.tsx",
@@ -590,7 +636,7 @@
     "12089b9a": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdatePaymentMethod",
         "kind": "mutation",
         "file": "components/recurring-contributions/UpdatePaymentMethodPopUp.tsx",
@@ -601,7 +647,7 @@
     "121dcaf5": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UploadTransactionsImport",
         "kind": "mutation",
         "file": "components/dashboard/sections/transactions-imports/StepMapCSVColumns.tsx",
@@ -612,7 +658,7 @@
     "135d24d4": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "RequestManualKYCVerification",
         "kind": "mutation",
         "file": "components/kyc/request/manual/ManualKYCRequestConfirmation.tsx",
@@ -623,7 +669,7 @@
     "136bec4d": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CancelRecurringContribution",
         "kind": "mutation",
         "file": "components/recurring-contributions/graphql/queries.ts",
@@ -634,7 +680,7 @@
     "13c0dcb3": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ConnectAccounts",
         "kind": "mutation",
         "file": "components/root-actions/ConnectAccountsForm.tsx",
@@ -656,7 +702,7 @@
     "13d1da71": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ApplyToHostModal",
         "kind": "query",
         "file": "components/ApplyToHostModal.tsx",
@@ -667,7 +713,7 @@
     "13e40bb9": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "InfoSettingsDashboard",
         "kind": "query",
         "file": "components/edit-collective/sections/Info.tsx",
@@ -678,7 +724,7 @@
     "14c21342": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditPublicMessage",
         "kind": "mutation",
         "file": "components/EditPublicMessagePopup.tsx",
@@ -689,7 +735,7 @@
     "14d4bd49": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AddAuthenticatorAppToIndividual",
         "kind": "mutation",
         "file": "components/two-factor-authentication/AuthenticatorSettings.tsx",
@@ -700,7 +746,7 @@
     "159c8c09": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdateManualPaymentProvider",
         "kind": "mutation",
         "file": "components/edit-collective/sections/receive-money/gql.ts",
@@ -711,7 +757,7 @@
     "1692666d": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "BudgetSectionWithHost",
         "kind": "query",
         "file": "components/collective-page/sections/Budget.tsx",
@@ -722,7 +768,7 @@
     "16a228cc": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AddFunds",
         "kind": "mutation",
         "file": "components/dashboard/sections/collectives/AddFundsModal.tsx",
@@ -733,7 +779,7 @@
     "1779f341": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostExpensesReport",
         "kind": "query",
         "file": "components/dashboard/sections/expenses/reports/HostExpensesReportView.tsx",
@@ -744,7 +790,7 @@
     "1781c727": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ReplaceCreditCard",
         "kind": "mutation",
         "file": "pages/updatePaymentMethod.tsx",
@@ -755,7 +801,7 @@
     "1868c91a": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CommunityAccountExpensesMeta",
         "kind": "query",
         "file": "components/dashboard/sections/community/tabs/ManagedDisbursements.tsx",
@@ -766,7 +812,7 @@
     "19d264f2": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateManualKYCVerificationRequest",
         "kind": "mutation",
         "file": "components/kyc/request/manual/CreateManualKYCRequestModal.tsx",
@@ -777,7 +823,7 @@
     "19f54ca1": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditMoneyManagementAndHosting",
         "kind": "mutation",
         "file": "components/edit-collective/sections/FiscalHosting.tsx",
@@ -799,7 +845,7 @@
     "1a2bfda6": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountKYCStatusBadgeIndividual",
         "kind": "query",
         "file": "components/kyc/components/AccountKYCStatusBadge.tsx",
@@ -810,7 +856,7 @@
     "1b3bd84f": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ChangelogTriggerLoggedInUser",
         "kind": "query",
         "file": "lib/graphql/v1/queries.ts",
@@ -821,7 +867,7 @@
     "1d0edd9e": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "KYCRequestsDashboard",
         "kind": "query",
         "file": "components/kyc/dashboard/KYCRequests.tsx",
@@ -832,7 +878,7 @@
     "1d40364f": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "RemovePayoutMethod",
         "kind": "mutation",
         "file": "components/expenses/PayoutMethodSelect.tsx",
@@ -843,12 +889,23 @@
     "1d46a6f0": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "TeamSection",
         "kind": "query",
         "file": "components/edit-collective/sections/team/queries.ts",
         "line": 24,
         "endLine": 119
+      }
+    ],
+    "1e097c5d": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "CollectiveContactPage",
+        "kind": "query",
+        "file": "pages/collective-contact.tsx",
+        "line": 93,
+        "endLine": 118
       }
     ],
     "1e4e2817": [
@@ -865,7 +922,7 @@
     "1e835cba": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ConfirmOrder",
         "kind": "mutation",
         "file": "components/contribution-flow/index.tsx",
@@ -876,7 +933,7 @@
     "1e8d4ec9": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DisputedContributionsWarning",
         "kind": "query",
         "file": "components/dashboard/sections/collectives/DisputedContributionsWarning.tsx",
@@ -887,7 +944,7 @@
     "1f457e68": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "RefreshPlaidAccount",
         "kind": "mutation",
         "file": "lib/hooks/usePlaidConnectDialog.tsx",
@@ -898,7 +955,7 @@
     "1f9adbad": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "BanAccountSearch",
         "kind": "query",
         "file": "components/root-actions/BanAccountsWithSearch.tsx",
@@ -920,7 +977,7 @@
     "215ae40f": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "RemoveExportRequest",
         "kind": "mutation",
         "file": "components/dashboard/sections/exports/index.tsx",
@@ -931,7 +988,7 @@
     "219bfa9c": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateManualPaymentProvider",
         "kind": "mutation",
         "file": "components/edit-collective/sections/receive-money/gql.ts",
@@ -942,7 +999,7 @@
     "21b21d16": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ExpenseHost",
         "kind": "query",
         "file": "components/dashboard/sections/expenses/queries.ts",
@@ -953,7 +1010,7 @@
     "21d6792d": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ConvertAccountToOrganization",
         "kind": "mutation",
         "file": "components/edit-collective/ConvertToOrganizationModal.tsx",
@@ -964,7 +1021,7 @@
     "22107b2f": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "OrgOverviewMetrics",
         "kind": "query",
         "file": "components/dashboard/sections/overview/queries.ts",
@@ -975,7 +1032,7 @@
     "225c8bec": [
       {
         "service": "images",
-        "commit": "14f354b12597bdba48985bd0755e42feed6b8ca2",
+        "commit": "b11f9c3f2e20fd4f27dd7ed1a1a1290ffb44af83",
         "operation": "MembersStats",
         "kind": "query",
         "file": "src/server/lib/graphql.ts",
@@ -986,7 +1043,7 @@
     "22d3ae93": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "Applications",
         "kind": "query",
         "file": "components/oauth/OAuthApplicationsList.tsx",
@@ -997,7 +1054,7 @@
     "22e5a39c": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ValidateTransferRequirements",
         "kind": "query",
         "file": "components/expenses/PayExpenseModal.tsx",
@@ -1005,10 +1062,21 @@
         "endLine": 130
       }
     ],
+    "232ad404": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "RecurringContributions",
+        "kind": "query",
+        "file": "components/recurring-contributions/graphql/queries.ts",
+        "line": 196,
+        "endLine": 232
+      }
+    ],
     "2371ea76": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountActivityLog",
         "kind": "query",
         "file": "components/dashboard/sections/ActivityLog/index.tsx",
@@ -1019,7 +1087,7 @@
     "252080fd": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdateDashboardAudience",
         "kind": "query",
         "file": "components/dashboard/sections/updates/UpdateFormView.tsx",
@@ -1030,7 +1098,7 @@
     "252ff90f": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditTwoFactorAuthenticationMethod",
         "kind": "mutation",
         "file": "components/two-factor-authentication/UserTwoFactorMethodItem.tsx",
@@ -1041,7 +1109,7 @@
     "255dc542": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ConversationsSection",
         "kind": "query",
         "file": "components/collective-page/sections/Conversations.tsx",
@@ -1052,7 +1120,7 @@
     "25f992b2": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ReplyToMemberInvitation",
         "kind": "mutation",
         "file": "components/ReplyToMemberInvitationCard.tsx",
@@ -1063,7 +1131,7 @@
     "2754f435": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditMember",
         "kind": "mutation",
         "file": "components/edit-collective/sections/team/EditMemberModal.tsx",
@@ -1074,7 +1142,7 @@
     "27936a57": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "Plans",
         "kind": "query",
         "file": "components/dashboard/sections/subscriptions/queries.ts",
@@ -1085,7 +1153,7 @@
     "27f2bb30": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountHasTwoFactorAuthForTest",
         "kind": "query",
         "file": "test/cypress/support/commands.js",
@@ -1096,7 +1164,7 @@
     "29095a87": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AddAgreement",
         "kind": "mutation",
         "file": "components/agreements/AgreementForm.tsx",
@@ -1107,7 +1175,7 @@
     "29495e66": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CancelMemberInvitation",
         "kind": "mutation",
         "file": "components/edit-collective/sections/team/queries.ts",
@@ -1118,7 +1186,7 @@
     "29e87271": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountExpenses",
         "kind": "query",
         "file": "components/dashboard/sections/expenses/queries.ts",
@@ -1129,7 +1197,7 @@
     "2a3f48da": [
       {
         "service": "images",
-        "commit": "14f354b12597bdba48985bd0755e42feed6b8ca2",
+        "commit": "b11f9c3f2e20fd4f27dd7ed1a1a1290ffb44af83",
         "operation": "Collective",
         "kind": "query",
         "file": "src/server/lib/graphql.ts",
@@ -1140,7 +1208,7 @@
     "2bc4a182": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "RefundTransaction",
         "kind": "mutation",
         "file": "components/dashboard/sections/transactions/actions.tsx",
@@ -1151,7 +1219,7 @@
     "2cb8c74f": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SetUseVendorPolicy",
         "kind": "mutation",
         "file": "test/cypress/integration/41-vendor-visibility.test.ts",
@@ -1159,10 +1227,32 @@
         "endLine": 41
       }
     ],
+    "2cbe9005": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "ContributePage",
+        "kind": "query",
+        "file": "pages/contribute.tsx",
+        "line": 363,
+        "endLine": 476
+      }
+    ],
+    "2d0cdbb2": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "TierPage",
+        "kind": "query",
+        "file": "components/tier-page/graphql/queries.ts",
+        "line": 5,
+        "endLine": 96
+      }
+    ],
     "2ddbf944": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "00df02ecbe53989e15a64d647c4c736eb91bebee",
         "operation": "CommunityAccountDetail",
         "kind": "query",
         "file": "components/dashboard/sections/community/queries.ts",
@@ -1173,7 +1263,7 @@
     "2df2f440": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "OAuthAuthorization",
         "kind": "query",
         "file": "pages/oauth/authorize.tsx",
@@ -1181,10 +1271,21 @@
         "endLine": 40
       }
     ],
+    "2e260fd6": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "CreateConversationPage",
+        "kind": "query",
+        "file": "pages/create-conversation.tsx",
+        "line": 137,
+        "endLine": 174
+      }
+    ],
     "2e78d762": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditCollectiveSettingsPayoutPolicy",
         "kind": "mutation",
         "file": "components/dashboard/sections/community/EditCollectiveSettingsModal.tsx",
@@ -1195,7 +1296,7 @@
     "2e7ca2a3": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditCollectiveMembers",
         "kind": "mutation",
         "file": "lib/graphql/v1/mutations.ts",
@@ -1206,7 +1307,7 @@
     "2f498303": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "RequestVirtualCard",
         "kind": "mutation",
         "file": "components/edit-collective/RequestVirtualCardModal.tsx",
@@ -1217,7 +1318,7 @@
     "2f7f4179": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "MemberInvitationsPage",
         "kind": "query",
         "file": "pages/member-invitations.tsx",
@@ -1228,7 +1329,7 @@
     "2f824a05": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "FromCollectiveSearch",
         "kind": "query",
         "file": "lib/graphql/v1/queries.ts",
@@ -1239,7 +1340,7 @@
     "2fe938ec": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "LoggedInUser",
         "kind": "query",
         "file": "lib/graphql/v1/queries.ts",
@@ -1261,7 +1362,7 @@
     "3235efd9": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdateOrderPopUpTiers",
         "kind": "query",
         "file": "components/recurring-contributions/UpdateOrderPopUp.tsx",
@@ -1272,7 +1373,7 @@
     "32f415f4": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdateUserEmail",
         "kind": "mutation",
         "file": "components/edit-collective/EditUserEmailForm.tsx",
@@ -1283,7 +1384,7 @@
     "3309e2aa": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SavePayoutMethod",
         "kind": "mutation",
         "file": "components/submit-expense/useExpenseFormActions.ts",
@@ -1291,10 +1392,21 @@
         "endLine": 35
       }
     ],
+    "330b392e": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "ConversationPage",
+        "kind": "query",
+        "file": "pages/conversation.tsx",
+        "line": 40,
+        "endLine": 107
+      }
+    ],
     "33838f02": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "RemoveTwoFactorAuthFromIndividual",
         "kind": "mutation",
         "file": "components/two-factor-authentication/UserTwoFactorMethodItem.tsx",
@@ -1305,7 +1417,7 @@
     "33d2001f": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DeletePayoutMethod",
         "kind": "mutation",
         "file": "components/submit-expense/useExpenseFormActions.ts",
@@ -1316,7 +1428,7 @@
     "33fcfee0": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreatePendingContribution",
         "kind": "mutation",
         "file": "components/dashboard/sections/contributions/CreatePendingOrderModal.tsx",
@@ -1327,7 +1439,7 @@
     "344ddfa6": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "VirtualCardsAssignedToCollective",
         "kind": "query",
         "file": "components/edit-collective/EditVirtualCardModal.tsx",
@@ -1338,7 +1450,7 @@
     "36334dc1": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DashboardUnpublishUpdate",
         "kind": "mutation",
         "file": "components/dashboard/sections/updates/UpdateFormView.tsx",
@@ -1349,7 +1461,7 @@
     "364558af": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "BudgetSection",
         "kind": "query",
         "file": "components/collective-page/sections/FinancialOverview.tsx",
@@ -1360,7 +1472,7 @@
     "3682d9b9": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "VirtualCardDrawer",
         "kind": "query",
         "file": "components/virtual-cards/VirtualCardDrawer.tsx",
@@ -1382,7 +1494,7 @@
     "3707c771": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HeroTotalCollectiveContributions",
         "kind": "query",
         "file": "components/collective-page/hero/HeroTotalCollectiveContributionsWithData.tsx",
@@ -1393,7 +1505,7 @@
     "38340c20": [
       {
         "service": "rest",
-        "commit": "e64b2d206fdd20a841026527e2f7d512033fe532",
+        "commit": "e67c37f3719cd772ae294eb152dbb16c34f9d1ff",
         "operation": "Collective",
         "kind": "query",
         "file": "src/server/lib/graphql.ts",
@@ -1404,7 +1516,7 @@
     "384bb7f2": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountItem",
         "kind": "query",
         "file": "components/submit-expense/form/ExpenseAccountItem.tsx",
@@ -1415,7 +1527,7 @@
     "3aed4566": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditAccountingCategories",
         "kind": "mutation",
         "file": "components/dashboard/sections/accounting/index.tsx",
@@ -1426,7 +1538,7 @@
     "3b5447e9": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditVirtualCard",
         "kind": "mutation",
         "file": "components/edit-collective/EditVirtualCardModal.tsx",
@@ -1437,7 +1549,7 @@
     "3bddc77d": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DeleteExpense",
         "kind": "mutation",
         "file": "components/expenses/ExpenseConfirmDeletionModal.tsx",
@@ -1448,7 +1560,7 @@
     "3c3ca273": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "FindExpenseMatchForOffPlatformDebit",
         "kind": "query",
         "file": "components/dashboard/sections/transactions-imports/MatchDebitDialog.tsx",
@@ -1459,7 +1571,7 @@
     "3d09f49e": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateFundModal",
         "kind": "query",
         "file": "components/dashboard/sections/funds-and-grants/CreateFundModal.tsx",
@@ -1470,7 +1582,7 @@
     "3daf34bb": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AuthorizedApps",
         "kind": "query",
         "file": "components/oauth/queries.ts",
@@ -1481,7 +1593,7 @@
     "3e43c35c": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "LoggedInUserEmail",
         "kind": "query",
         "file": "components/edit-collective/EditUserEmailForm.tsx",
@@ -1492,7 +1604,7 @@
     "3ef4ab5b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CollectivePickerSearch",
         "kind": "query",
         "file": "components/CollectivePickerAsync.tsx",
@@ -1503,7 +1615,7 @@
     "3f8b6dac": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateEvent",
         "kind": "mutation",
         "file": "components/CreateEventForm.tsx",
@@ -1514,7 +1626,7 @@
     "4095a3af": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CollectiveSettingsEdit",
         "kind": "query",
         "file": "components/edit-collective/sections/EditCollectivePage.tsx",
@@ -1525,7 +1637,7 @@
     "40db578d": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdateSubscriptionsForPaymentMethod",
         "kind": "query",
         "file": "pages/updatePaymentMethod.tsx",
@@ -1536,7 +1648,7 @@
     "41105b69": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostDashboardExpenses",
         "kind": "query",
         "file": "components/dashboard/sections/expenses/queries.ts",
@@ -1547,7 +1659,7 @@
     "4120bb6c": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountStripePaymentMethods",
         "kind": "query",
         "file": "components/expenses/PayExpenseWithStripe.tsx",
@@ -1558,7 +1670,7 @@
     "41482a99": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "QuoteExpense",
         "kind": "query",
         "file": "components/expenses/PayExpenseModal.tsx",
@@ -1569,7 +1681,7 @@
     "4169062e": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditAgreement",
         "kind": "mutation",
         "file": "components/agreements/AgreementForm.tsx",
@@ -1580,7 +1692,7 @@
     "416a4966": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CommunityAccountExpenses",
         "kind": "query",
         "file": "components/dashboard/sections/community/tabs/ManagedDisbursements.tsx",
@@ -1602,7 +1714,7 @@
     "4199fe5b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditTransactionsImport",
         "kind": "mutation",
         "file": "components/dashboard/sections/transactions-imports/TransactionsImportSettingsModal.tsx",
@@ -1613,7 +1725,7 @@
     "42a01358": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditTierPage",
         "kind": "mutation",
         "file": "components/tier-page/index.tsx",
@@ -1624,7 +1736,7 @@
     "4346f4ea": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DashboardContributorsMetadata",
         "kind": "query",
         "file": "components/dashboard/sections/Contributors.tsx",
@@ -1646,7 +1758,7 @@
     "43d8df6d": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostedVirtualCardsMetaData",
         "kind": "query",
         "file": "components/dashboard/sections/HostVirtualCards.tsx",
@@ -1657,7 +1769,7 @@
     "4403a8b8": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountPaymentRequests",
         "kind": "query",
         "file": "components/dashboard/sections/community/tabs/PaymentRequests.tsx",
@@ -1668,7 +1780,7 @@
     "441f9932": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditVendor",
         "kind": "mutation",
         "file": "components/vendors/VendorForm.tsx",
@@ -1676,10 +1788,21 @@
         "endLine": 56
       }
     ],
+    "44489d38": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "EditCollectiveWebhooks",
+        "kind": "query",
+        "file": "components/edit-collective/sections/Webhooks.tsx",
+        "line": 417,
+        "endLine": 440
+      }
+    ],
     "449dd477": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostedCollectives",
         "kind": "query",
         "file": "components/dashboard/sections/collectives/queries.ts",
@@ -1690,7 +1813,7 @@
     "4694414e": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ConvertOrganizationToVendor",
         "kind": "mutation",
         "file": "components/dashboard/sections/community/AccountDetail.tsx",
@@ -1701,7 +1824,7 @@
     "470c1695": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ContributionsExpireOrder",
         "kind": "mutation",
         "file": "components/dashboard/sections/contributions/actions.tsx",
@@ -1712,7 +1835,7 @@
     "472c68e6": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditComment",
         "kind": "mutation",
         "file": "components/conversations/graphql.ts",
@@ -1723,7 +1846,7 @@
     "4767d100": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DeleteStripeConnectedAccount",
         "kind": "mutation",
         "file": "components/edit-collective/EditStripeAccount.tsx",
@@ -1734,7 +1857,7 @@
     "478a56cd": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountPermissions",
         "kind": "query",
         "file": "components/collective-navbar/index.tsx",
@@ -1745,7 +1868,7 @@
     "47af3fa1": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "FindContributionsMatchForOffPlatformDebit",
         "kind": "query",
         "file": "components/dashboard/sections/transactions-imports/MatchDebitDialog.tsx",
@@ -1756,7 +1879,7 @@
     "485d2fb1": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountTiers",
         "kind": "query",
         "file": "components/edit-collective/tiers/EditTierModal.tsx",
@@ -1767,7 +1890,7 @@
     "485fb1bb": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountVirtualCards",
         "kind": "query",
         "file": "components/dashboard/sections/virtual-cards/queries.ts",
@@ -1778,7 +1901,7 @@
     "4a035395": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountingCategories",
         "kind": "query",
         "file": "components/dashboard/filters/AccountingCategoryFilter.tsx",
@@ -1789,7 +1912,7 @@
     "4a772ee8": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CollectiveBalance",
         "kind": "query",
         "file": "components/dashboard/sections/overview/queries.ts",
@@ -1800,7 +1923,7 @@
     "4ad1fc61": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "PeopleHostDashboard",
         "kind": "query",
         "file": "components/dashboard/sections/community/queries.ts",
@@ -1811,7 +1934,7 @@
     "4af3d772": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdateContributionAccountingCategoryRules",
         "kind": "mutation",
         "file": "components/accounting/dashboard/categorization/AccountingCategorizationRulesDashboard.tsx",
@@ -1822,7 +1945,7 @@
     "4b9b321d": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DashboardVendors",
         "kind": "query",
         "file": "components/dashboard/sections/Vendors.tsx",
@@ -1833,7 +1956,7 @@
     "4c754555": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateSetupIntent",
         "kind": "mutation",
         "file": "lib/stripe/useSetupIntent.ts",
@@ -1844,7 +1967,7 @@
     "4c98b16c": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "InviteMembers",
         "kind": "mutation",
         "file": "components/signup/common.tsx",
@@ -1855,7 +1978,7 @@
     "4cc1cec4": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ConfirmOrderPage",
         "kind": "mutation",
         "file": "pages/confirmOrder.tsx",
@@ -1866,7 +1989,7 @@
     "4cf52acc": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "InviteMember",
         "kind": "mutation",
         "file": "components/edit-collective/sections/team/InviteMemberModal.tsx",
@@ -1877,7 +2000,7 @@
     "4d272f4d": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ChangelogUpdates",
         "kind": "query",
         "file": "components/NewsAndUpdatesModal.tsx",
@@ -1888,7 +2011,7 @@
     "4e0f8278": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateVirtualCard",
         "kind": "mutation",
         "file": "components/edit-collective/EditVirtualCardModal.tsx",
@@ -1899,7 +2022,7 @@
     "4ec690c1": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditAccountForTest",
         "kind": "mutation",
         "file": "test/cypress/support/commands.js",
@@ -1910,7 +2033,7 @@
     "4f212674": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AddCreditCardRecurringContributions",
         "kind": "mutation",
         "file": "components/recurring-contributions/UpdatePaymentMethodPopUp.tsx",
@@ -1921,7 +2044,7 @@
     "4f22e493": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UseExportRequestCreate",
         "kind": "mutation",
         "file": "lib/hooks/useExportRequest.ts",
@@ -1932,7 +2055,7 @@
     "4fbb1a96": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "VirtualCardFilter",
         "kind": "query",
         "file": "components/dashboard/filters/VirtualCardsFilter.tsx",
@@ -1943,7 +2066,7 @@
     "50c1b496": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CompleteProfileSetPassword",
         "kind": "mutation",
         "file": "components/signup/IndividualForm.tsx",
@@ -1954,7 +2077,7 @@
     "50fe59d2": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SearchCacheTest",
         "kind": "query",
         "file": "components/search/lib.test.ts",
@@ -1965,7 +2088,7 @@
     "516b2ff9": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostTransactionsImportsSources",
         "kind": "query",
         "file": "components/dashboard/sections/transactions-imports/NewCSVTransactionsImportDialog.tsx",
@@ -1987,7 +2110,7 @@
     "5216b603": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "BillingProjection",
         "kind": "query",
         "file": "components/dashboard/sections/platform-subscription/BillingProjection.tsx",
@@ -1998,7 +2121,7 @@
     "5240b725": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "PeopleRouterAccount",
         "kind": "query",
         "file": "components/dashboard/sections/People.tsx",
@@ -2009,18 +2132,18 @@
     "5254e206": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CommunityAccountOverview",
         "kind": "query",
         "file": "components/dashboard/sections/community/queries.ts",
-        "line": 378,
-        "endLine": 430
+        "line": 389,
+        "endLine": 441
       }
     ],
     "53143caf": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreatePendingContributionCollective",
         "kind": "query",
         "file": "components/dashboard/sections/contributions/CreatePendingOrderModal.tsx",
@@ -2031,7 +2154,7 @@
     "53151e65": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditAccountFlags",
         "kind": "mutation",
         "file": "components/root-actions/AccountSettings.tsx",
@@ -2042,7 +2165,7 @@
     "53a16c32": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SecurityAccount",
         "kind": "query",
         "file": "components/edit-collective/sections/Security.tsx",
@@ -2053,7 +2176,7 @@
     "53d16ca5": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateCollectiveHost",
         "kind": "query",
         "file": "pages/create-collective.tsx",
@@ -2086,7 +2209,7 @@
     "54f7fcdd": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostedFundsMetadata",
         "kind": "query",
         "file": "components/dashboard/sections/funds-and-grants/HostedFunds.tsx",
@@ -2097,7 +2220,7 @@
     "55514cfb": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ReorderManualPaymentProviders",
         "kind": "mutation",
         "file": "components/edit-collective/sections/receive-money/gql.ts",
@@ -2108,7 +2231,7 @@
     "5645e77a": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "GeneratePlaidLinkToken",
         "kind": "mutation",
         "file": "lib/hooks/usePlaidConnectDialog.tsx",
@@ -2119,7 +2242,7 @@
     "567140a7": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ContributionsSection",
         "kind": "query",
         "file": "components/collective-page/sections/Contributions.tsx",
@@ -2130,7 +2253,7 @@
     "56a3524b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdateCollectiveAdminsCanSeePayoutMethodPolicy",
         "kind": "mutation",
         "file": "components/dashboard/sections/collectives/CollectiveDetails.tsx",
@@ -2141,7 +2264,7 @@
     "56a4fd98": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ConfirmContribution",
         "kind": "mutation",
         "file": "components/contributions/ConfirmContributionForm.tsx",
@@ -2152,7 +2275,7 @@
     "56e1c328": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditAccountSetting",
         "kind": "mutation",
         "file": "components/edit-collective/mutations.ts",
@@ -2163,7 +2286,7 @@
     "579a386f": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditPayPalAccount",
         "kind": "query",
         "file": "components/edit-collective/EditPayPalAccount.tsx",
@@ -2174,7 +2297,7 @@
     "58f6aa9a": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UploadFile",
         "kind": "mutation",
         "file": "lib/hooks/useGraphQLFileUploader.ts",
@@ -2185,7 +2308,7 @@
     "59d615a6": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditTransferWiseAccount",
         "kind": "query",
         "file": "components/edit-collective/EditTransferWiseAccount.tsx",
@@ -2196,7 +2319,7 @@
     "5aa61e2b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "PaymentRequestsMetadata",
         "kind": "query",
         "file": "components/dashboard/sections/expenses/queries.ts",
@@ -2207,7 +2330,7 @@
     "5b3bb92a": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "Signup",
         "kind": "mutation",
         "file": "components/SignInOrJoinFree.tsx",
@@ -2218,7 +2341,7 @@
     "5c7589ee": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CompleteProfileInfo",
         "kind": "query",
         "file": "components/signup/IndividualForm.tsx",
@@ -2229,7 +2352,7 @@
     "5ce7dbf6": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "TransactionResult",
         "kind": "query",
         "file": "components/search/RecentVisits.tsx",
@@ -2240,7 +2363,7 @@
     "5d59e3ea": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountKYCStatusBadgeHostFeature",
         "kind": "query",
         "file": "components/kyc/components/AccountKYCStatusBadge.tsx",
@@ -2251,7 +2374,7 @@
     "5d8caf63": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SetEmailNotification",
         "kind": "mutation",
         "file": "components/dashboard/sections/NotificationsSettings/ActivitySwitch.tsx",
@@ -2262,7 +2385,7 @@
     "5e02ad39": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountExpensesMetadata",
         "kind": "query",
         "file": "components/dashboard/sections/expenses/queries.ts",
@@ -2273,7 +2396,7 @@
     "5ef62c26": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "MemberInvitationsCount",
         "kind": "query",
         "file": "components/navigation/ProfileMenu.tsx",
@@ -2284,7 +2407,7 @@
     "5f8f1462": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ProjectsSectionSearch",
         "kind": "query",
         "file": "components/collective-page/sections/Projects.tsx",
@@ -2292,10 +2415,21 @@
         "endLine": 110
       }
     ],
+    "5fff3fb1": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "CreateExpensePage",
+        "kind": "query",
+        "file": "pages/create-expense.tsx",
+        "line": 159,
+        "endLine": 229
+      }
+    ],
     "6098de8a": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "PaymentMethodPicker",
         "kind": "query",
         "file": "components/orders/PaymentMethodPicker.tsx",
@@ -2303,15 +2437,37 @@
         "endLine": 78
       }
     ],
+    "60a7a0f6": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "UpdatePage",
+        "kind": "query",
+        "file": "pages/update.tsx",
+        "line": 28,
+        "endLine": 112
+      }
+    ],
     "60f0959a": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "IssuedPaymentRequestsMetadata",
         "kind": "query",
         "file": "components/dashboard/sections/expenses/queries.ts",
         "line": 467,
         "endLine": 512
+      }
+    ],
+    "61fc440a": [
+      {
+        "service": "contributors-svg",
+        "commit": "7ba92580e8cbda7b9ab825aa497f6192b55af16a",
+        "operation": "Collective",
+        "kind": "query",
+        "file": "test/graphql.test.js",
+        "line": 83,
+        "endLine": 92
       }
     ],
     "622302e2": [
@@ -2328,7 +2484,7 @@
     "62c2d54a": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ContributionTier",
         "kind": "query",
         "file": "components/dashboard/filters/TierFilter.tsx",
@@ -2339,7 +2495,7 @@
     "66b27670": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostCancelContributionModal",
         "kind": "query",
         "file": "components/dashboard/sections/contributions/queries.ts",
@@ -2350,7 +2506,7 @@
     "66cbe61a": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateUser",
         "kind": "mutation",
         "file": "components/CreateCollectiveMiniForm.tsx",
@@ -2361,7 +2517,7 @@
     "6755a305": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditTags",
         "kind": "mutation",
         "file": "lib/graphql/v1/mutations.ts",
@@ -2372,7 +2528,7 @@
     "678447e5": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ExpenseTags",
         "kind": "query",
         "file": "components/dashboard/filters/ExpenseTagsFilter.tsx",
@@ -2383,7 +2539,7 @@
     "6792d0da": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ContributionDrawer",
         "kind": "query",
         "file": "components/contributions/ContributionDrawer.tsx",
@@ -2394,7 +2550,7 @@
     "681dcadc": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "TransactionsSection",
         "kind": "query",
         "file": "components/collective-page/sections/Transactions.tsx",
@@ -2405,7 +2561,7 @@
     "688c922e": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ConnectTransferwiseAccount",
         "kind": "mutation",
         "file": "pages/services/transferwise/oauth/callback.tsx",
@@ -2416,7 +2572,7 @@
     "689b0c03": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CancelMemberInvitationInAccountDetail",
         "kind": "mutation",
         "file": "components/dashboard/sections/community/tabs/Overview.tsx",
@@ -2424,10 +2580,21 @@
         "endLine": 86
       }
     ],
+    "69e04ac6": [
+      {
+        "service": "contributors-svg",
+        "commit": "7ba92580e8cbda7b9ab825aa497f6192b55af16a",
+        "operation": "GithubContributors",
+        "kind": "query",
+        "file": "test/graphql.test.js",
+        "line": 43,
+        "endLine": 51
+      }
+    ],
     "69e7210c": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "TransactionsImport",
         "kind": "query",
         "file": "components/dashboard/sections/transactions-imports/CSVTransactionsImport.tsx",
@@ -2438,7 +2605,7 @@
     "6a3ac257": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "PaypalOAuthUrl",
         "kind": "mutation",
         "file": "components/paypal/PaypalConnectButton.tsx",
@@ -2449,7 +2616,7 @@
     "6a878cec": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostCreateExpenseModalPayeeSelect",
         "kind": "query",
         "file": "components/dashboard/sections/expenses/HostCreateExpenseModal.tsx",
@@ -2460,7 +2627,7 @@
     "6a905f7b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CollectiveSignup",
         "kind": "mutation",
         "file": "components/signup/CollectiveForm.tsx",
@@ -2471,7 +2638,7 @@
     "6b2c678f": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DeletePersonalToken",
         "kind": "mutation",
         "file": "components/personal-token/DeletePersonalTokenModal.tsx",
@@ -2482,7 +2649,7 @@
     "6b48ddb2": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreatedByFilterSearch",
         "kind": "query",
         "file": "components/dashboard/filters/OrderCreatedByFilter.tsx",
@@ -2493,7 +2660,7 @@
     "6b5f829c": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ExpensesScheduledForPayment",
         "kind": "query",
         "file": "components/dashboard/sections/expenses/PayExpensesScheduledForPaymentButton.tsx",
@@ -2515,7 +2682,7 @@
     "6bde9dd6": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostReports",
         "kind": "query",
         "file": "components/dashboard/sections/reports/queries.ts",
@@ -2526,7 +2693,7 @@
     "6bfe744e": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostApplicationResult",
         "kind": "query",
         "file": "components/search/RecentVisits.tsx",
@@ -2537,7 +2704,7 @@
     "6d329835": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateHostedFund",
         "kind": "mutation",
         "file": "components/dashboard/sections/funds-and-grants/CreateFundModal.tsx",
@@ -2548,7 +2715,7 @@
     "6d466f95": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "OffPlatformConnections",
         "kind": "query",
         "file": "components/dashboard/sections/transactions-imports/OffPlatformConnections.tsx",
@@ -2559,7 +2726,7 @@
     "6d737a75": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountsDashboardMetadata",
         "kind": "query",
         "file": "components/dashboard/sections/accounts/queries.ts",
@@ -2570,7 +2737,7 @@
     "6d7ef7bd": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateOrganizationFromExpenseFlow",
         "kind": "mutation",
         "file": "components/submit-expense/form/mutations.ts",
@@ -2581,7 +2748,7 @@
     "6da720fb": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "RootUnhostAccount",
         "kind": "mutation",
         "file": "components/root-actions/UnhostAccountForm.tsx",
@@ -2592,7 +2759,7 @@
     "6e491181": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ResetPassword",
         "kind": "mutation",
         "file": "pages/reset-password.tsx",
@@ -2603,7 +2770,7 @@
     "6e546876": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateVendor",
         "kind": "mutation",
         "file": "components/vendors/queries.ts",
@@ -2611,10 +2778,21 @@
         "endLine": 91
       }
     ],
+    "6e847b4b": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "ProcessExpenseButtonsExpenseStatus",
+        "kind": "query",
+        "file": "components/expenses/ProcessExpenseButtons.tsx",
+        "line": 156,
+        "endLine": 167
+      }
+    ],
     "6ea6dc99": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ContributionsTiers",
         "kind": "query",
         "file": "components/dashboard/filters/TierFilter.tsx",
@@ -2625,7 +2803,7 @@
     "6f0183c9": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateIncognitoProfile",
         "kind": "mutation",
         "file": "components/contribution-flow/index.tsx",
@@ -2636,7 +2814,7 @@
     "6f32a6d2": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditAccount",
         "kind": "mutation",
         "file": "components/edit-collective/sections/Info.tsx",
@@ -2647,7 +2825,7 @@
     "6f639a54": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ApplyToHostWithAccounts",
         "kind": "query",
         "file": "components/ApplyToHostModal.tsx",
@@ -2658,7 +2836,7 @@
     "70a07872": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "OffPlatformTransactionsInstitutions",
         "kind": "query",
         "file": "components/dashboard/sections/transactions-imports/NewOffPlatformTransactionsConnection.tsx",
@@ -2702,7 +2880,7 @@
     "718c6df2": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SearchCommand",
         "kind": "query",
         "file": "components/search/queries.ts",
@@ -2713,7 +2891,7 @@
     "71c8e118": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "FiscalHostSettingsUpdate",
         "kind": "mutation",
         "file": "components/edit-collective/sections/FiscalHost.tsx",
@@ -2724,7 +2902,7 @@
     "71ed5eef": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateStripePaymentIntent",
         "kind": "mutation",
         "file": "lib/stripe/usePaymentIntent.ts",
@@ -2735,7 +2913,7 @@
     "7282d7dc": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdatePlatformSubscription",
         "kind": "mutation",
         "file": "components/platform-subscriptions/ManageSubscriptionModal.tsx",
@@ -2746,7 +2924,7 @@
     "728c342f": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "IsUserFollowingConversation",
         "kind": "query",
         "file": "components/conversations/graphql.ts",
@@ -2757,7 +2935,7 @@
     "7312ada4": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateProjectForTest",
         "kind": "mutation",
         "file": "test/cypress/support/commands.js",
@@ -2768,7 +2946,7 @@
     "7369786f": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ConnectStripeAccount",
         "kind": "mutation",
         "file": "pages/services/stripe/oauth/callback.tsx",
@@ -2779,7 +2957,7 @@
     "738373db": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SendMessage",
         "kind": "mutation",
         "file": "components/CollectiveContactForm.tsx",
@@ -2790,7 +2968,7 @@
     "739d389e": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "TransactionsTable",
         "kind": "query",
         "file": "components/dashboard/sections/transactions/queries.tsx",
@@ -2801,7 +2979,7 @@
     "73d04b61": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateProject",
         "kind": "mutation",
         "file": "components/create-project/index.tsx",
@@ -2809,10 +2987,21 @@
         "endLine": 143
       }
     ],
+    "751d44f9": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "ExpensesPage",
+        "kind": "query",
+        "file": "components/expenses/ExpensesPage.tsx",
+        "line": 38,
+        "endLine": 179
+      }
+    ],
     "753c5860": [
       {
         "service": "rest",
-        "commit": "e64b2d206fdd20a841026527e2f7d512033fe532",
+        "commit": "e67c37f3719cd772ae294eb152dbb16c34f9d1ff",
         "operation": "AccountOrders",
         "kind": "query",
         "file": "src/server/controllers/account-orders.ts",
@@ -2823,7 +3012,7 @@
     "7566178d": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "OAuthApplication",
         "kind": "query",
         "file": "components/oauth/OAuthApplicationSettings.tsx",
@@ -2834,7 +3023,7 @@
     "76c72646": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostTodo",
         "kind": "query",
         "file": "components/dashboard/sections/overview/TodoList.tsx",
@@ -2845,7 +3034,7 @@
     "7716bcf1": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "PaidDisbursements",
         "kind": "query",
         "file": "components/dashboard/sections/expenses/queries.ts",
@@ -2856,7 +3045,7 @@
     "774e3b1b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostOverviewMetrics",
         "kind": "query",
         "file": "components/dashboard/sections/overview/queries.ts",
@@ -2867,7 +3056,7 @@
     "78c559c1": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ProcessHostApplication",
         "kind": "mutation",
         "file": "components/dashboard/sections/collectives/queries.ts",
@@ -2878,7 +3067,7 @@
     "791718cf": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountDetailBalanceSummary",
         "kind": "query",
         "file": "components/dashboard/sections/community/HostedAccountBalanceSummary.tsx",
@@ -2889,18 +3078,18 @@
     "79bcdb83": [
       {
         "service": "images",
-        "commit": "14f354b12597bdba48985bd0755e42feed6b8ca2",
+        "commit": "b11f9c3f2e20fd4f27dd7ed1a1a1290ffb44af83",
         "operation": "MembersWithTier",
         "kind": "query",
         "file": "src/server/lib/graphql.ts",
-        "line": 367,
-        "endLine": 389
+        "line": 368,
+        "endLine": 390
       }
     ],
     "79c2bcc0": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditCollectiveSettings",
         "kind": "mutation",
         "file": "lib/graphql/v1/mutations.ts",
@@ -2911,7 +3100,7 @@
     "7a16ae61": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "KYCRequestAccountCard",
         "kind": "query",
         "file": "components/kyc/request/KYCRequestAccountCard.tsx",
@@ -2922,18 +3111,18 @@
     "7a2a1b1b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditWebhooks",
         "kind": "mutation",
         "file": "components/edit-collective/sections/Webhooks.tsx",
-        "line": 443,
-        "endLine": 452
+        "line": 442,
+        "endLine": 451
       }
     ],
     "7aa2f24f": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountDetailDeleteAgreement",
         "kind": "mutation",
         "file": "components/dashboard/sections/community/tabs/Agreements.tsx",
@@ -2944,7 +3133,7 @@
     "7b4111d7": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UploadTaxForm",
         "kind": "mutation",
         "file": "components/dashboard/sections/legal-documents/UploadTaxFormModal.tsx",
@@ -2955,7 +3144,7 @@
     "7b9a384c": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreatePersonalToken",
         "kind": "mutation",
         "file": "components/personal-token/CreatePersonalTokenModal.tsx",
@@ -2966,7 +3155,7 @@
     "7c6a284a": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ActivitySubscriptionsSettings",
         "kind": "query",
         "file": "components/dashboard/sections/NotificationsSettings/index.tsx",
@@ -2988,7 +3177,7 @@
     "7cdc6c99": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UnhostAccount",
         "kind": "mutation",
         "file": "components/dashboard/sections/collectives/UnhostAccountModal.tsx",
@@ -2999,7 +3188,7 @@
     "7cdd787e": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "OscCreateCollective",
         "kind": "mutation",
         "file": "components/osc-host-application/ApplicationForm.tsx",
@@ -3010,7 +3199,7 @@
     "7d08dfb1": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "RemovePaymentMethod",
         "kind": "mutation",
         "file": "components/edit-collective/sections/payment-info/PaymentMethodsTable.tsx",
@@ -3021,7 +3210,7 @@
     "7f332900": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "RejectTransaction",
         "kind": "mutation",
         "file": "components/dashboard/sections/transactions/TransactionRejectModal.tsx",
@@ -3032,7 +3221,7 @@
     "7f490de2": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditPayoutMethod",
         "kind": "mutation",
         "file": "components/submit-expense/useExpenseFormActions.ts",
@@ -3043,7 +3232,7 @@
     "7f6428da": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdateView",
         "kind": "query",
         "file": "components/dashboard/sections/updates/queries.ts",
@@ -3051,10 +3240,21 @@
         "endLine": 99
       }
     ],
+    "7f6d42d6": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "EditExpense",
+        "kind": "mutation",
+        "file": "components/expenses/graphql/mutations.ts",
+        "line": 7,
+        "endLine": 16
+      }
+    ],
     "7fecca93": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "Memberships",
         "kind": "query",
         "file": "components/MembershipsWithData.tsx",
@@ -3062,10 +3262,32 @@
         "endLine": 221
       }
     ],
+    "802a9c94": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "EditCollectivePage",
+        "kind": "query",
+        "file": "lib/graphql/v1/queries.ts",
+        "line": 291,
+        "endLine": 300
+      }
+    ],
+    "8059d9cc": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "CommunityAccountDetail",
+        "kind": "query",
+        "file": "components/dashboard/sections/community/queries.ts",
+        "line": 196,
+        "endLine": 387
+      }
+    ],
     "80bf4d47": [
       {
         "service": "rest",
-        "commit": "e64b2d206fdd20a841026527e2f7d512033fe532",
+        "commit": "e67c37f3719cd772ae294eb152dbb16c34f9d1ff",
         "operation": "AccountTransactions",
         "kind": "query",
         "file": "src/server/controllers/account-transactions.ts",
@@ -3076,7 +3298,7 @@
     "80f5f0ab": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DashboardCreateUpdate",
         "kind": "mutation",
         "file": "components/dashboard/sections/updates/UpdateFormView.tsx",
@@ -3087,7 +3309,7 @@
     "816ae610": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountInfoForLeaveHost",
         "kind": "query",
         "file": "components/edit-collective/LeaveHostModal.tsx",
@@ -3098,18 +3320,18 @@
     "821f469d": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CommunityAccountActivities",
         "kind": "query",
         "file": "components/dashboard/sections/community/queries.ts",
-        "line": 432,
-        "endLine": 449
+        "line": 443,
+        "endLine": 460
       }
     ],
     "826b3df3": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostTerms",
         "kind": "query",
         "file": "pages/terms-of-fiscal-sponsorship.tsx",
@@ -3120,7 +3342,7 @@
     "82919dd8": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditCollectiveBackground",
         "kind": "mutation",
         "file": "lib/graphql/v1/mutations.ts",
@@ -3131,7 +3353,7 @@
     "82a5d37b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ContributionFlowPaymentMethods",
         "kind": "query",
         "file": "components/contribution-flow/PaymentMethodList.tsx",
@@ -3142,7 +3364,7 @@
     "835caaae": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ExpensePayoutMethodForm",
         "kind": "query",
         "file": "components/expenses/usePayoutMethodForm.ts",
@@ -3153,7 +3375,7 @@
     "842ba8df": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DashboardPlatformSubscription",
         "kind": "query",
         "file": "components/dashboard/sections/platform-subscription/DashboardPlatformSubscription.tsx",
@@ -3164,7 +3386,7 @@
     "84638b27": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "PlatformSubscriptionForm",
         "kind": "query",
         "file": "components/platform-subscriptions/ManageSubscriptionModal.tsx",
@@ -3175,7 +3397,7 @@
     "84d326b1": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SetRYCRequestIntroductionSkip",
         "kind": "mutation",
         "file": "components/kyc/request/KYCRequestIntroduction.tsx",
@@ -3186,7 +3408,7 @@
     "850f7a46": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "GenerateGoCardlessLink",
         "kind": "mutation",
         "file": "lib/hooks/useRedirectToGoCardlessConnect.ts",
@@ -3197,7 +3419,7 @@
     "857d580b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ProcessPendingOrder",
         "kind": "mutation",
         "file": "components/orders/ProcessOrderButtons.tsx",
@@ -3208,7 +3430,7 @@
     "85b0feb6": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostVirtualCardRequests",
         "kind": "query",
         "file": "components/dashboard/sections/HostVirtualCardRequests.tsx",
@@ -3219,18 +3441,18 @@
     "861fb055": [
       {
         "service": "images",
-        "commit": "14f354b12597bdba48985bd0755e42feed6b8ca2",
+        "commit": "b11f9c3f2e20fd4f27dd7ed1a1a1290ffb44af83",
         "operation": "MembersWithRole",
         "kind": "query",
         "file": "src/server/lib/graphql.ts",
-        "line": 340,
-        "endLine": 359
+        "line": 341,
+        "endLine": 360
       }
     ],
     "871002d8": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "OscHostApplicationPage",
         "kind": "query",
         "file": "pages/osc-host-application.tsx",
@@ -3241,7 +3463,7 @@
     "878dd98e": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ConfirmCreditCardRecurringContributions",
         "kind": "mutation",
         "file": "components/recurring-contributions/UpdatePaymentMethodPopUp.tsx",
@@ -3252,7 +3474,7 @@
     "87e75f74": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AllCollectives",
         "kind": "query",
         "file": "components/dashboard/sections/collectives/queries.ts",
@@ -3263,7 +3485,7 @@
     "887dbd32": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditCollectivePolicy",
         "kind": "mutation",
         "file": "lib/graphql/v1/mutations.ts",
@@ -3274,7 +3496,7 @@
     "88c5c460": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountTransactionsMetaData",
         "kind": "query",
         "file": "components/dashboard/sections/transactions/AccountTransactions.tsx",
@@ -3285,7 +3507,7 @@
     "891542e9": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostApplications",
         "kind": "query",
         "file": "components/dashboard/sections/collectives/queries.ts",
@@ -3296,7 +3518,7 @@
     "89a8791e": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountFilter",
         "kind": "query",
         "file": "components/dashboard/filters/AccountFilter.tsx",
@@ -3307,7 +3529,7 @@
     "89b8fb09": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "BanAccounts",
         "kind": "mutation",
         "file": "components/root-actions/BanAccounts.tsx",
@@ -3318,7 +3540,7 @@
     "8ac4aa52": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "TransactionsDownloadInvoices",
         "kind": "query",
         "file": "components/edit-collective/sections/PaymentReceipts.tsx",
@@ -3329,7 +3551,7 @@
     "8ad2d759": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountHasTwoFactorAuth",
         "kind": "query",
         "file": "components/edit-collective/sections/UserSecurity.tsx",
@@ -3340,7 +3562,7 @@
     "8ad95f19": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ExpenseFormExchangeRates",
         "kind": "query",
         "file": "components/submit-expense/useExpenseForm.ts",
@@ -3351,7 +3573,7 @@
     "8c9c323b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditExpenseFromDashboard",
         "kind": "mutation",
         "file": "components/submit-expense/useExpenseForm.ts",
@@ -3362,7 +3584,7 @@
     "8cadb58b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditOrderAccountingCategory",
         "kind": "mutation",
         "file": "components/orders/OrderAccountingCategoryPill.tsx",
@@ -3373,7 +3595,7 @@
     "8d0d5419": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostsFilterSearch",
         "kind": "query",
         "file": "components/dashboard/filters/HostsFilter.tsx",
@@ -3384,7 +3606,7 @@
     "8d772df3": [
       {
         "service": "rest",
-        "commit": "e64b2d206fdd20a841026527e2f7d512033fe532",
+        "commit": "e67c37f3719cd772ae294eb152dbb16c34f9d1ff",
         "operation": "Contributors",
         "kind": "query",
         "file": "src/server/controllers/account-contributors.ts",
@@ -3395,7 +3617,7 @@
     "8e0e9803": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountDetailUpdates",
         "kind": "query",
         "file": "components/dashboard/sections/community/tabs/Updates.tsx",
@@ -3406,7 +3628,7 @@
     "8e68a3e3": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateCollective",
         "kind": "mutation",
         "file": "test/cypress/support/commands.js",
@@ -3417,7 +3639,7 @@
     "8f1fe26f": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostTransactionsMetaData",
         "kind": "query",
         "file": "components/dashboard/sections/transactions/HostTransactions.tsx",
@@ -3428,7 +3650,7 @@
     "90ca7113": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "KYCTabPeopleDashboard",
         "kind": "query",
         "file": "components/kyc/dashboard/KYCTabPeopleDashboard.tsx",
@@ -3439,7 +3661,7 @@
     "9154a9f9": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "TransferwiseOAuthUrl",
         "kind": "mutation",
         "file": "components/edit-collective/EditTransferWiseAccount.tsx",
@@ -3450,7 +3672,7 @@
     "915a32ae": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdateSetupGuideState",
         "kind": "mutation",
         "file": "components/dashboard/sections/overview/queries.ts",
@@ -3461,7 +3683,7 @@
     "91ddf197": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostApplicationRequests",
         "kind": "query",
         "file": "components/dashboard/sections/collectives/HostApplicationRequests.tsx",
@@ -3472,7 +3694,7 @@
     "92b278e0": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "FiscalHosting",
         "kind": "query",
         "file": "components/edit-collective/sections/FiscalHosting.tsx",
@@ -3483,7 +3705,7 @@
     "92c254cf": [
       {
         "service": "pdf",
-        "commit": "b9d20f947072dbbfd1cb6b02ec18eb12381776ce",
+        "commit": "417b7fc69fb1c35fb7d6b8b06f390027a7f6ea23",
         "operation": "ExpenseInvoice",
         "kind": "query",
         "file": "server/routes/expenses.ts",
@@ -3494,7 +3716,7 @@
     "92c64e46": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "RevokeKYCVerification",
         "kind": "mutation",
         "file": "components/kyc/actions/RevokeKYCConfirmationDialog.tsx",
@@ -3505,7 +3727,7 @@
     "932f10b0": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "IncompleteContributionsMetadata",
         "kind": "query",
         "file": "components/dashboard/sections/contributions/IncompleteContributions.tsx",
@@ -3527,7 +3749,7 @@
     "93a05731": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "InviteExpenseFromDashboard",
         "kind": "mutation",
         "file": "components/submit-expense/useExpenseForm.ts",
@@ -3538,7 +3760,7 @@
     "93b29138": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "RevokeAuthorization",
         "kind": "mutation",
         "file": "components/oauth/AuthorizedApp.tsx",
@@ -3549,7 +3771,7 @@
     "952ecb23": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditAccountType",
         "kind": "mutation",
         "file": "components/root-actions/AccountType.tsx",
@@ -3560,7 +3782,7 @@
     "95cff200": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostedAccountDetail",
         "kind": "query",
         "file": "components/dashboard/sections/accounts/queries.ts",
@@ -3571,7 +3793,7 @@
     "969d0f27": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SetBankAccountBalanceAccountingCategory",
         "kind": "mutation",
         "file": "components/dashboard/sections/transactions-imports/TransactionsImportAssignmentsForm.tsx",
@@ -3582,7 +3804,7 @@
     "96eaeed6": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "MoveExpenses",
         "kind": "mutation",
         "file": "components/root-actions/MoveExpenses.tsx",
@@ -3615,7 +3837,7 @@
     "982e7b08": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdateTransactionsImportRow",
         "kind": "mutation",
         "file": "components/dashboard/sections/transactions-imports/lib/graphql.ts",
@@ -3626,7 +3848,7 @@
     "9851b480": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "FindExpenseMatchForOffPlatformCredit",
         "kind": "query",
         "file": "components/dashboard/sections/transactions-imports/MatchCreditDialog.tsx",
@@ -3637,7 +3859,7 @@
     "98682bed": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UseExportRequest",
         "kind": "query",
         "file": "lib/hooks/useExportRequest.ts",
@@ -3648,7 +3870,7 @@
     "98d58f23": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UnhostAccountCollectivePickerSearch",
         "kind": "query",
         "file": "lib/graphql/v1/queries.ts",
@@ -3659,7 +3881,7 @@
     "992bf354": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditCollectiveLongDescription",
         "kind": "mutation",
         "file": "lib/graphql/v1/mutations.ts",
@@ -3670,7 +3892,7 @@
     "99b7b6e4": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "PausedContributionsData",
         "kind": "query",
         "file": "components/dashboard/sections/contributions/PausedIncomingContributionsMessage.tsx",
@@ -3692,7 +3914,7 @@
     "9a019e16": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ResumeVirtualCard",
         "kind": "mutation",
         "file": "components/edit-collective/VirtualCard.tsx",
@@ -3703,7 +3925,7 @@
     "9a3eae7c": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateApplication",
         "kind": "mutation",
         "file": "components/oauth/CreateOauthApplicationModal.tsx",
@@ -3714,7 +3936,7 @@
     "9a73558d": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DashboardPublishUpdate",
         "kind": "mutation",
         "file": "components/dashboard/sections/updates/UpdateFormView.tsx",
@@ -3725,7 +3947,7 @@
     "9a9324c1": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SendMoneyToCollectivePaymentMethods",
         "kind": "query",
         "file": "components/SendMoneyToCollectiveBtn.tsx",
@@ -3736,7 +3958,7 @@
     "9aa9abc0": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "FindAFiscalHost",
         "kind": "query",
         "file": "components/accept-financial-contributions/FindAHostSearch.tsx",
@@ -3747,7 +3969,7 @@
     "9be9bfd1": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CompleteProfileForTest",
         "kind": "mutation",
         "file": "test/cypress/support/commands.js",
@@ -3758,7 +3980,7 @@
     "9c24ecfc": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostPaymentRequestsMetadata",
         "kind": "query",
         "file": "components/dashboard/sections/expenses/queries.ts",
@@ -3769,7 +3991,7 @@
     "9c9e307a": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdateCustomMessage",
         "kind": "mutation",
         "file": "components/edit-collective/sections/CustomMessage.tsx",
@@ -3780,7 +4002,7 @@
     "9d5e1cb7": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SearchContext",
         "kind": "query",
         "file": "components/search/queries.ts",
@@ -3791,7 +4013,7 @@
     "9d7c2180": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ConnectPlaidAccount",
         "kind": "mutation",
         "file": "lib/hooks/usePlaidConnectDialog.tsx",
@@ -3802,7 +4024,7 @@
     "9db285fa": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostApplicationThread",
         "kind": "query",
         "file": "components/dashboard/sections/collectives/HostApplicationDrawer.tsx",
@@ -3813,7 +4035,7 @@
     "9e604347": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ConfirmEmail",
         "kind": "mutation",
         "file": "pages/confirmEmail.tsx",
@@ -3824,7 +4046,7 @@
     "9ed44449": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdatePersonalToken",
         "kind": "mutation",
         "file": "components/personal-token/PersonalTokenSettings.tsx",
@@ -3835,7 +4057,7 @@
     "9ff2b644": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "IncomingOutgoingContributionViewCounts",
         "kind": "query",
         "file": "components/dashboard/sections/contributions/views.ts",
@@ -3846,7 +4068,7 @@
     "a04ed2dc": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DashboardOrders",
         "kind": "query",
         "file": "components/dashboard/sections/contributions/queries.ts",
@@ -3857,7 +4079,7 @@
     "a05f4bb8": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ArchiveAccount",
         "kind": "mutation",
         "file": "components/edit-collective/actions/Archive.tsx",
@@ -3868,7 +4090,7 @@
     "a065dc2d": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SetChangelogViewDate",
         "kind": "mutation",
         "file": "components/changelog/ChangelogTrigger.tsx",
@@ -3879,7 +4101,7 @@
     "a08e3a70": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateEventPage",
         "kind": "query",
         "file": "pages/createEvent.tsx",
@@ -3890,7 +4112,7 @@
     "a163f550": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdateOAuthApplication",
         "kind": "mutation",
         "file": "components/oauth/OAuthApplicationSettings.tsx",
@@ -3901,7 +4123,7 @@
     "a1a98f9f": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "NewContributionFlowEditPublicMessage",
         "kind": "mutation",
         "file": "components/contribution-flow/ContributionFlowPublicMessage.tsx",
@@ -3912,7 +4134,7 @@
     "a1b74bed": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AssignNewVirtualCard",
         "kind": "mutation",
         "file": "components/edit-collective/AssignVirtualCardModal.tsx",
@@ -3923,7 +4145,7 @@
     "a1fbb9a8": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ScheduledExpensesBanner",
         "kind": "query",
         "file": "components/dashboard/sections/expenses/ScheduledExpensesBanner.tsx",
@@ -3934,7 +4156,7 @@
     "a2a92fe2": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditTier",
         "kind": "mutation",
         "file": "components/edit-collective/tiers/EditTierModal.tsx",
@@ -3945,7 +4167,7 @@
     "a6948be6": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AddFundsAccount",
         "kind": "query",
         "file": "components/dashboard/sections/collectives/AddFundsModal.tsx",
@@ -3956,7 +4178,7 @@
     "a6cdafae": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountReports",
         "kind": "query",
         "file": "components/dashboard/sections/reports/queries.ts",
@@ -3964,10 +4186,21 @@
         "endLine": 176
       }
     ],
+    "a71fb53d": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "CreateGrantPage",
+        "kind": "query",
+        "file": "pages/create-grant.tsx",
+        "line": 150,
+        "endLine": 182
+      }
+    ],
     "a73e5918": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditTransactionsImportAssignments",
         "kind": "mutation",
         "file": "components/dashboard/sections/transactions-imports/TransactionsImportAssignmentsForm.tsx",
@@ -3978,7 +4211,7 @@
     "a74f0581": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateFund",
         "kind": "mutation",
         "file": "components/create-fund/index.tsx",
@@ -3989,7 +4222,7 @@
     "a80db5a2": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "MoveContributionsTiers",
         "kind": "query",
         "file": "components/root-actions/MoveReceivedContributions.tsx",
@@ -4000,7 +4233,7 @@
     "a85711a0": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "RemoveEmojiReaction",
         "kind": "mutation",
         "file": "components/conversations/EmojiReactionPicker.tsx",
@@ -4011,7 +4244,7 @@
     "a8dde46f": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "KYCRequestModal",
         "kind": "query",
         "file": "components/kyc/request/KYCRequestModal.tsx",
@@ -4022,7 +4255,7 @@
     "a945ec93": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateWebAuthnRegistrationOptions",
         "kind": "mutation",
         "file": "components/two-factor-authentication/DevicesSettings.tsx",
@@ -4033,7 +4266,7 @@
     "aaf026e3": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ClearCache",
         "kind": "mutation",
         "file": "components/root-actions/ClearCacheForAccountForm.tsx",
@@ -4044,7 +4277,7 @@
     "aaf07834": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ResetPasswordAccount",
         "kind": "query",
         "file": "pages/reset-password.tsx",
@@ -4055,7 +4288,7 @@
     "ab9ec164": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SetTransactionsImportAccountBalanceAccountingCategory",
         "kind": "mutation",
         "file": "components/dashboard/sections/accounting/PaymentAccountsTable.tsx",
@@ -4066,7 +4299,7 @@
     "ac158d5e": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostExpectedFundsMetadata",
         "kind": "query",
         "file": "components/dashboard/sections/contributions/HostExpectedFunds.tsx",
@@ -4077,7 +4310,7 @@
     "ac3dec57": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "PauseVirtualCard",
         "kind": "mutation",
         "file": "components/edit-collective/VirtualCard.tsx",
@@ -4088,7 +4321,7 @@
     "ac81e439": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditAccountFreezeStatus",
         "kind": "mutation",
         "file": "components/dashboard/sections/collectives/FreezeAccountModal.tsx",
@@ -4099,7 +4332,7 @@
     "ac8dd587": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "RemoveFiscalHostNote",
         "kind": "mutation",
         "file": "components/FiscalHostNoteModal.tsx",
@@ -4110,7 +4343,7 @@
     "acb436a4": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdateSecuritySettings",
         "kind": "mutation",
         "file": "components/edit-collective/sections/Security.tsx",
@@ -4121,7 +4354,7 @@
     "ad477734": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateUser",
         "kind": "mutation",
         "file": "test/cypress/support/commands.js",
@@ -4132,7 +4365,7 @@
     "ad9236be": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountDetailExpectedFundsMetadata",
         "kind": "query",
         "file": "components/dashboard/sections/community/tabs/ExpectedFunds.tsx",
@@ -4143,7 +4376,7 @@
     "ad94e0c2": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditAccountSettingByLegacyId",
         "kind": "mutation",
         "file": "components/collective-page/graphql/mutations.ts",
@@ -4154,7 +4387,7 @@
     "adab2783": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SyncTransactionsImport",
         "kind": "mutation",
         "file": "components/dashboard/sections/transactions-imports/TransactionsImportForceSyncButton.tsx",
@@ -4165,7 +4398,7 @@
     "adde8e18": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostApplySuccess",
         "kind": "query",
         "file": "components/accept-financial-contributions/SuccessPage.tsx",
@@ -4176,7 +4409,7 @@
     "ae63a27c": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SetVendorArchive",
         "kind": "mutation",
         "file": "components/vendors/queries.ts",
@@ -4187,7 +4420,7 @@
     "aee4369b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "TransactionsImportStats",
         "kind": "query",
         "file": "components/dashboard/sections/transactions-imports/CSVTransactionsImport.tsx",
@@ -4198,7 +4431,7 @@
     "af8e0b61": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DeleteTier",
         "kind": "mutation",
         "file": "components/edit-collective/tiers/EditTierModal.tsx",
@@ -4209,7 +4442,7 @@
     "afc93d79": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostCancelOrder",
         "kind": "mutation",
         "file": "components/dashboard/sections/contributions/queries.ts",
@@ -4220,7 +4453,7 @@
     "b03ea642": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CollectiveMembers",
         "kind": "query",
         "file": "components/edit-collective/EditVirtualCardModal.tsx",
@@ -4231,7 +4464,7 @@
     "b076f19d": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountingCategoryTable",
         "kind": "query",
         "file": "components/dashboard/sections/accounting/AccountingCategoriesTable.tsx",
@@ -4242,7 +4475,7 @@
     "b097b1a8": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostedVirtualCardAccounts",
         "kind": "query",
         "file": "components/dashboard/sections/HostVirtualCards.tsx",
@@ -4253,7 +4486,7 @@
     "b0ab99f1": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditCollectiveSettingsFee",
         "kind": "mutation",
         "file": "components/dashboard/sections/community/EditCollectiveSettingsModal.tsx",
@@ -4264,7 +4497,7 @@
     "b0b40419": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "OverviewMetrics",
         "kind": "query",
         "file": "components/dashboard/sections/overview/queries.ts",
@@ -4275,7 +4508,7 @@
     "b1a02a08": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "StartResumeContributionsProcess",
         "kind": "mutation",
         "file": "components/dashboard/sections/contributions/PausedIncomingContributionsMessage.tsx",
@@ -4286,7 +4519,7 @@
     "b1a078cf": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CollectiveSettings",
         "kind": "query",
         "file": "lib/graphql/v1/queries.ts",
@@ -4297,7 +4530,7 @@
     "b1c94243": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SendMoneyToCollective",
         "kind": "mutation",
         "file": "components/SendMoneyToCollectiveBtn.tsx",
@@ -4308,7 +4541,7 @@
     "b27db1e3": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SetNewsletterOptIn",
         "kind": "mutation",
         "file": "components/dashboard/sections/NotificationsSettings/index.tsx",
@@ -4319,7 +4552,7 @@
     "b2875791": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CypressResolveCollectiveId",
         "kind": "query",
         "file": "test/cypress/support/commands.js",
@@ -4330,7 +4563,7 @@
     "b2d8ed24": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SetConnectedAccountBalanceAccountingCategory",
         "kind": "mutation",
         "file": "components/dashboard/sections/accounting/PaymentAccountsTable.tsx",
@@ -4338,10 +4571,21 @@
         "endLine": 114
       }
     ],
+    "b3042a43": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "OrderPage",
+        "kind": "query",
+        "file": "pages/order.tsx",
+        "line": 46,
+        "endLine": 188
+      }
+    ],
     "b30d60b9": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SearchTags",
         "kind": "query",
         "file": "components/CollectiveTagsInput.tsx",
@@ -4352,7 +4596,7 @@
     "b3415a31": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdateExpenseBalanceAccountingCategory",
         "kind": "mutation",
         "file": "components/accounting/BalanceAccountingCategoryPill.tsx",
@@ -4363,7 +4607,7 @@
     "b4236be5": [
       {
         "service": "rest",
-        "commit": "e64b2d206fdd20a841026527e2f7d512033fe532",
+        "commit": "e67c37f3719cd772ae294eb152dbb16c34f9d1ff",
         "operation": "HostedCollectives",
         "kind": "query",
         "file": "src/server/controllers/hosted-collectives.ts",
@@ -4385,7 +4629,7 @@
     "b5e019a1": [
       {
         "service": "pdf",
-        "commit": "b9d20f947072dbbfd1cb6b02ec18eb12381776ce",
+        "commit": "417b7fc69fb1c35fb7d6b8b06f390027a7f6ea23",
         "operation": "InvoiceByDateRange",
         "kind": "query",
         "file": "server/routes/receipts.ts",
@@ -4396,7 +4640,7 @@
     "b5e74cfd": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateExpenseStripePaymentIntent",
         "kind": "mutation",
         "file": "lib/stripe/usePaymentIntent.ts",
@@ -4407,7 +4651,7 @@
     "b6bb8988": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SubscriberDrawer",
         "kind": "query",
         "file": "components/dashboard/sections/subscriptions/queries.ts",
@@ -4418,7 +4662,7 @@
     "b6c15832": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdateFilterCategories",
         "kind": "mutation",
         "file": "components/edit-collective/sections/Policies.tsx",
@@ -4429,7 +4673,7 @@
     "b6e5ca94": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditAccountFee",
         "kind": "mutation",
         "file": "components/dashboard/sections/collectives/CollectiveDetails.tsx",
@@ -4440,7 +4684,7 @@
     "b71fd802": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "LeaveHost",
         "kind": "mutation",
         "file": "components/edit-collective/LeaveHostModal.tsx",
@@ -4451,7 +4695,7 @@
     "b8713170": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditLegalDocumentStatus",
         "kind": "mutation",
         "file": "components/dashboard/sections/legal-documents/InvalidateTaxFormModal.tsx",
@@ -4462,7 +4706,7 @@
     "b9e43299": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "Account",
         "kind": "query",
         "file": "test/cypress/support/typed-commands.ts",
@@ -4473,7 +4717,7 @@
     "bac40434": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ContributionsSectionStatic",
         "kind": "query",
         "file": "components/collective-page/sections/Contributions.tsx",
@@ -4495,7 +4739,7 @@
     "bc5a76d6": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditStripeAccount",
         "kind": "query",
         "file": "components/edit-collective/EditStripeAccount.tsx",
@@ -4506,7 +4750,7 @@
     "bc716c85": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "PlatformBillingOverviewCard",
         "kind": "query",
         "file": "components/dashboard/sections/overview/PlatformBillingOverviewCard.tsx",
@@ -4517,7 +4761,7 @@
     "bc896460": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DeleteAgreement",
         "kind": "mutation",
         "file": "components/dashboard/sections/HostDashboardAgreements.tsx",
@@ -4528,7 +4772,7 @@
     "bc9eb2eb": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AddStripePaymentMethodFromSetupIntent",
         "kind": "mutation",
         "file": "components/EditOrderModal.tsx",
@@ -4539,7 +4783,7 @@
     "bcefb994": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "TagStats",
         "kind": "query",
         "file": "components/EditTagsModal.tsx",
@@ -4550,7 +4794,7 @@
     "bcf65310": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "LedgerCSVImports",
         "kind": "query",
         "file": "components/dashboard/sections/transactions-imports/CSVTransactionsImportsTable.tsx",
@@ -4561,7 +4805,7 @@
     "bd20ac95": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ConfirmOrderFromPaymentMethods",
         "kind": "mutation",
         "file": "components/edit-collective/sections/payment-info/PaymentMethodsTable.tsx",
@@ -4572,7 +4816,7 @@
     "bdd2c19f": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SetSubscriberBlockStatus",
         "kind": "mutation",
         "file": "components/dashboard/sections/subscriptions/queries.ts",
@@ -4583,7 +4827,7 @@
     "bde7236b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ConnectGoCardlessAccount",
         "kind": "mutation",
         "file": "pages/services/gocardless/callback.tsx",
@@ -4594,7 +4838,7 @@
     "bdf5efd1": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountPaymentRequestsMetadata",
         "kind": "query",
         "file": "components/dashboard/sections/community/tabs/PaymentRequests.tsx",
@@ -4605,7 +4849,7 @@
     "be8c03a0": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DeleteOAuthApplication",
         "kind": "mutation",
         "file": "components/oauth/DeleteOAuthApplicationModal.tsx",
@@ -4616,7 +4860,7 @@
     "bedf1e85": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreatePendingContributionModal",
         "kind": "query",
         "file": "components/dashboard/sections/contributions/CreatePendingOrderModal.tsx",
@@ -4627,7 +4871,7 @@
     "bf0879b2": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SetPolicies",
         "kind": "mutation",
         "file": "components/edit-collective/sections/Policies.tsx",
@@ -4638,7 +4882,7 @@
     "bf119943": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostExpenseModalCurrencyExchangeRate",
         "kind": "query",
         "file": "components/InputAmountWithDynamicFxRate.tsx",
@@ -4646,10 +4890,21 @@
         "endLine": 21
       }
     ],
+    "bfb09506": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "UpdatesPage",
+        "kind": "query",
+        "file": "pages/updates.tsx",
+        "line": 36,
+        "endLine": 101
+      }
+    ],
     "c0a346a1": [
       {
         "service": "rest",
-        "commit": "e64b2d206fdd20a841026527e2f7d512033fe532",
+        "commit": "e67c37f3719cd772ae294eb152dbb16c34f9d1ff",
         "operation": "CollectiveMembers",
         "kind": "query",
         "file": "src/server/controllers/members.ts",
@@ -4671,7 +4926,7 @@
     "c2088c9a": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "VirtualCardPolicies",
         "kind": "query",
         "file": "components/edit-collective/EditVirtualCardModal.tsx",
@@ -4682,7 +4937,7 @@
     "c2152655": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "FollowConversation",
         "kind": "mutation",
         "file": "components/conversations/FollowConversationButton.tsx",
@@ -4693,7 +4948,7 @@
     "c2731867": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdatesDashboardMetadata",
         "kind": "query",
         "file": "components/dashboard/sections/updates/queries.ts",
@@ -4704,7 +4959,7 @@
     "c2ecb0c7": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ConnectPaypalPayoutMethod",
         "kind": "mutation",
         "file": "components/paypal/PaypalConnectButton.tsx",
@@ -4715,7 +4970,7 @@
     "c3385519": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditAddedFunds",
         "kind": "mutation",
         "file": "components/dashboard/sections/collectives/AddFundsModal.tsx",
@@ -4726,7 +4981,7 @@
     "c3b3f75c": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ConvertOrganizationToCollective",
         "kind": "mutation",
         "file": "components/edit-collective/ConvertToCollectiveModal.tsx",
@@ -4737,12 +4992,34 @@
     "c3e95b60": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SubmitKYCVerificationButton",
         "kind": "query",
         "file": "components/kyc/request/SubmitKYCVerificationButton.tsx",
         "line": 36,
         "endLine": 46
+      }
+    ],
+    "c411fea5": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "ProcessExpenseAction",
+        "kind": "mutation",
+        "file": "components/dashboard/sections/expenses/actions.tsx",
+        "line": 221,
+        "endLine": 241
+      }
+    ],
+    "c4450fb3": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "TransactionsPage",
+        "kind": "query",
+        "file": "components/transactions/TransactionsPageContent.tsx",
+        "line": 119,
+        "endLine": 246
       }
     ],
     "c465f21d": [
@@ -4759,7 +5036,7 @@
     "c47fe978": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ExportRequests",
         "kind": "query",
         "file": "components/dashboard/sections/exports/index.tsx",
@@ -4767,10 +5044,21 @@
         "endLine": 86
       }
     ],
+    "c4b787de": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "CollectiveNavbar",
+        "kind": "query",
+        "file": "lib/graphql/queries.ts",
+        "line": 9,
+        "endLine": 38
+      }
+    ],
     "c4f11bac": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateConversation",
         "kind": "mutation",
         "file": "components/conversations/CreateConversationForm.tsx",
@@ -4781,7 +5069,7 @@
     "c50a4bde": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "OrganizationSignup",
         "kind": "mutation",
         "file": "components/signup/OrganizationForm.tsx",
@@ -4792,7 +5080,7 @@
     "c525f580": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "OrderStatus",
         "kind": "query",
         "file": "test/cypress/support/commands.js",
@@ -4803,7 +5091,7 @@
     "c56f46d2": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostContributionsReport",
         "kind": "query",
         "file": "components/dashboard/sections/contributions/reports/HostContributionsReportView.tsx",
@@ -4811,10 +5099,21 @@
         "endLine": 71
       }
     ],
+    "c5d6e14a": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "CollectivePage",
+        "kind": "query",
+        "file": "components/collective-page/graphql/queries.ts",
+        "line": 7,
+        "endLine": 222
+      }
+    ],
     "c5e4b0e1": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "Timeline",
         "kind": "query",
         "file": "components/dashboard/sections/overview/queries.ts",
@@ -4825,7 +5124,7 @@
     "c628d69b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DashboardExpenses",
         "kind": "query",
         "file": "components/dashboard/sections/expenses/queries.ts",
@@ -4836,7 +5135,7 @@
     "c66326e6": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ExportRequestDetails",
         "kind": "query",
         "file": "components/dashboard/sections/exports/ExportRequestDetailsDrawer.tsx",
@@ -4847,7 +5146,7 @@
     "c6a581fb": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateCollectiveTagStats",
         "kind": "query",
         "file": "components/create-collective/index.tsx",
@@ -4858,7 +5157,7 @@
     "c6a9d4d7": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DashboardContributors",
         "kind": "query",
         "file": "components/dashboard/sections/Contributors.tsx",
@@ -4869,7 +5168,7 @@
     "c79e0809": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DeleteManualPaymentProvider",
         "kind": "mutation",
         "file": "components/edit-collective/sections/receive-money/gql.ts",
@@ -4880,7 +5179,7 @@
     "c7caaf05": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DeleteUpdate",
         "kind": "mutation",
         "file": "components/StyledUpdate.tsx",
@@ -4888,10 +5187,21 @@
         "endLine": 312
       }
     ],
+    "c863c096": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "UpdatesSection",
+        "kind": "query",
+        "file": "components/collective-page/sections/Updates.tsx",
+        "line": 33,
+        "endLine": 62
+      }
+    ],
     "c9a46e75": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateTransactionsImport",
         "kind": "mutation",
         "file": "components/dashboard/sections/transactions-imports/NewCSVTransactionsImportDialog.tsx",
@@ -4902,7 +5212,7 @@
     "c9b1e2f8": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SetConnectedAccountBalanceAccountingCategoryFromSettings",
         "kind": "mutation",
         "file": "components/accounting/BalanceAccountingCategoryPicker.tsx",
@@ -4913,7 +5223,7 @@
     "ca385101": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DeleteAccount",
         "kind": "mutation",
         "file": "components/edit-collective/actions/Delete.tsx",
@@ -4924,7 +5234,7 @@
     "cb249688": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "PayoutBankInformationAvailableCurrencies",
         "kind": "query",
         "file": "components/expenses/PayoutBankInformationForm.tsx",
@@ -4932,10 +5242,21 @@
         "endLine": 535
       }
     ],
+    "cb8c9347": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "ExpensePage",
+        "kind": "query",
+        "file": "components/expenses/graphql/queries.ts",
+        "line": 11,
+        "endLine": 102
+      }
+    ],
     "cba157bc": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "FreezeAccountModal",
         "kind": "query",
         "file": "components/dashboard/sections/collectives/FreezeAccountModal.tsx",
@@ -4946,7 +5267,7 @@
     "cc0ab681": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "NewContributionFlowOrderSuccess",
         "kind": "query",
         "file": "components/contribution-flow/ContributionFlowSuccess.tsx",
@@ -4957,7 +5278,7 @@
     "cc3acd63": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateConnectedAccount",
         "kind": "mutation",
         "file": "components/edit-collective/EditPayPalAccount.tsx",
@@ -4968,7 +5289,7 @@
     "cc82ed91": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateCollectiveFromHost",
         "kind": "mutation",
         "file": "components/dashboard/sections/collectives/CreateHostedCollectiveModal.tsx",
@@ -4979,7 +5300,7 @@
     "cca5b1c9": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DeleteVirtualCard",
         "kind": "mutation",
         "file": "components/edit-collective/DeleteVirtualCardModal.tsx",
@@ -4990,7 +5311,7 @@
     "ccaa2ca5": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ExpenseResult",
         "kind": "query",
         "file": "components/search/RecentVisits.tsx",
@@ -5001,7 +5322,7 @@
     "cd966cc8": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "TransactionDetails",
         "kind": "query",
         "file": "components/dashboard/sections/transactions/TransactionDrawer.tsx",
@@ -5012,7 +5333,7 @@
     "ce0cb372": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostApplicationsMetadata",
         "kind": "query",
         "file": "components/dashboard/sections/collectives/queries.ts",
@@ -5023,7 +5344,7 @@
     "ce14befe": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "VirtualCardRequest",
         "kind": "query",
         "file": "components/virtual-card-requests/VirtualCardRequestDrawer.tsx",
@@ -5034,7 +5355,7 @@
     "ce25c829": [
       {
         "service": "contributors-svg",
-        "commit": "a9600e516c4a8e1ced3f8aa90d759b408ccb313a",
+        "commit": "7ba92580e8cbda7b9ab825aa497f6192b55af16a",
         "operation": "GithubContributors",
         "kind": "query",
         "file": "src/server/lib/contributors.js",
@@ -5045,7 +5366,7 @@
     "cec332d5": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AddTwoFactorAuthToIndividualForTest",
         "kind": "mutation",
         "file": "test/cypress/support/commands.js",
@@ -5056,7 +5377,7 @@
     "cf77513e": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateTier",
         "kind": "mutation",
         "file": "components/edit-collective/tiers/EditTierModal.tsx",
@@ -5064,10 +5385,21 @@
         "endLine": 781
       }
     ],
+    "d05ab197": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "ProcessExpenseButtons",
+        "kind": "mutation",
+        "file": "components/expenses/ProcessExpenseButtons.tsx",
+        "line": 41,
+        "endLine": 55
+      }
+    ],
     "d07bacd3": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdateResult",
         "kind": "query",
         "file": "components/search/RecentVisits.tsx",
@@ -5078,7 +5410,7 @@
     "d0b4c30e": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostContributionCategoryRules",
         "kind": "query",
         "file": "components/accounting/dashboard/categorization/AccountingCategorizationRulesDashboard.tsx",
@@ -5089,7 +5421,7 @@
     "d0b5b019": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountAdminKYCModal",
         "kind": "query",
         "file": "components/kyc/components/AccountAdminKYCModal.tsx",
@@ -5100,7 +5432,7 @@
     "d0c0f4b1": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AppliedToFiscalHost",
         "kind": "query",
         "file": "components/edit-collective/sections/fiscal-host/AppliedToFiscalHost.tsx",
@@ -5111,7 +5443,7 @@
     "d11284cb": [
       {
         "service": "images",
-        "commit": "14f354b12597bdba48985bd0755e42feed6b8ca2",
+        "commit": "b11f9c3f2e20fd4f27dd7ed1a1a1290ffb44af83",
         "operation": "MembersStatsForTier",
         "kind": "query",
         "file": "src/server/lib/graphql.ts",
@@ -5122,7 +5454,7 @@
     "d331487f": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UserContextualMemberships",
         "kind": "query",
         "file": "components/AccountHoverCard.tsx",
@@ -5133,7 +5465,7 @@
     "d34308a2": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AuthoredOrdersRoot",
         "kind": "query",
         "file": "components/root-actions/MoveAuthoredContributions.tsx",
@@ -5144,7 +5476,7 @@
     "d39dc763": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostExpensesReportList",
         "kind": "query",
         "file": "components/dashboard/sections/expenses/reports/HostExpensesReportList.tsx",
@@ -5155,7 +5487,7 @@
     "d5118db0": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdateAccountUSEntity",
         "kind": "mutation",
         "file": "components/submit-expense/form/mutations.ts",
@@ -5177,7 +5509,7 @@
     "d74334d9": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ConfirmGuestAccount",
         "kind": "mutation",
         "file": "pages/confirm-guest.tsx",
@@ -5188,7 +5520,7 @@
     "d77789ac": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SearchResultsPage",
         "kind": "query",
         "file": "components/search/queries.ts",
@@ -5199,7 +5531,7 @@
     "d91822c8": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateExpenseFromDashboard",
         "kind": "mutation",
         "file": "components/submit-expense/useExpenseForm.ts",
@@ -5210,7 +5542,7 @@
     "db26f73b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostedCollectivesMetadata",
         "kind": "query",
         "file": "components/dashboard/sections/collectives/queries.ts",
@@ -5221,7 +5553,7 @@
     "dbbd74c3": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditCollectiveAvatar",
         "kind": "mutation",
         "file": "lib/graphql/v1/mutations.ts",
@@ -5232,7 +5564,7 @@
     "dbd58d26": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountMoneyMovementsSummary",
         "kind": "query",
         "file": "components/dashboard/sections/community/common.tsx",
@@ -5243,7 +5575,7 @@
     "dceb5ef4": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateOrganization",
         "kind": "mutation",
         "file": "test/cypress/support/commands.js",
@@ -5254,7 +5586,7 @@
     "dda27e66": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostedCollectiveDetail",
         "kind": "query",
         "file": "components/dashboard/sections/collectives/queries.ts",
@@ -5265,7 +5597,7 @@
     "ddf050d7": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostDashboardMetadata",
         "kind": "query",
         "file": "components/dashboard/sections/expenses/queries.ts",
@@ -5276,7 +5608,7 @@
     "deee8f86": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "RemoveTwoFactorAuthentication",
         "kind": "mutation",
         "file": "components/two-factor-authentication/ResetTwoFactorButton.tsx",
@@ -5287,7 +5619,7 @@
     "df269f93": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SubmitLegalDocument",
         "kind": "mutation",
         "file": "components/dashboard/sections/tax-information/TaxInformationForm.tsx",
@@ -5298,7 +5630,7 @@
     "e029b377": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostContributionsReportList",
         "kind": "query",
         "file": "components/dashboard/sections/contributions/reports/HostContributionsReportList.tsx",
@@ -5309,7 +5641,7 @@
     "e030a13d": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountDetailMoneyMovementsMetadata",
         "kind": "query",
         "file": "components/dashboard/sections/community/tabs/MoneyMovements.tsx",
@@ -5320,7 +5652,7 @@
     "e04ace5e": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DeleteTransferWiseAccount",
         "kind": "mutation",
         "file": "components/edit-collective/EditTransferWiseAccount.tsx",
@@ -5353,7 +5685,7 @@
     "e0e37157": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostMetricsOverviewSection",
         "kind": "query",
         "file": "components/metrics/host/dashboard-overview/queries.ts",
@@ -5364,7 +5696,7 @@
     "e139dd74": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ManagePaymentMethods",
         "kind": "query",
         "file": "components/edit-collective/sections/payment-info/gql.ts",
@@ -5375,7 +5707,7 @@
     "e180f716": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdateAccountLegalName",
         "kind": "mutation",
         "file": "components/submit-expense/form/mutations.ts",
@@ -5386,7 +5718,7 @@
     "e1d37d41": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "PayoutMethodExchangeRateWarning",
         "kind": "query",
         "file": "components/submit-expense/form/SummarySection.tsx",
@@ -5397,7 +5729,7 @@
     "e29b640c": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditPaymentMethodModal",
         "kind": "query",
         "file": "components/EditOrderModal.tsx",
@@ -5408,7 +5740,7 @@
     "e2b94799": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SetPassword",
         "kind": "mutation",
         "file": "components/edit-collective/sections/UserSecurity.tsx",
@@ -5419,7 +5751,7 @@
     "e2c56d5b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ExpensePipelineOverview",
         "kind": "query",
         "file": "components/dashboard/sections/expenses/ExpensePipelineOverview.tsx",
@@ -5430,12 +5762,23 @@
     "e2f4c1d3": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AddEmojiReaction",
         "kind": "mutation",
         "file": "components/conversations/EmojiReactionPicker.tsx",
         "line": 15,
         "endLine": 30
+      }
+    ],
+    "e3209c55": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "MoveExpense",
+        "kind": "mutation",
+        "file": "components/expenses/graphql/mutations.ts",
+        "line": 36,
+        "endLine": 45
       }
     ],
     "e39dd92b": [
@@ -5452,7 +5795,7 @@
     "e3fdd361": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "BalanceAccountingCategoryPicker",
         "kind": "query",
         "file": "components/accounting/BalanceAccountingCategoryPicker.tsx",
@@ -5463,7 +5806,7 @@
     "e4035ebf": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CompleteProfile",
         "kind": "mutation",
         "file": "components/signup/IndividualForm.tsx",
@@ -5485,7 +5828,7 @@
     "e50b3bab": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "RejectVirtualCardRequest",
         "kind": "mutation",
         "file": "components/virtual-card-requests/VirtualCardRequestDrawer.tsx",
@@ -5496,7 +5839,7 @@
     "e53e1a64": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "MetricsPerAccount",
         "kind": "query",
         "file": "components/dashboard/sections/overview/queries.ts",
@@ -5507,7 +5850,7 @@
     "e5f86483": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditCollectiveBankTransferHost",
         "kind": "query",
         "file": "components/edit-collective/sections/receive-money/gql.ts",
@@ -5518,7 +5861,7 @@
     "e6740fe9": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "RemoveMember",
         "kind": "mutation",
         "file": "components/edit-collective/sections/team/EditMemberModal.tsx",
@@ -5529,18 +5872,18 @@
     "e75d973b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostedAccountActivities",
         "kind": "query",
         "file": "components/dashboard/sections/community/queries.ts",
-        "line": 451,
-        "endLine": 464
+        "line": 462,
+        "endLine": 475
       }
     ],
     "e85ff75f": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "Members",
         "kind": "query",
         "file": "components/MembersWithData.tsx",
@@ -5551,7 +5894,7 @@
     "e8d1990a": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditExportRequest",
         "kind": "mutation",
         "file": "components/dashboard/sections/exports/ExportRequestDetailsDrawer.tsx",
@@ -5562,7 +5905,7 @@
     "e8e0371b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "MergeAccounts",
         "kind": "mutation",
         "file": "components/root-actions/MergeAccountsForm.tsx",
@@ -5573,7 +5916,7 @@
     "e90d013c": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CollectiveBannerIframe",
         "kind": "query",
         "file": "lib/graphql/v1/queries.ts",
@@ -5584,7 +5927,7 @@
     "e95758d1": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "BudgetSectionWithoutHost",
         "kind": "query",
         "file": "components/collective-page/sections/Budget.tsx",
@@ -5595,7 +5938,7 @@
     "e9b30dd3": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostCreateExpense",
         "kind": "mutation",
         "file": "components/dashboard/sections/expenses/HostCreateExpenseModal.tsx",
@@ -5606,7 +5949,7 @@
     "e9b9f0ae": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UnarchiveAccount",
         "kind": "mutation",
         "file": "components/edit-collective/actions/Archive.tsx",
@@ -5617,7 +5960,7 @@
     "ea91523b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountResult",
         "kind": "query",
         "file": "components/search/RecentVisits.tsx",
@@ -5628,7 +5971,7 @@
     "eb3871da": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ResendDraftExpenseInvite",
         "kind": "mutation",
         "file": "components/expenses/ExpenseInviteNotificationBanner.tsx",
@@ -5639,7 +5982,7 @@
     "eb92862b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AnonymizeAccount",
         "kind": "mutation",
         "file": "components/root-actions/AnonymizeAccount.tsx",
@@ -5650,7 +5993,7 @@
     "ebaee2eb": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "OscApplyToHost",
         "kind": "mutation",
         "file": "components/osc-host-application/ApplicationForm.tsx",
@@ -5661,7 +6004,7 @@
     "ebe81ae4": [
       {
         "service": "rest",
-        "commit": "e64b2d206fdd20a841026527e2f7d512033fe532",
+        "commit": "e67c37f3719cd772ae294eb152dbb16c34f9d1ff",
         "operation": "HostTransactions",
         "kind": "query",
         "file": "src/server/controllers/account-transactions.ts",
@@ -5672,7 +6015,7 @@
     "ec03783b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "OscCollectiveApplicationPage",
         "kind": "query",
         "file": "pages/osc-host-application.tsx",
@@ -5683,7 +6026,7 @@
     "ec1e7626": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "InternalTransfer",
         "kind": "mutation",
         "file": "components/dashboard/sections/accounts/InternalTransferModal.tsx",
@@ -5694,7 +6037,7 @@
     "ec991323": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateCollective",
         "kind": "mutation",
         "file": "components/create-collective/index.tsx",
@@ -5705,7 +6048,7 @@
     "ecbe260b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditExpenseCategory",
         "kind": "mutation",
         "file": "components/expenses/graphql/mutations.ts",
@@ -5716,7 +6059,7 @@
     "ed40ab6f": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DeleteComment",
         "kind": "mutation",
         "file": "components/conversations/CommentActions.tsx",
@@ -5727,7 +6070,7 @@
     "edefa4a8": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostedGrantsMetadata",
         "kind": "query",
         "file": "components/dashboard/sections/funds-and-grants/HostedGrants.tsx",
@@ -5738,7 +6081,7 @@
     "ee34e348": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateProjectPageParentAccount",
         "kind": "query",
         "file": "pages/create-project.tsx",
@@ -5749,7 +6092,7 @@
     "ee6c3ee5": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditPendingContribution",
         "kind": "mutation",
         "file": "components/dashboard/sections/contributions/CreatePendingOrderModal.tsx",
@@ -5760,7 +6103,7 @@
     "eec1a196": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ExpensePayeeFilterSearch",
         "kind": "query",
         "file": "components/dashboard/filters/ExpensePayeeFilter.tsx",
@@ -5771,7 +6114,7 @@
     "ef152e82": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostAgreements",
         "kind": "query",
         "file": "components/dashboard/sections/HostDashboardAgreements.tsx",
@@ -5782,7 +6125,7 @@
     "ef221c89": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "BudgetSectionExpense",
         "kind": "query",
         "file": "components/collective-page/sections/Budget/ExpenseBudget.tsx",
@@ -5793,7 +6136,7 @@
     "f0281a03": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountDetailAgreements",
         "kind": "query",
         "file": "components/dashboard/sections/community/tabs/Agreements.tsx",
@@ -5804,7 +6147,7 @@
     "f092df01": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SearchPage",
         "kind": "query",
         "file": "pages/search.tsx",
@@ -5815,7 +6158,7 @@
     "f0c256c2": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ExpensesPickerSearch",
         "kind": "query",
         "file": "components/ExpensesPickerAsync.tsx",
@@ -5826,7 +6169,7 @@
     "f1641dde": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "LegalDocumentDrawer",
         "kind": "query",
         "file": "components/dashboard/sections/legal-documents/LegalDocumentDrawer.tsx",
@@ -5837,7 +6180,7 @@
     "f1ca45eb": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountConversions",
         "kind": "query",
         "file": "components/dashboard/sections/overview/ConvertedAccountMessage.tsx",
@@ -5848,7 +6191,7 @@
     "f1edb8ab": [
       {
         "service": "rest",
-        "commit": "e64b2d206fdd20a841026527e2f7d512033fe532",
+        "commit": "e67c37f3719cd772ae294eb152dbb16c34f9d1ff",
         "operation": "AllTransactions",
         "kind": "query",
         "file": "src/server/lib/graphql.ts",
@@ -5859,7 +6202,7 @@
     "f2aba510": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "SetTags",
         "kind": "mutation",
         "file": "components/Tags.tsx",
@@ -5870,7 +6213,7 @@
     "f369eb14": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "MemberInvitations",
         "kind": "query",
         "file": "components/onboarding-modal/OnboardingModal.tsx",
@@ -5892,7 +6235,7 @@
     "f418f502": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DashboardEditUpdate",
         "kind": "mutation",
         "file": "components/dashboard/sections/updates/UpdateFormView.tsx",
@@ -5903,7 +6246,7 @@
     "f424277d": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountsDashboard",
         "kind": "query",
         "file": "components/dashboard/sections/accounts/queries.ts",
@@ -5914,7 +6257,7 @@
     "f4c27ec0": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "OrderResult",
         "kind": "query",
         "file": "components/search/RecentVisits.tsx",
@@ -5925,7 +6268,7 @@
     "f4ee189c": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountFilterSearch",
         "kind": "query",
         "file": "components/dashboard/filters/AccountFilter.tsx",
@@ -5936,7 +6279,7 @@
     "f501f0e4": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountTaxInformation",
         "kind": "query",
         "file": "components/dashboard/sections/tax-information/queries.ts",
@@ -5947,7 +6290,7 @@
     "f554037b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditMemberInvitation",
         "kind": "mutation",
         "file": "components/edit-collective/sections/team/EditMemberModal.tsx",
@@ -5958,7 +6301,7 @@
     "f5a01f10": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateOrder",
         "kind": "mutation",
         "file": "components/contribution-flow/index.tsx",
@@ -5969,7 +6312,7 @@
     "f7e8effb": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DraftExpenseAndInviteUser",
         "kind": "mutation",
         "file": "test/cypress/support/commands.js",
@@ -5980,7 +6323,7 @@
     "f824ec61": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateExpense",
         "kind": "mutation",
         "file": "test/cypress/support/commands.js",
@@ -5991,7 +6334,7 @@
     "f86be258": [
       {
         "service": "pdf",
-        "commit": "b9d20f947072dbbfd1cb6b02ec18eb12381776ce",
+        "commit": "417b7fc69fb1c35fb7d6b8b06f390027a7f6ea23",
         "operation": "TransactionInvoice",
         "kind": "query",
         "file": "server/routes/receipts.ts",
@@ -6002,7 +6345,7 @@
     "f8a65715": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "BudgetSectionForIndividual",
         "kind": "query",
         "file": "components/collective-page/sections/Budget.tsx",
@@ -6013,7 +6356,7 @@
     "f8ba57d6": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "DismissMessage",
         "kind": "mutation",
         "file": "components/DismissibleMessage.ts",
@@ -6035,7 +6378,7 @@
     "f92f5363": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostRefundPaymentTransaction",
         "kind": "query",
         "file": "components/dashboard/sections/transactions/HostRefundChargeModal.tsx",
@@ -6057,7 +6400,7 @@
     "f9fdfdfd": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "ContributionFlowAccount",
         "kind": "query",
         "file": "components/contribution-flow/graphql/queries.ts",
@@ -6079,7 +6422,7 @@
     "fa8a3923": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "OrdersPickerSearch",
         "kind": "query",
         "file": "components/OrdersPickerAsync.tsx",
@@ -6090,7 +6433,7 @@
     "fa95c67b": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdateOrderBalanceAccountingCategory",
         "kind": "mutation",
         "file": "components/accounting/BalanceAccountingCategoryPill.tsx",
@@ -6101,7 +6444,7 @@
     "fac723a1": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "UpdateAccountPlatformSubscription",
         "kind": "mutation",
         "file": "components/dashboard/sections/subscriptions/queries.ts",
@@ -6112,7 +6455,7 @@
     "fbcc7d71": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostVirtualCardRequestsMetaData",
         "kind": "query",
         "file": "components/dashboard/sections/HostVirtualCardRequests.tsx",
@@ -6123,7 +6466,7 @@
     "fbcfc6ab": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "NotificationsSettingsRefetch",
         "kind": "query",
         "file": "components/dashboard/sections/NotificationsSettings/ActivitySwitch.tsx",
@@ -6131,10 +6474,21 @@
         "endLine": 25
       }
     ],
+    "fc226d9a": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "ProcessExpense",
+        "kind": "mutation",
+        "file": "lib/expenses/useProcessExpense.ts",
+        "line": 49,
+        "endLine": 71
+      }
+    ],
     "fcb73680": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "PaidDisbursementsMetadata",
         "kind": "query",
         "file": "components/dashboard/sections/expenses/queries.ts",
@@ -6142,10 +6496,21 @@
         "endLine": 434
       }
     ],
+    "fcca18b1": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "Dashboard",
+        "kind": "query",
+        "file": "components/dashboard/queries.ts",
+        "line": 5,
+        "endLine": 187
+      }
+    ],
     "fd096280": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateVendorForTest",
         "kind": "mutation",
         "file": "test/cypress/support/typed-commands.ts",
@@ -6156,7 +6521,7 @@
     "fd51f0dc": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "MoveAuthoredContributions",
         "kind": "mutation",
         "file": "components/root-actions/MoveAuthoredContributions.tsx",
@@ -6167,7 +6532,7 @@
     "fd5b885a": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "AccountSettings",
         "kind": "query",
         "file": "components/DismissibleMessage.ts",
@@ -6178,7 +6543,7 @@
     "fd5de99a": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateComment",
         "kind": "mutation",
         "file": "components/conversations/CommentForm.tsx",
@@ -6189,7 +6554,7 @@
     "fe4198ae": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostedVirtualCards",
         "kind": "query",
         "file": "components/dashboard/sections/HostVirtualCards.tsx",
@@ -6200,7 +6565,7 @@
     "fe86d336": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "EditCollectiveContact",
         "kind": "mutation",
         "file": "lib/graphql/v1/mutations.ts",
@@ -6211,7 +6576,7 @@
     "feb3c965": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "HostTaxForms",
         "kind": "query",
         "file": "components/dashboard/sections/legal-documents/HostDashboardTaxForms.tsx",
@@ -6222,7 +6587,7 @@
     "fefc6dc6": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "WelcomeOrganization",
         "kind": "query",
         "file": "components/dashboard/sections/overview/Welcome.tsx",
@@ -6233,7 +6598,7 @@
     "ff779c54": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "BannerTopContributors",
         "kind": "query",
         "file": "pages/banner-iframe.tsx",
@@ -6241,10 +6606,21 @@
         "endLine": 52
       }
     ],
+    "ff7cc3dc": [
+      {
+        "service": "frontend",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
+        "operation": "ExpenseActionsExpenseStatus",
+        "kind": "query",
+        "file": "components/dashboard/sections/expenses/actions.tsx",
+        "line": 243,
+        "endLine": 254
+      }
+    ],
     "ffa02e00": [
       {
         "service": "frontend",
-        "commit": "56afde28ad4f480723738d5104eb4fad0f63f7c3",
+        "commit": "dee6856c7b150060372688c31eada26d6d2de890",
         "operation": "CreateCollectiveWithHost",
         "kind": "mutation",
         "file": "test/cypress/support/commands.js",
