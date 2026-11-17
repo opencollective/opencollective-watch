@@ -265,6 +265,7 @@ function createAggregator() {
 
   graphqlOperationFormatter.setFormats([
     ['hash', (entry) => entry.getIn(['graphql', 'hash']) || ''],
+    ['version', (entry) => entry.getIn(['graphql', 'version']) || ''],
     ['operation', operation],
     // The latest request's variables, as the logs show them (empty without any)
     [
@@ -314,6 +315,24 @@ const isMutation = (log) => {
 };
 
 const hasGraphql = (log) => log.has('graphql');
+
+// The GraphQL API a log called: v1 at /graphql/v1 (also /graphql/v1/<api
+// key>), v2 at /graphql/v2 and /graphql (see the API's server/routes.ts)
+const graphqlVersion = (log) =>
+  /^\/graphql\/v1(?:[/?]|$)/.test(log.getIn(['request', 'url']) || '')
+    ? 'v1'
+    : 'v2';
+
+// graphql.version: v1 or v2. Set before main with the hash (see
+// setGraphqlHash), so every node and the logs on disk have it
+function setGraphqlVersion(log) {
+  return log.has('graphql')
+    ? log.setIn(['graphql', 'version'], graphqlVersion(log))
+    : log;
+}
+
+const isVersion = (version) => (log) =>
+  log.getIn(['graphql', 'version']) === version;
 
 // The hash of a log's GraphQL query, the first 8 characters of its MD5: the
 // key of the /graphql table and of graphql-index.json. Set before main (see
@@ -469,9 +488,22 @@ function createDiskCompactor(dir) {
   return { transform, restore };
 }
 
+const AGGREGATOR_COLUMNS = [
+  'hash',
+  'version',
+  'operation',
+  'lastVariables',
+  'lastAgent',
+  'lastIdentity',
+  'count',
+  'execTime',
+  'lastSeen',
+];
+
 // Registers `graphql`, a branch of GraphQL logs (they need their graphql hash
-// first, see setGraphqlHash), as the graphql node with its mutation and slow
-// nodes, the /graphql aggregator and the GraphQL request format
+// and version first, see setGraphqlHash and setGraphqlVersion), as the
+// graphql node with its v1, v2, mutation and slow nodes, the /graphql,
+// /graphql-v1 and /graphql-v2 aggregators and the GraphQL request format
 function registerGraphqlNodes(graphql) {
   lib.logger.defaultFormatter.replaceFormat('request', formatRequest);
 
@@ -482,17 +514,27 @@ function registerGraphqlNodes(graphql) {
   app.api.registerAggregator('graphql', aggregator, {
     nav: true,
     identityFilter: true,
-    columns: [
-      'hash',
-      'operation',
-      'lastVariables',
-      'lastAgent',
-      'lastIdentity',
-      'count',
-      'execTime',
-      'lastSeen',
-    ],
+    columns: AGGREGATOR_COLUMNS,
   });
+
+  // One node and one aggregator per API version, after graphql in the
+  // navigation. Named with a dash, not /graphql/v1: persistence only accepts
+  // letters, digits, ".", "_" and "-" in names
+  let after = 'graphql';
+  for (const version of ['v1', 'v2']) {
+    const name = `graphql-${version}`;
+    const node = graphql.filter(isVersion(version), `graphql ${version}`);
+    node.registerNode(name);
+
+    const versionAggregator = createAggregator();
+    node.map((log) => versionAggregator.processLog(log), `${name} aggregator`);
+    app.api.registerAggregator(name, versionAggregator, {
+      nav: { after },
+      identityFilter: true,
+      columns: AGGREGATOR_COLUMNS.filter((column) => column !== 'version'),
+    });
+    after = name;
+  }
 
   graphql.filter(isMutation, 'is mutation').registerNode('graphql-mutation');
 
@@ -505,4 +547,5 @@ module.exports = {
   registerApplicationNodes,
   registerGraphqlNodes,
   setGraphqlHash,
+  setGraphqlVersion,
 };
