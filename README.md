@@ -62,8 +62,9 @@ The nodes are:
 - `api`, `frontend`, `images`, `rest`, `pdf`, `contributors-svg`: one source each, skipped while
   its `<SOURCE>_HYPERWATCH_URL` isn't set. `contributors-svg` is production only (it has no
   staging)
-- below `api`: `graphql` (with `graphql-mutation`, `graphql-slow`, `graphql-extra-slow` and the
-  `/graphql` aggregator) and `other`, the API requests that aren't GraphQL
+- below `api`: `graphql` (with `graphql-v1`, `graphql-v2`, `graphql-mutation`, `graphql-slow`,
+  `graphql-extra-slow` and the `/graphql`, `/graphql-v1` and `/graphql-v2` aggregators) and `other`, the API
+  requests that aren't GraphQL
 - below `frontend`: `slow` and `extra-slow`
 
 Slow nodes (`slow`, `graphql-slow`…) hold requests over 300 ms, extra-slow ones over 1 s
@@ -72,6 +73,10 @@ Slow nodes (`slow`, `graphql-slow`…) hold requests over 300 ms, extra-slow one
 ### GraphQL queries and their source
 
 `/graphql` has one row per query, by hash (the first 8 characters of the MD5 of the query text).
+Its `version` column is the API each one called: `v1` at `/graphql/v1`, `v2` at `/graphql/v2` and
+`/graphql` (`graphql.version` in the logs). `/graphql-v1` and `/graphql-v2` list the queries of
+one version (who still calls the legacy API: `/graphql-v1`); `/logs/graphql-v1` and
+`/logs/graphql-v2` follow each one.
 The operations our services send link to their definition on GitHub (all of them in the
 tooltip), from `graphql-index.json`. Other queries show the start of their text instead: they come
 from other clients, or from code older than the index.

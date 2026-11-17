@@ -17,6 +17,7 @@ const {
   hasGraphql,
   registerGraphqlNodes,
   setGraphqlHash,
+  setGraphqlVersion,
 } = require('./graphql');
 const { hyperwatchOptions } = require('./options');
 const { registerSlowNodes } = require('./slow');
@@ -78,7 +79,9 @@ const SOURCES = {
     connections: 2,
     // The GraphQL hash before main, so the logs on disk have it too
     prepare: (log) =>
-      setGraphqlHash(verifyServiceSecret(cloudflare.augment(log))),
+      setGraphqlVersion(
+        setGraphqlHash(verifyServiceSecret(cloudflare.augment(log))),
+      ),
   },
   frontend: {
     connections: 4,

@@ -13,6 +13,7 @@ const {
   registerApplicationNodes,
   registerGraphqlNodes,
   setGraphqlHash,
+  setGraphqlVersion,
 } = require('./graphql');
 const { hyperwatchOptions } = require('./options');
 const {
@@ -66,6 +67,7 @@ pipeline
   .map(setAppsScriptIdentity, 'set apps script identity')
   // Before registering main, so every node derived from it has the hash
   .map(setGraphqlHash, 'compute graphql hash')
+  .map(setGraphqlVersion, 'set graphql version')
   .registerNode('main');
 
 registerApplicationNodes(pipeline.getNode('main'));
