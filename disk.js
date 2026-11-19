@@ -142,14 +142,70 @@ function trimHeaders(log) {
   );
 }
 
+// Copies of the client address (address.value, set before main) left out on
+// disk, when they hold nothing else:
+// - request.address (put back on reading: every log has one);
+// - cf-connecting-ip and oc-real-ip, where they equal it;
+// - x-forwarded-for when it's only the client, or the client then
+//   Cloudflare's edge on a request that came through Cloudflare. One that
+//   holds an address behind a proxy (a corporate gateway…) stays.
+function dropAddressCopies(log) {
+  const address = log.getIn(['address', 'value']);
+  if (!address) {
+    return log;
+  }
+  const headers = log.getIn(['request', 'headers']);
+  const viaCloudflare = Boolean(
+    headers && headers.get('cf-connecting-ip') === address,
+  );
+  if (log.getIn(['request', 'address']) === address) {
+    log = log.deleteIn(['request', 'address']);
+  }
+  if (!headers) {
+    return log;
+  }
+  return log.setIn(
+    ['request', 'headers'],
+    headers.filter((value, name) => {
+      if (name === 'cf-connecting-ip' || name === 'oc-real-ip') {
+        return value !== address;
+      }
+      if (name === 'x-forwarded-for') {
+        return !isPlainForwardedFor(value, address, viaCloudflare);
+      }
+      return true;
+    }),
+  );
+}
+
+function isPlainForwardedFor(value, address, viaCloudflare) {
+  if (typeof value !== 'string') {
+    return false;
+  }
+  const hops = value.split(',').map((hop) => hop.trim());
+  return (
+    hops[0] === address &&
+    (hops.length === 1 || (hops.length === 2 && viaCloudflare))
+  );
+}
+
+// request.address, left out when it was address.value
+function restoreAddress(log) {
+  const address = log.getIn(['address', 'value']);
+  return address && !log.hasIn(['request', 'address'])
+    ? log.setIn(['request', 'address'], address)
+    : log;
+}
+
 // What is written of a log to `dir`, and read back: credentials redacted
 // and headers trimmed for good, GraphQL query texts written once each and
 // put back on reading (see createDiskCompactor)
 function createDiskCodec(dir) {
   const graphql = createDiskCompactor(dir);
   return {
-    transform: (log) => graphql.transform(trimHeaders(redactCredentials(log))),
-    restore: graphql.restore,
+    transform: (log) =>
+      graphql.transform(dropAddressCopies(trimHeaders(redactCredentials(log)))),
+    restore: async (log) => restoreAddress(await graphql.restore(log)),
   };
 }
 
@@ -159,6 +215,8 @@ module.exports = {
   CREDENTIAL_PARAMS,
   TRACING_HEADERS,
   createDiskCodec,
+  dropAddressCopies,
+  restoreAddress,
   redactCredentials,
   trimHeaders,
 };
