@@ -26,7 +26,6 @@ const {
   redactSigninToken,
   setApplicationAndIdentity,
   setImagesIdentity,
-  setRealIp,
   transformInput,
   verifyServiceSecret,
 } = require('./transforms');
@@ -85,7 +84,7 @@ const SOURCES = {
   },
   frontend: {
     connections: 4,
-    prepare: (log) => redactSigninToken(setRealIp(log)),
+    prepare: (log) => redactSigninToken(cloudflare.augment(log)),
   },
   images: { connections: 2, prepare: cloudflare.augment },
   rest: { connections: 1, prepare: cloudflare.augment },

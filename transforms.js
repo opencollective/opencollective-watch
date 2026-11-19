@@ -97,12 +97,6 @@ function setApplicationAndIdentity(log) {
   return log;
 }
 
-// frontend: the client address, as seen by our Cloudflare Worker
-function setRealIp(log) {
-  const realIp = log.getIn(['request', 'headers', 'oc-real-ip']);
-  return realIp ? log.setIn(['address', 'value'], realIp) : log;
-}
-
 // frontend: Next.js internals (/_next, …) and static files
 function isAsset(log) {
   return /^\/(_|static)/.test(log.getIn(['request', 'url']));
@@ -142,7 +136,6 @@ module.exports = {
   redactSigninToken,
   setApplicationAndIdentity,
   setImagesIdentity,
-  setRealIp,
   transformInput,
   verifyServiceSecret,
 };
