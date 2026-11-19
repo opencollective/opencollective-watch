@@ -2,6 +2,8 @@
 // modules.history.disk.transform, see all.js). Logs in memory, in the tables
 // and in the live streams are unchanged.
 
+const { modules } = require('@hyperwatch/hyperwatch');
+
 const { createDiskCompactor } = require('./graphql');
 
 // Headers our own infrastructure sets to always the same value (Heroku's
@@ -197,6 +199,25 @@ function restoreAddress(log) {
     : log;
 }
 
+// The AS of the client (asn module): only its number on disk, the rest
+// (organization, country) put back on reading from the table
+function compactAsn(log) {
+  return typeof log.getIn(['asn', 'number']) === 'number'
+    ? log.update('asn', (asn) => asn.filter((value, key) => key === 'number'))
+    : log;
+}
+
+function restoreAsn(log) {
+  const asn = log.get('asn');
+  if (!asn || asn.size !== 1 || !asn.has('number')) {
+    return log;
+  }
+  // The asn module of Hyperwatch (hyperwatch#748), when active
+  const module = modules.get('asn');
+  const value = module && module.byNumber && module.byNumber(asn.get('number'));
+  return value ? log.set('asn', value) : log;
+}
+
 // What is written of a log to `dir`, and read back: credentials redacted
 // and headers trimmed for good, GraphQL query texts written once each and
 // put back on reading (see createDiskCompactor)
@@ -204,8 +225,11 @@ function createDiskCodec(dir) {
   const graphql = createDiskCompactor(dir);
   return {
     transform: (log) =>
-      graphql.transform(dropAddressCopies(trimHeaders(redactCredentials(log)))),
-    restore: async (log) => restoreAddress(await graphql.restore(log)),
+      graphql.transform(
+        compactAsn(dropAddressCopies(trimHeaders(redactCredentials(log)))),
+      ),
+    restore: async (log) =>
+      restoreAsn(restoreAddress(await graphql.restore(log))),
   };
 }
 
@@ -214,9 +238,11 @@ module.exports = {
   CREDENTIAL_HEADERS,
   CREDENTIAL_PARAMS,
   TRACING_HEADERS,
+  compactAsn,
   createDiskCodec,
   dropAddressCopies,
   restoreAddress,
+  restoreAsn,
   redactCredentials,
   trimHeaders,
 };
