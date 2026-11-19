@@ -6,12 +6,7 @@ const { setClientWorkerIdentity } = require('./cloudflare-worker');
 const { mountDashboard } = require('./dashboard');
 const { hyperwatchOptions } = require('./options');
 const { registerSlowNodes } = require('./slow');
-const {
-  isAsset,
-  redactSigninToken,
-  setRealIp,
-  transformInput,
-} = require('./transforms');
+const { isAsset, redactSigninToken, transformInput } = require('./transforms');
 
 // Each websocket gets the logs of the one server dyno the router picked. A
 // dyno keeps one websocket per clientId and cuts the others, which reconnect
@@ -23,9 +18,7 @@ const { pipeline, input, lib } = hyperwatch;
 
 // Init Hyperwatch (will load modules)
 
-hyperwatch.init(
-  hyperwatchOptions('frontend', { modules: { cloudflare: { active: false } } }),
-);
+hyperwatch.init(hyperwatchOptions('frontend'));
 
 mountDashboard();
 basicAuth();
@@ -53,7 +46,6 @@ for (let i = 1; i <= serverCount; i++) {
 
 pipeline
   .getNode('main')
-  .map(setRealIp, 'extract oc-real-ip')
   .map(setClientWorkerIdentity, 'set client worker identity')
   .filter((log) => !isAsset(log), 'exclude /_* and /static urls')
   .registerNode('main');
