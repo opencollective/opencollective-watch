@@ -4,6 +4,9 @@
     "geoip": {
       "active": true
     },
+    "asn": {
+      "active": true
+    },
     "agent": {
       "active": true
     },
