@@ -156,8 +156,8 @@ for (const source of Object.keys(SOURCES)) {
   node.registerNode(source);
 }
 
-// /routes-rest, /routes-images and /routes-contributors-svg: requests by
-// route (see routes.js)
+// /routes-api, /routes-rest, /routes-images and /routes-contributors-svg:
+// requests by route (see routes.js)
 
 registerRoutesAggregators(pipeline, Object.keys(SOURCES));
 

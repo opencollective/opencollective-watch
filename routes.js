@@ -1,9 +1,9 @@
 // Routes aggregators: one per service with a route table below
-// (/routes-rest, /routes-images, /routes-contributors-svg), one entry per
+// (/routes-api, /routes-rest, /routes-images, /routes-contributors-svg), one entry per
 // route as its requests use it, e.g. /v1/:collectiveSlug.json.
 //
 // The tables are copies of each service's routes, in the same order (the first
-// match wins, as in Express): rest src/server/routes.ts, images
+// match wins, as in Express): api server/routes.ts, rest src/server/routes.ts, images
 // src/server/routes.ts, contributors-svg src/server/routes.js. Update them
 // when a service changes its routes; a request no route matches is counted
 // under "(no route)", so a missing route shows up there.
@@ -13,6 +13,47 @@ const html = require('@hyperwatch/hyperwatch/src/app/html');
 const { pathToRegexp } = require('path-to-regexp');
 
 const NO_ROUTE = '(no route)';
+
+// api: server/routes.ts. GraphQL is one row per endpoint here (/graphql has
+// one per query). Its Express 5 path '/graphql{/:version}{/:apiKey}' as a
+// regular expression, as the path-to-regexp here is v6
+const API = [
+  '/users/signin',
+  '/users/signup',
+  '/users/resend-otp',
+  '/users/verify-email',
+  '/users/update-token',
+  '/users/exchange-login-token',
+  '/users/refresh-token',
+  '/users/two-factor-auth',
+  '/oauth/token',
+  '/oauth/authorize',
+  '/oauth/authenticate',
+  '/id/:id',
+  '/permalink/:id',
+  /^\/graphql(?:\/(?<version>v1|v2))?(?:\/(?<apiKey>[^/]+?))?\/?$/i,
+  '/webhooks/stripe',
+  '/webhooks/transferwise',
+  '/webhooks/paypal/:hostId',
+  '/webhooks/plaid',
+  '/connected-accounts/:service/callback',
+  '/contact/send-message',
+  '/users/exists',
+  '/images',
+  '/connected-accounts/:service',
+  '/connected-accounts/:service/oauthUrl',
+  '/connected-accounts/:service/verify',
+  '/services/transferwise/pay-batch',
+  '/services/email/unsubscribe/:email/:slug/:type/:token',
+  '/github-repositories',
+  '/legal-documents/:id/download',
+  '/files/:uploadedFileId',
+  '/docs/search',
+  '/ecosystems/repository',
+  '/status',
+  '/__test_sentry__',
+  '/__test_sentry_crash__',
+];
 
 // rest: src/server/routes.ts
 const REST = [
@@ -61,6 +102,7 @@ const CONTRIBUTORS_SVG = [
 ];
 
 const ROUTES = {
+  api: API,
   rest: REST,
   images: IMAGES,
   'contributors-svg': CONTRIBUTORS_SVG,
@@ -99,40 +141,55 @@ function compileRoute(route) {
   };
 }
 
-// The route of a request path, e.g. /v1/nest.json → /v1/:collectiveSlug.json,
-// or null when no route matches. Lowercased, without the trailing slash
-function routeOf(compiled, path) {
+// Groups whose value is a credential or personal data: hidden in the latest
+// path (lastPath), which the aggregator keeps and persists
+const SENSITIVE_GROUP = /key|token|secret|email|password/i;
+const HIDDEN = '[redacted]';
+
+// The route of a request path, e.g. /v1/nest.json → /v1/:collectiveSlug.json
+// (lowercased, without the trailing slash), and the path with the values of
+// sensitive groups hidden. Null when no route matches
+function matchRoute(compiled, path) {
   for (const { regexp, groups, fixed } of compiled) {
     const match = regexp.exec(path);
     if (!match) {
       continue;
     }
-    // [start, end, replacement] for each group that matched, last first
-    const parts = [];
-    if (groups) {
-      groups.forEach((name, i) => {
-        const indices = match.indices[i + 1];
-        if (indices) {
-          parts.push([...indices, name === '*' ? '*' : `:${name}`]);
-        }
-      });
-    } else {
-      for (const [name, indices] of Object.entries(match.indices.groups)) {
-        if (indices && !fixed.has(name)) {
-          parts.push([...indices, `:${name}`]);
-        }
-      }
-    }
-    parts.sort((a, b) => b[0] - a[0]);
+    // The groups that matched, last first: { indices: [start, end], name, kept }
+    const named = groups
+      ? groups.map((name, i) => ({
+          indices: match.indices[i + 1],
+          name,
+          kept: false,
+        }))
+      : Object.entries(match.indices.groups).map(([name, indices]) => ({
+          indices,
+          name,
+          kept: fixed.has(name),
+        }));
+    const matched = named
+      .filter(({ indices }) => indices)
+      .sort((a, b) => b.indices[0] - a.indices[0]);
     let route = path;
-    for (const [start, end, replacement] of parts) {
-      route = route.slice(0, start) + replacement + route.slice(end);
+    let shown = path;
+    for (const { indices, name, kept } of matched) {
+      const [start, end] = indices;
+      if (!kept) {
+        const replacement = name === '*' ? '*' : `:${name}`;
+        route = route.slice(0, start) + replacement + route.slice(end);
+      }
+      if (SENSITIVE_GROUP.test(name)) {
+        shown = shown.slice(0, start) + HIDDEN + shown.slice(end);
+      }
     }
     // Lowercase but the group names (:collectiveSlug)
     route = route.replace(/(:\w+)|[^:]+/g, (text, name) =>
       name ? name : text.toLowerCase(),
     );
-    return route.length > 1 ? route.replace(/\/$/, '') : route;
+    return {
+      route: route.length > 1 ? route.replace(/\/$/, '') : route,
+      path: shown,
+    };
   }
   return null;
 }
@@ -143,11 +200,14 @@ function createAggregator(compiled) {
   const { Aggregator } = lib.aggregator;
   const aggregator = new Aggregator();
 
-  aggregator.setIdentifier((log) => routeOf(compiled, pathOf(log)) || NO_ROUTE);
+  aggregator.setIdentifier(
+    (log) => matchRoute(compiled, pathOf(log))?.route || NO_ROUTE,
+  );
 
   // The latest request: its path, and who sent it, as on /graphql
   aggregator.setEnricher((entry, log) => {
-    entry = entry.set('lastPath', pathOf(log));
+    const path = pathOf(log);
+    entry = entry.set('lastPath', matchRoute(compiled, path)?.path || path);
     for (const field of ['identity', 'agent']) {
       entry = log.has(field)
         ? entry.set(field, log.get(field))
@@ -251,4 +311,9 @@ function registerRoutesAggregators(pipeline, services) {
   }
 }
 
-module.exports = { ROUTES, compileRoute, registerRoutesAggregators, routeOf };
+module.exports = {
+  ROUTES,
+  compileRoute,
+  matchRoute,
+  registerRoutesAggregators,
+};

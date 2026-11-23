@@ -89,7 +89,7 @@ Run it after deploys and commit the file.
 
 ### Requests by route
 
-`/routes-rest`, `/routes-images` and `/routes-contributors-svg` have one row per route, as the
+`/routes-api`, `/routes-rest`, `/routes-images` and `/routes-contributors-svg` have one row per route, as the
 requests use it: `/:collectiveSlug.json` and `/v1/:collectiveSlug.json` are two rows, and so are
 `members/all.json` and `members/all.csv`. A parameter limited to a few words (`format`, `version`,
 `backerType` in rest…) keeps its value; any other one shows its name. Each row has the count, 2xx,
@@ -98,7 +98,11 @@ requests use it: `/:collectiveSlug.json` and `/v1/:collectiveSlug.json` are two 
 column.
 
 The route tables in `routes.js` are copies of each service's routes, in the same order: update them
-when a service changes its routes. Requests that no route matches are counted under `(no route)`.
+when a service changes its routes. Requests that no route matches are counted under `(no route)`. On `/routes-api`, GraphQL is one
+row per endpoint (`/graphql/v1`, `/graphql/v2/:apiKey`…); `/graphql` has one per query. The
+latest path hides the values of parameters that hold a credential or personal data (`apiKey`,
+`email`, `token`…), since aggregators are persisted. The frontend has no table: its routes are
+Next.js rewrites (`rewrites.ts`), too many and changing too often to copy.
 
 ### One process per service
 
