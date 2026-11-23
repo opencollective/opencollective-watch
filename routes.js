@@ -278,15 +278,15 @@ function createAggregator(compiled) {
   return aggregator;
 }
 
+// As on /graphql: the key, the latest request, then count, execTime and
+// lastSeen. 2xx and 4xx are in the JSON and CSV only, as on the other pages
 const COLUMNS = [
   'route',
-  'count',
-  '2xx',
-  '4xx',
-  'execTime',
   'lastPath',
   'lastAgent',
   'lastIdentity',
+  'count',
+  'execTime',
   'lastSeen',
 ];
 

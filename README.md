@@ -92,10 +92,9 @@ Run it after deploys and commit the file.
 `/routes-api`, `/routes-rest`, `/routes-images` and `/routes-contributors-svg` have one row per route, as the
 requests use it: `/:collectiveSlug.json` and `/v1/:collectiveSlug.json` are two rows, and so are
 `members/all.json` and `members/all.csv`. A parameter limited to a few words (`format`, `version`,
-`backerType` in rest…) keeps its value; any other one shows its name. Each row has the count, 2xx,
-4xx and execution time over 15 minutes or 24 hours, and the latest path, agent and identity.
-3xx responses (304s from Cloudflare revalidating its cache) are in the count but in neither
-column.
+`backerType` in rest…) keeps its value; any other one shows its name. Each row has the latest path, agent and identity, and the count and execution time over 15
+minutes or 24 hours, like `/graphql`. The JSON and CSV also have the 2xx and 4xx counts; 3xx
+responses (304s from Cloudflare revalidating its cache) are in the count but in neither.
 
 The route tables in `routes.js` are copies of each service's routes, in the same order: update them
 when a service changes its routes. Requests that no route matches are counted under `(no route)`. On `/routes-api`, GraphQL is one
