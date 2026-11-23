@@ -87,6 +87,19 @@ worktree of the local clone (`~/Dev/opencollective/<service>`, or `--dir`, using
 `node_modules`), finds its `gql` documents and computes the hash of the text Apollo Client sends.
 Run it after deploys and commit the file.
 
+### Requests by route
+
+`/routes-rest`, `/routes-images` and `/routes-contributors-svg` have one row per route, as the
+requests use it: `/:collectiveSlug.json` and `/v1/:collectiveSlug.json` are two rows, and so are
+`members/all.json` and `members/all.csv`. A parameter limited to a few words (`format`, `version`,
+`backerType` in rest…) keeps its value; any other one shows its name. Each row has the count, 2xx,
+4xx and execution time over 15 minutes or 24 hours, and the latest path, agent and identity.
+3xx responses (304s from Cloudflare revalidating its cache) are in the count but in neither
+column.
+
+The route tables in `routes.js` are copies of each service's routes, in the same order: update them
+when a service changes its routes. Requests that no route matches are counted under `(no route)`.
+
 ### One process per service
 
 Each service also has its own config, with its own counters, started when asked for:

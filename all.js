@@ -20,6 +20,7 @@ const {
   setGraphqlVersion,
 } = require('./graphql');
 const { hyperwatchOptions } = require('./options');
+const { registerRoutesAggregators } = require('./routes');
 const { registerSlowNodes } = require('./slow');
 const {
   isAsset,
@@ -154,6 +155,11 @@ for (const source of Object.keys(SOURCES)) {
     .filter((log) => log.get('source') === source, `source = ${source}`);
   node.registerNode(source);
 }
+
+// /routes-rest, /routes-images and /routes-contributors-svg: requests by
+// route (see routes.js)
+
+registerRoutesAggregators(pipeline, Object.keys(SOURCES));
 
 // api: split into graphql (with graphql-mutation, graphql-slow…) and other.
 // Calls from our own services are told apart by identity (Open Collective
