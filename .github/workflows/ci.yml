@@ -1,0 +1,92 @@
+name: CI
+
+# Security: Do not replace `pull_request` with `pull_request_target` to expose secrets or
+# GITHUB_TOKEN write access to PR code. pull_request_target runs untrusted fork PR code with
+# base-branch privileges.
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+env:
+  CI: true
+  TZ: UTC
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: 'package.json'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - run: npm run lint:quiet
+
+  prettier:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: 'package.json'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - run: npm run prettier:check
+
+  # Watch has no tests: check that the merged pipeline (all.js) starts and serves its pages. No
+  # <SERVICE>_HYPERWATCH_URL is set, so it connects to nothing and every source is skipped.
+  start:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: 'package.json'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Start Watch and request its pages
+        run: |
+          PORT=3399 npx hyperwatch all > watch.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:3399/status > /dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          for page in status graphql.json identities.json addresses.json; do
+            curl -sf -o /dev/null "http://localhost:3399/$page" || {
+              echo "/$page does not answer"
+              cat watch.log
+              exit 1
+            }
+          done
+          echo "Watch starts and answers"
