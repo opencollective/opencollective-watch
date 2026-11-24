@@ -92,8 +92,9 @@ Run it after deploys and commit the file.
 `/routes-api`, `/routes-rest`, `/routes-images` and `/routes-contributors-svg` have one row per
 route, as the service declares it: the `route.path` that Hyperwatch's Express input logs
 ([log.md, Route](https://github.com/hyperwatch/hyperwatch/blob/main/docs/log.md#route)), such as
-`/v1/collectives/:collectiveSlug/transactions`, and a route declared as a regular expression as its
-literal. They share one `routes` link in the top navigation, with the services on a second line.
+`/v1/collectives/:collectiveSlug/transactions`. A route declared as a regular expression is logged
+as its literal and shown in the Express 5 syntax of the other routes: a named group by its name, an
+optional part between braces (`{/:version}/:collectiveSlug.:format`). They share one `routes` link in the top navigation, with the services on a second line.
 Each row has the latest path, agent and identity, and the count and execution time over 15 minutes
 or 24 hours, like `/graphql`. The JSON and CSV also have the 2xx and 4xx counts; 3xx responses
 (304s from Cloudflare revalidating its cache) are in the count but in neither.

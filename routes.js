@@ -180,6 +180,29 @@ function matchRoute(compiled, path) {
   return null;
 }
 
+// A route declared as a regular expression, shown in the Express 5 syntax
+// the other routes use: /^(?:\/(?<version>v1))?\/(?<collectiveSlug>[^/]+?)\.(?<format>json)\/?$/i
+// → {/:version}/:collectiveSlug.:format. A named group is shown by its name, an
+// optional part between braces. Shown as is when it doesn't read back as a
+// path (anything else than these, escaped characters and literal text)
+function readableRoute(route) {
+  const literal = /^\/\^(.*?)(?:\\\/\?)?\$\/[a-z]*$/.exec(route);
+  if (!literal) {
+    return route;
+  }
+  let path = literal[1];
+  for (let previous; previous !== path;) {
+    previous = path;
+    path = path
+      .replace(/\(\?<(\w+)>[^()]*\)/g, ':$1')
+      .replace(/\(\?:([^()]*)\)\?/g, '{$1}');
+  }
+  if (/(?<!\\)[()[\]|?*+^$]/.test(path)) {
+    return route;
+  }
+  return path.replace(/\\(.)/g, '$1');
+}
+
 const pathOf = (log) => (log.getIn(['request', 'url']) || '').split('?')[0];
 
 function createAggregator(compiled) {
@@ -239,7 +262,7 @@ function createAggregator(compiled) {
 
   const formatter = new lib.formatter.Formatter();
   formatter.setFormats([
-    ['route', (entry) => entry.get('identifier')],
+    ['route', (entry) => readableRoute(entry.get('identifier'))],
     ['lastPath', lastPath],
     ['lastAgent', lastAgent],
     ['lastIdentity', lastIdentity],
@@ -304,6 +327,7 @@ function registerRoutesAggregators(pipeline, services) {
 
 module.exports = {
   ROUTES,
+  readableRoute,
   compileRoute,
   matchRoute,
   registerRoutesAggregators,
