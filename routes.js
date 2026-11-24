@@ -1,12 +1,17 @@
 // Routes aggregators: one per service with a route table below
-// (/routes-api, /routes-rest, /routes-images, /routes-contributors-svg), one entry per
-// route as its requests use it, e.g. /v1/:collectiveSlug.json.
+// (/routes-api, /routes-rest, /routes-images, /routes-contributors-svg), one
+// entry per route, as the service declares it: its log's route.path, which
+// Hyperwatch's Express input sets (docs/log.md, "Route"), e.g.
+// /v1/collectives/:collectiveSlug/transactions, a regular expression as its
+// literal. Grouped under one "routes" link in the top navigation.
 //
-// The tables are copies of each service's routes, in the same order (the first
-// match wins, as in Express): api server/routes.ts, rest src/server/routes.ts, images
-// src/server/routes.ts, contributors-svg src/server/routes.js. Update them
-// when a service changes its routes; a request no route matches is counted
-// under "(no route)", so a missing route shows up there.
+// Logs without a route (services on a Hyperwatch older than the route, or a
+// middleware such as /graphql, which Express gives no route) get it
+// recomputed from the tables, copies of each service's routes in the same
+// order (the first match wins, as in Express): api server/routes.ts, rest
+// src/server/routes.ts, images src/server/routes.ts, contributors-svg
+// src/server/routes.js. Update them when a service changes its routes; a
+// request no route matches is counted under "(no route)".
 
 const { app, lib, util } = require('@hyperwatch/hyperwatch');
 const html = require('@hyperwatch/hyperwatch/src/app/html');
@@ -14,9 +19,9 @@ const { pathToRegexp } = require('path-to-regexp');
 
 const NO_ROUTE = '(no route)';
 
-// api: server/routes.ts. GraphQL is one row per endpoint here (/graphql has
-// one per query). Its Express 5 path '/graphql{/:version}{/:apiKey}' as a
-// regular expression, as the path-to-regexp here is v6
+// api: server/routes.ts. GraphQL is one row here (/graphql has one per
+// query): its Express 5 path, matched with a regular expression, as the
+// path-to-regexp here is v6
 const API = [
   '/users/signin',
   '/users/signup',
@@ -31,7 +36,10 @@ const API = [
   '/oauth/authenticate',
   '/id/:id',
   '/permalink/:id',
-  /^\/graphql(?:\/(?<version>v1|v2))?(?:\/(?<apiKey>[^/]+?))?\/?$/i,
+  {
+    path: '/graphql{/:version}{/:apiKey}',
+    match: /^\/graphql(?:\/(?<version>v1|v2))?(?:\/(?<apiKey>[^/]+?))?\/?$/i,
+  },
   '/webhooks/stripe',
   '/webhooks/transferwise',
   '/webhooks/paypal/:hostId',
@@ -108,36 +116,35 @@ const ROUTES = {
   'contributors-svg': CONTRIBUTORS_SVG,
 };
 
-// A group that can only match a fixed list of words, e.g. (?<format>json|csv):
-// its value is kept in the entry (/v1/…, .csv), any other group is replaced by
-// its name (:collectiveSlug), so a route has a bounded number of entries
-const FIXED_GROUP = /\(\?<(\w+)>([\w-]+(?:\|[\w-]+)*)\)/g;
+// The order of the services on the second line of the routes pages
+const SERVICES = Object.keys(ROUTES);
 
-// Each route as a regular expression with match indices ("d"), and the name of
-// each capturing group, in order. Express paths ('/:collectiveSlug/:backerType.svg')
-// go through path-to-regexp, case-insensitive and with an optional trailing
+// Each route as a regular expression with match indices ("d"), the name of
+// each capturing group, in order, and its path as Hyperwatch logs it: a
+// string as is, a regular expression as its literal, or the path given with
+// { path, match }. Express paths ('/:collectiveSlug/:backerType.svg') go
+// through path-to-regexp, case-insensitive and with an optional trailing
 // slash, like Express's default routing
 function compileRoute(route) {
   if (typeof route === 'string') {
     const keys = [];
     const regexp = pathToRegexp(route, keys, { sensitive: false, end: true });
     return {
+      path: route,
       regexp: new RegExp(regexp.source, `${regexp.flags}d`),
       // The unnamed groups of a path, such as (.*) in /static/(.*), are
-      // numbered by path-to-regexp: shown as the path shows them
+      // numbered by path-to-regexp
       groups: keys.map((key) =>
         typeof key.name === 'number' ? '*' : key.name,
       ),
-      fixed: new Set(),
     };
   }
-  const fixed = new Set(
-    [...route.source.matchAll(FIXED_GROUP)].map(([, name]) => name),
-  );
+  const { path, match } =
+    route instanceof RegExp ? { path: String(route), match: route } : route;
   return {
-    regexp: new RegExp(route.source, `${route.flags.replace('d', '')}d`),
+    path,
+    regexp: new RegExp(match.source, `${match.flags.replace('d', '')}d`),
     groups: null,
-    fixed,
   };
 }
 
@@ -146,50 +153,29 @@ function compileRoute(route) {
 const SENSITIVE_GROUP = /key|token|secret|email|password/i;
 const HIDDEN = '[redacted]';
 
-// The route of a request path, e.g. /v1/nest.json → /v1/:collectiveSlug.json
-// (lowercased, without the trailing slash), and the path with the values of
-// sensitive groups hidden. Null when no route matches
+// The route of a request path, as the service declares it, e.g.
+// /v1/collectives/nest/transactions → /v1/collectives/:collectiveSlug/transactions,
+// and the path with the values of sensitive groups hidden. Null when no route
+// matches
 function matchRoute(compiled, path) {
-  for (const { regexp, groups, fixed } of compiled) {
+  for (const { path: route, regexp, groups } of compiled) {
     const match = regexp.exec(path);
     if (!match) {
       continue;
     }
-    // The groups that matched, last first: { indices: [start, end], name, kept }
     const named = groups
-      ? groups.map((name, i) => ({
-          indices: match.indices[i + 1],
-          name,
-          kept: false,
-        }))
-      : Object.entries(match.indices.groups).map(([name, indices]) => ({
-          indices,
-          name,
-          kept: fixed.has(name),
-        }));
-    const matched = named
-      .filter(({ indices }) => indices)
-      .sort((a, b) => b.indices[0] - a.indices[0]);
-    let route = path;
+      ? groups.map((name, i) => [name, match.indices[i + 1]])
+      : Object.entries(match.indices.groups);
+    // Last first, so the indices of the others still hold
+    const hidden = named
+      .filter(([name, indices]) => indices && SENSITIVE_GROUP.test(name))
+      .map(([, indices]) => indices)
+      .sort((a, b) => b[0] - a[0]);
     let shown = path;
-    for (const { indices, name, kept } of matched) {
-      const [start, end] = indices;
-      if (!kept) {
-        const replacement = name === '*' ? '*' : `:${name}`;
-        route = route.slice(0, start) + replacement + route.slice(end);
-      }
-      if (SENSITIVE_GROUP.test(name)) {
-        shown = shown.slice(0, start) + HIDDEN + shown.slice(end);
-      }
+    for (const [start, end] of hidden) {
+      shown = shown.slice(0, start) + HIDDEN + shown.slice(end);
     }
-    // Lowercase but the group names (:collectiveSlug)
-    route = route.replace(/(:\w+)|[^:]+/g, (text, name) =>
-      name ? name : text.toLowerCase(),
-    );
-    return {
-      route: route.length > 1 ? route.replace(/\/$/, '') : route,
-      path: shown,
-    };
+    return { route, path: shown };
   }
   return null;
 }
@@ -200,8 +186,12 @@ function createAggregator(compiled) {
   const { Aggregator } = lib.aggregator;
   const aggregator = new Aggregator();
 
+  // The route the service logged, or else recomputed from its table
   aggregator.setIdentifier(
-    (log) => matchRoute(compiled, pathOf(log))?.route || NO_ROUTE,
+    (log) =>
+      log.getIn(['route', 'path']) ||
+      matchRoute(compiled, pathOf(log))?.route ||
+      NO_ROUTE,
   );
 
   // The latest request: its path, and who sent it, as on /graphql
@@ -290,11 +280,12 @@ const COLUMNS = [
   'lastSeen',
 ];
 
-// Registers routes-<service> on the node of each service with a route table.
-// Named with a dash: persistence only accepts letters, digits, ".", "_" and "-"
+// Registers routes-<service> on the node of each service with a route table,
+// in the "routes" navigation group, labelled by service. Named with a dash:
+// persistence only accepts letters, digits, ".", "_" and "-"
 function registerRoutesAggregators(pipeline, services) {
-  for (const service of services) {
-    if (!ROUTES[service]) {
+  for (const service of SERVICES) {
+    if (!services.includes(service)) {
       continue;
     }
     const compiled = ROUTES[service].map(compileRoute);
@@ -304,7 +295,7 @@ function registerRoutesAggregators(pipeline, services) {
       .getNode(service)
       .map((log) => aggregator.processLog(log), `${name} aggregator`);
     app.api.registerAggregator(name, aggregator, {
-      nav: true,
+      nav: { group: 'routes', label: service },
       identityFilter: true,
       columns: COLUMNS,
     });
