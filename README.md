@@ -87,6 +87,26 @@ worktree of the local clone (`~/Dev/opencollective/<service>`, or `--dir`, using
 `node_modules`), finds its `gql` documents and computes the hash of the text Apollo Client sends.
 Run it after deploys and commit the file.
 
+### Requests by route
+
+`/routes-api`, `/routes-rest`, `/routes-images` and `/routes-contributors-svg` have one row per
+route, as the service declares it: the `route.path` that Hyperwatch's Express input logs
+([log.md, Route](https://github.com/hyperwatch/hyperwatch/blob/main/docs/log.md#route)), such as
+`/v1/collectives/:collectiveSlug/transactions`. A route declared as a regular expression is logged
+as its literal and shown in the Express 5 syntax of the other routes: a named group by its name, an
+optional part between braces (`{/:version}/:collectiveSlug.:format`). They share one `routes` link in the top navigation, with the services on a second line.
+Each row has the latest path, agent and identity, and the count and execution time over 15 minutes
+or 24 hours, like `/graphql`. The JSON and CSV also have the 2xx and 4xx counts; 3xx responses
+(304s from Cloudflare revalidating its cache) are in the count but in neither.
+
+A log without a route (a service on a Hyperwatch release without it, or a middleware such as `/graphql`,
+which Express gives no route) gets it recomputed from the route tables in `routes.js`, copies of
+each service's routes in the same order: update them when a service changes its routes. Requests
+that no route matches are counted under `(no route)`. The latest path hides the values of
+parameters that hold a credential or personal data (`apiKey`, `email`, `token`…), since aggregators
+are persisted. The frontend has no table: its routes are Next.js rewrites (`rewrites.ts`), too many
+and changing too often to copy; it gets rows once it sets `req.hyperwatch.route`.
+
 ### One process per service
 
 Each service also has its own config, with its own counters, started when asked for:
