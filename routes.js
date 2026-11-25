@@ -20,8 +20,7 @@ const { pathToRegexp } = require('path-to-regexp');
 const NO_ROUTE = '(no route)';
 
 // api: server/routes.ts. GraphQL is one row here (/graphql has one per
-// query): its Express 5 path, matched with a regular expression, as the
-// path-to-regexp here is v6
+// query), under the path the api should log for it
 const API = [
   '/users/signin',
   '/users/signup',
@@ -36,10 +35,7 @@ const API = [
   '/oauth/authenticate',
   '/id/:id',
   '/permalink/:id',
-  {
-    path: '/graphql{/:version}{/:apiKey}',
-    match: /^\/graphql(?:\/(?<version>v1|v2))?(?:\/(?<apiKey>[^/]+?))?\/?$/i,
-  },
+  '/graphql{/:version}{/:apiKey}',
   '/webhooks/stripe',
   '/webhooks/transferwise',
   '/webhooks/paypal/:hostId',
@@ -82,9 +78,8 @@ const REST = [
   /^\/v2\/(?<slug>[^/]+?)\/hosted-collectives\.(?<format>json|csv)\/?$/i,
 ];
 
-// images: src/server/routes.ts (and /static in src/server/index.ts)
+// images: src/server/routes.ts
 const IMAGES = [
-  '/static/(.*)',
   '/',
   '/proxy/images',
   '/robots.txt',
@@ -100,9 +95,8 @@ const IMAGES = [
   /^\/(?<collectiveSlug>[^/]+?)\/tiers\/(?<tierSlug>[^/]+?)\/(?<position>[^/]+?)\/avatar(?:\.(?<format>png|jpg|svg))?\/?$/i,
 ];
 
-// contributors-svg: src/server/routes.js (and /static in src/server/index.js)
+// contributors-svg: src/server/routes.js
 const CONTRIBUTORS_SVG = [
-  '/static/(.*)',
   '/',
   '/robots.txt',
   /^\/github\/(?<githubUsername>[^/]+?)\/(?<image>avatar)(?:\/(?<style>rounded|square))?(?:\/(?<height>[^/]+?))?\.(?<format>png)\/?$/i,
@@ -121,29 +115,26 @@ const SERVICES = Object.keys(ROUTES);
 
 // Each route as a regular expression with match indices ("d"), the name of
 // each capturing group, in order, and its path as Hyperwatch logs it: a
-// string as is, a regular expression as its literal, or the path given with
-// { path, match }. Express paths ('/:collectiveSlug/:backerType.svg') go
-// through path-to-regexp, case-insensitive and with an optional trailing
-// slash, like Express's default routing
+// string as is, a regular expression as its literal. Express 5 paths
+// ('/:collectiveSlug/:backerType.svg', '/graphql{/:version}') go through
+// path-to-regexp v8, as in Express 5's router: case-insensitive and with an
+// optional trailing slash, like its default routing
 function compileRoute(route) {
   if (typeof route === 'string') {
-    const keys = [];
-    const regexp = pathToRegexp(route, keys, { sensitive: false, end: true });
+    const { regexp, keys } = pathToRegexp(route, {
+      sensitive: false,
+      end: true,
+      trailing: true,
+    });
     return {
       path: route,
       regexp: new RegExp(regexp.source, `${regexp.flags}d`),
-      // The unnamed groups of a path, such as (.*) in /static/(.*), are
-      // numbered by path-to-regexp
-      groups: keys.map((key) =>
-        typeof key.name === 'number' ? '*' : key.name,
-      ),
+      groups: keys.map((key) => key.name),
     };
   }
-  const { path, match } =
-    route instanceof RegExp ? { path: String(route), match: route } : route;
   return {
-    path,
-    regexp: new RegExp(match.source, `${match.flags.replace('d', '')}d`),
+    path: String(route),
+    regexp: new RegExp(route.source, `${route.flags.replace('d', '')}d`),
     groups: null,
   };
 }
