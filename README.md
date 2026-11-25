@@ -76,7 +76,8 @@ Slow nodes (`slow`, `graphql-slow`…) hold requests over 300 ms, extra-slow one
 Its `version` column is the API each one called: `v1` at `/graphql/v1`, `v2` at `/graphql/v2` and
 `/graphql` (`graphql.version` in the logs). `/graphql-v1` and `/graphql-v2` list the queries of
 one version (who still calls the legacy API: `/graphql-v1`); `/logs/graphql-v1` and
-`/logs/graphql-v2` follow each one.
+`/logs/graphql-v2` follow each one. The three share one `graphql` link in the top navigation, with
+`all`, `v1` and `v2` on a second line.
 The operations our services send link to their definition on GitHub (all of them in the
 tooltip), from `graphql-index.json`. Other queries show the start of their text instead: they come
 from other clients, or from code older than the index.
