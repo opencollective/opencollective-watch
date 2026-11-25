@@ -512,15 +512,14 @@ function registerGraphqlNodes(graphql) {
   const aggregator = createAggregator();
   graphql.map((log) => aggregator.processLog(log), 'graphql aggregator');
   app.api.registerAggregator('graphql', aggregator, {
-    nav: true,
+    nav: { group: 'graphql', label: 'all' },
     identityFilter: true,
     columns: AGGREGATOR_COLUMNS,
   });
 
-  // One node and one aggregator per API version, after graphql in the
-  // navigation. Named with a dash, not /graphql/v1: persistence only accepts
-  // letters, digits, ".", "_" and "-" in names
-  let after = 'graphql';
+  // One node and one aggregator per API version, in the graphql navigation
+  // group after "all". Named with a dash, not /graphql/v1: persistence only
+  // accepts letters, digits, ".", "_" and "-" in names
   for (const version of ['v1', 'v2']) {
     const name = `graphql-${version}`;
     const node = graphql.filter(isVersion(version), `graphql ${version}`);
@@ -529,11 +528,10 @@ function registerGraphqlNodes(graphql) {
     const versionAggregator = createAggregator();
     node.map((log) => versionAggregator.processLog(log), `${name} aggregator`);
     app.api.registerAggregator(name, versionAggregator, {
-      nav: { after },
+      nav: { group: 'graphql', label: version },
       identityFilter: true,
       columns: AGGREGATOR_COLUMNS.filter((column) => column !== 'version'),
     });
-    after = name;
   }
 
   graphql.filter(isMutation, 'is mutation').registerNode('graphql-mutation');
