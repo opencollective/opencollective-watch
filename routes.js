@@ -144,6 +144,11 @@ function compileRoute(route) {
 const SENSITIVE_GROUP = /key|token|secret|email|password/i;
 const HIDDEN = '[redacted]';
 
+// A version that is not one (/graphql/<key>, which the api reads as the
+// version) may be a key sent without a version: hidden too
+const isSensitive = (name, value) =>
+  SENSITIVE_GROUP.test(name) || (name === 'version' && !/^v\d+$/i.test(value));
+
 // The route of a request path, as the service declares it, e.g.
 // /v1/collectives/nest/transactions → /v1/collectives/:collectiveSlug/transactions,
 // and the path with the values of sensitive groups hidden. Null when no route
@@ -159,7 +164,10 @@ function matchRoute(compiled, path) {
       : Object.entries(match.indices.groups);
     // Last first, so the indices of the others still hold
     const hidden = named
-      .filter(([name, indices]) => indices && SENSITIVE_GROUP.test(name))
+      .filter(
+        ([name, indices]) =>
+          indices && isSensitive(name, path.slice(indices[0], indices[1])),
+      )
       .map(([, indices]) => indices)
       .sort((a, b) => b[0] - a[0]);
     let shown = path;
