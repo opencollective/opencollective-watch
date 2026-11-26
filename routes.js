@@ -70,7 +70,6 @@ const REST = [
   /^(?:\/(?<version>v1))?\/(?<collectiveSlug>[^/]+?)\/events\/(?<eventSlug>[^/]+?)\.(?<format>json)\/?$/i,
   /^(?:\/(?<version>v1))?\/(?<collectiveSlug>[^/]+?)\/events\/(?<eventSlug>[^/]+?)\/(?<role>attendees|organizers|all)\.(?<format>json|csv)\/?$/i,
   '/v1/collectives/:collectiveSlug/transactions',
-  '/v1/collectives/:collectiveSlug/transactions/:idOrUuid',
   /^\/v2\/(?<slug>[^/]+?)\/tier\/(?<tierSlug>[^/]+?)\/orders(?:\/(?<filter>incoming))?(?:\/(?<status>active|cancelled|error|paid|pending))?\/?$/i,
   /^\/v2\/(?<slug>[^/]+?)\/orders(?:\/(?<filter>incoming|outgoing))?(?:\/(?<status>active|cancelled|error|paid|pending))?\/?$/i,
   /^\/v2\/(?<slug>[^/]+?)\/(?<reportType>hostTransactions|transactions)(?:\/(?<type>credit|debit))?(?:\/(?<kind>contribution|expense|added_funds|host_fee|host_fee_share|host_fee_share_debt|platform_tip|platform_tip_debt))?\.(?<format>json|csv|txt)\/?$/i,
