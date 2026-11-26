@@ -1,5 +1,5 @@
 // Routes aggregators: one per service with a route table below
-// (/routes-api, /routes-rest, /routes-images, /routes-contributors-svg), one
+// (/routes/api, /routes/rest, /routes/images, /routes/contributors-svg), one
 // entry per route, as the service declares it: its log's route.path, which
 // Hyperwatch's Express input sets (docs/log.md, "Route"), e.g.
 // /v1/collectives/:collectiveSlug/transactions, a regular expression as its
@@ -302,16 +302,15 @@ const COLUMNS = [
   'lastSeen',
 ];
 
-// Registers routes-<service> on the node of each service with a route table,
-// in the "routes" navigation group, labelled by service. Named with a dash:
-// persistence only accepts letters, digits, ".", "_" and "-"
+// Registers routes/<service> on the node of each service with a route table,
+// in the "routes" navigation group, labelled by service
 function registerRoutesAggregators(pipeline, services) {
   for (const service of SERVICES) {
     if (!services.includes(service)) {
       continue;
     }
     const compiled = ROUTES[service].map(compileRoute);
-    const name = `routes-${service}`;
+    const name = `routes/${service}`;
     const aggregator = createAggregator(compiled);
     pipeline
       .getNode(service)

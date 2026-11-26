@@ -63,7 +63,7 @@ The nodes are:
   its `<SOURCE>_HYPERWATCH_URL` isn't set. `contributors-svg` is production only (it has no
   staging)
 - below `api`: `graphql` (with `graphql-v1`, `graphql-v2`, `graphql-mutation`, `graphql-slow`,
-  `graphql-extra-slow` and the `/graphql`, `/graphql-v1` and `/graphql-v2` aggregators) and `other`, the API
+  `graphql-extra-slow` and the `/graphql`, `/graphql/v1` and `/graphql/v2` aggregators) and `other`, the API
   requests that aren't GraphQL
 - below `frontend`: `slow` and `extra-slow`
 
@@ -74,8 +74,8 @@ Slow nodes (`slow`, `graphql-slow`…) hold requests over 300 ms, extra-slow one
 
 `/graphql` has one row per query, by hash (the first 8 characters of the MD5 of the query text).
 Its `version` column is the API each one called: `v1` at `/graphql/v1`, `v2` at `/graphql/v2` and
-`/graphql` (`graphql.version` in the logs). `/graphql-v1` and `/graphql-v2` list the queries of
-one version (who still calls the legacy API: `/graphql-v1`); `/logs/graphql-v1` and
+`/graphql` (`graphql.version` in the logs). Watch's `/graphql/v1` and `/graphql/v2` pages list
+the queries of one version (who still calls the legacy API: `/graphql/v1`); `/logs/graphql-v1` and
 `/logs/graphql-v2` follow each one. The three share one `graphql` link in the top navigation, with
 `all`, `v1` and `v2` on a second line.
 The operations our services send link to their definition on GitHub (all of them in the
@@ -90,7 +90,7 @@ Run it after deploys and commit the file.
 
 ### Requests by route
 
-`/routes-api`, `/routes-rest`, `/routes-images` and `/routes-contributors-svg` have one row per
+`/routes/api`, `/routes/rest`, `/routes/images` and `/routes/contributors-svg` have one row per
 route, as the service declares it: the `route.path` that Hyperwatch's Express input logs
 ([log.md, Route](https://github.com/hyperwatch/hyperwatch/blob/main/docs/log.md#route)), such as
 `/v1/collectives/:collectiveSlug/transactions`. A route declared as a regular expression is logged

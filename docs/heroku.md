@@ -140,7 +140,7 @@ The dyno's disk is wiped on every restart and deploy, so counters and history ar
 (Hyperwatch's `s3` persistence backend, configured in `options.js` from the variables above):
 
 - **Where:** one JSON object per aggregator and per node history, at `all/<name>.json` in the
-  bucket. One bucket and one IAM user per environment: `opencollective-staging-watch` /
+  bucket (`/` in a name is saved as `_2f_`: `graphql/v1` is `all/graphql_2f_v1.json`). One bucket and one IAM user per environment: `opencollective-staging-watch` /
   `watch-staging`, `opencollective-production-watch` / `watch-production`, in `us-east-1`. Each user
   can only read and write its own bucket.
 - **When:** restored at start, before the inputs connect, and saved at shutdown: Heroku's `SIGTERM`
@@ -161,7 +161,9 @@ process, which loads the GeoIP database once. On production traffic it used ~235
 minutes, still growing as its counters fill: check a day of the Metrics tab before choosing a
 smaller dyno. History is capped at 1000 entries on `main` and 100 on the other nodes, with none on
 `raw` and the inputs (`.hyperwatchrc`), to keep memory down. Watch for `R14` in the logs or the
-Metrics tab.
+Metrics tab. `/memory.json` shows what holds the memory: the process and V8 heap, and the entries,
+limits and persisted size of each aggregator and history buffer (`?measure=1` adds each one's
+current JSON size, but blocks the process like a snapshot: avoid it on production under load).
 
 ## Deploying
 

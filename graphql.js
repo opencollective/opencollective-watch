@@ -503,7 +503,7 @@ const AGGREGATOR_COLUMNS = [
 // Registers `graphql`, a branch of GraphQL logs (they need their graphql hash
 // and version first, see setGraphqlHash and setGraphqlVersion), as the
 // graphql node with its v1, v2, mutation and slow nodes, the /graphql,
-// /graphql-v1 and /graphql-v2 aggregators and the GraphQL request format
+// /graphql/v1 and /graphql/v2 aggregators and the GraphQL request format
 function registerGraphqlNodes(graphql) {
   lib.logger.defaultFormatter.replaceFormat('request', formatRequest);
 
@@ -517,14 +517,13 @@ function registerGraphqlNodes(graphql) {
     columns: AGGREGATOR_COLUMNS,
   });
 
-  // One node and one aggregator per API version, in the graphql navigation
-  // group after "all". Named with a dash, not /graphql/v1: persistence only
-  // accepts letters, digits, ".", "_" and "-" in names
+  // One node (graphql-v1) and one aggregator (/graphql/v1) per API version,
+  // in the graphql navigation group after "all"
   for (const version of ['v1', 'v2']) {
-    const name = `graphql-${version}`;
     const node = graphql.filter(isVersion(version), `graphql ${version}`);
-    node.registerNode(name);
+    node.registerNode(`graphql-${version}`);
 
+    const name = `graphql/${version}`;
     const versionAggregator = createAggregator();
     node.map((log) => versionAggregator.processLog(log), `${name} aggregator`);
     app.api.registerAggregator(name, versionAggregator, {
