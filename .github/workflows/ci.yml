@@ -82,7 +82,7 @@ jobs:
             fi
             sleep 1
           done
-          for page in status graphql.json identities.json addresses.json; do
+          for page in status graphql.json graphql/v1.json routes/api.json identities.json addresses.json; do
             curl -sf -o /dev/null "http://localhost:3399/$page" || {
               echo "/$page does not answer"
               cat watch.log
